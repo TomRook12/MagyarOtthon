@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magyar Lessons — Family Hungarian</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FDFAF4;
+    --ink: #1A1208;
+    --muted: #7A6E5F;
+    --accent: #C8401A;
+    --accent-light: #F0D5CC;
+    --green: #3A6B4A;
+    --green-light: #D4E8DB;
+    --gold: #B8860B;
+    --gold-light: #F5EDD0;
+    --blue: #2B5278;
+    --blue-light: #D0DFF0;
+    --rose: #8B3A52;
+    --rose-light: #F0D8DF;
+    --teal: #2A6B65;
+    --teal-light: #D0ECEA;
+    --plum: #5C3D7A;
+    --plum-light: #E4D8F0;
+    --border: rgba(26,18,8,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 48px 32px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: 'HU';
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 180px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+  header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  header h1 em {
+    font-style: italic;
+    color: #E8B89A;
+  }
+  header p {
+    font-size: 15px;
+    color: rgba(245,240,232,0.7);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    gap: 0;
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav button {
+    background: none;
+    border: none;
+    padding: 16px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  nav button:hover { color: var(--ink); }
+  nav button.active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* SECTION HEADER */
+  .section-intro {
+    margin-bottom: 36px;
+  }
+  .section-intro .tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .tag-out { background: var(--blue-light); color: var(--blue); }
+  .tag-play { background: var(--green-light); color: var(--green); }
+  .tag-food { background: var(--gold-light); color: var(--gold); }
+  .tag-ready { background: var(--rose-light); color: var(--rose); }
+  .tag-read { background: var(--teal-light); color: var(--teal); }
+  .tag-day { background: var(--plum-light); color: var(--plum); }
+
+  .section-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .section-intro p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 580px;
+  }
+
+  /* LESSON CARD */
+  .lesson-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .lesson-card:hover { box-shadow: 0 4px 24px rgba(26,18,8,0.08); }
+
+  .lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .lesson-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--border);
+    min-width: 36px;
+    line-height: 1;
+  }
+  .lesson-meta { flex: 1; }
+  .lesson-meta h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .lesson-meta .sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .lesson-toggle {
+    font-size: 18px;
+    color: var(--muted);
+    transition: transform 0.25s;
+  }
+  .lesson-card.open .lesson-toggle { transform: rotate(180deg); }
+
+  .lesson-body {
+    display: none;
+    padding: 0 24px 28px;
+  }
+  .lesson-card.open .lesson-body { display: block; }
+
+  /* PHASE BADGE */
+  .phase-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .phase-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .phase-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .phase-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* ACTIVITY BLOCKS */
+  .activity {
+    margin-bottom: 24px;
+  }
+  .activity-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .activity-title span {
+    display: inline-block;
+    background: var(--cream);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 10px;
+    margin-left: 6px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* PHRASE TABLE */
+  .phrase-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .phrase-table tr {
+    border-bottom: 1px solid var(--border);
+  }
+  .phrase-table tr:last-child { border-bottom: none; }
+  .phrase-table td {
+    padding: 10px 8px;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .phrase-table td:first-child {
+    font-weight: 500;
+    width: 48%;
+    color: var(--ink);
+  }
+  .phrase-table td:nth-child(2) {
+    color: var(--muted);
+    font-style: italic;
+    width: 30%;
+    font-size: 12px;
+  }
+  .phrase-table td:last-child {
+    color: var(--muted);
+    font-size: 12px;
+    width: 22%;
+    text-align: right;
+  }
+
+  /* LISTEN BOX */
+  .listen-box {
+    background: var(--cream);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 3px 3px 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .listen-box strong { color: var(--accent); font-weight: 500; }
+
+  /* GAME BOX */
+  .game-box {
+    background: var(--green-light);
+    border-radius: 3px;
+    padding: 14px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--green);
+  }
+  .game-box .game-title {
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    opacity: 0.8;
+  }
+
+  /* TIP BOX */
+  .tip-box {
+    background: var(--gold-light);
+    border-radius: 3px;
+    padding: 14px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #7A5800;
+    margin-top: 16px;
+  }
+  .tip-box::before {
+    content: '💡 ';
+  }
+
+  /* OVERVIEW GRID */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .overview-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+  }
+  .overview-card .oc-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .overview-card .oc-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* HIDDEN SECTIONS */
+  .tab-section { display: none; }
+  .tab-section.active { display: block; }
+
+  /* PRONUNCIATION NOTE */
+  .pronun {
+    font-size: 11px;
+    background: var(--blue-light);
+    color: var(--blue);
+    padding: 2px 6px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-left: 4px;
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 32px 20px 28px; }
+    main { padding: 28px 16px 60px; }
+    .phrase-table td:nth-child(2) { display: none; }
+    .phrase-table td:last-child { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Family Hungarian · Child-Immersion Method</div>
+  <h1>Learning Magyar<br><em>the way children do</em></h1>
+  <p>15–20 minute sessions built around real daily life with your child and partner. No grammar rules — just phrases, context, and repetition.</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('overview', this)">Overview</button>
+  <button onclick="showTab('out', this)">🚶 Out &amp; About</button>
+  <button onclick="showTab('play', this)">🧩 Playing at Home</button>
+  <button onclick="showTab('food', this)">🍽️ Food</button>
+  <button onclick="showTab('ready', this)">👕 Getting Ready</button>
+  <button onclick="showTab('read', this)">📖 Reading</button>
+  <button onclick="showTab('day', this)">💬 How Was Your Day?</button>
+</nav>
+
+<main>
+
+<!-- OVERVIEW TAB -->
+<div class="tab-section active" id="tab-overview">
+  <div class="section-intro">
+    <div class="tag tag-out">Your learning arc</div>
+    <h2>21 Lessons, 6 Worlds</h2>
+    <p>Each lesson takes 15–20 minutes. Sessions start with listening only, then move to single chunks, then full phrases. You never need to be "correct" — you need to be understood by your child.</p>
+  </div>
+
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="oc-num" style="color:var(--blue)">5</div>
+      <div class="oc-label">Out & About lessons<br>Streets, school, library, friends</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-num" style="color:var(--green)">4</div>
+      <div class="oc-label">Playing at Home lessons<br>Toys, turns, sharing, games</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-num" style="color:var(--gold)">3</div>
+      <div class="oc-label">Food lessons<br>Meals, wants, making, eating</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-num" style="color:var(--rose)">3</div>
+      <div class="oc-label">Getting Ready lessons<br>Clothes, dressing, orientation</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-num" style="color:var(--teal)">3</div>
+      <div class="oc-label">Reading lessons<br>Books, questions, narrating</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-num" style="color:var(--plum)">3</div>
+      <div class="oc-label">How Was Your Day? lessons<br>Recapping, feelings, sharing</div>
+    </div>
+  </div>
+
+  <div class="section-intro" style="margin-top:8px">
+    <h2 style="font-size:22px">How each session works</h2>
+  </div>
+
+  <div class="lesson-card open">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num">—</div>
+      <div class="lesson-meta">
+        <h3>The Session Structure (every lesson)</h3>
+        <div class="sub">Follow this format for all 21 lessons</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Listen First</div>
+        <div class="phase-desc">3–4 min</div>
+      </div>
+      <div class="listen-box">
+        <strong>Ask your partner</strong> to say today's phrases naturally while doing the action or pointing to the thing. You listen. Don't repeat yet. Your job is to connect sound to meaning.
+      </div>
+
+      <div class="phase-bar">
+        <div class="phase-dot" style="background:var(--green)"></div>
+        <div class="phase-label" style="color:var(--green)">Absorb the Chunks</div>
+        <div class="phase-desc">6–8 min</div>
+      </div>
+      <div class="listen-box" style="border-color:var(--green)">
+        Read the lesson's phrase table. Say each phrase <strong>out loud 3 times</strong>, slowly. Don't think about grammar. These are chunks — whole units you absorb like a child learns "I don't know" before knowing what "don't" means.
+      </div>
+
+      <div class="phase-bar">
+        <div class="phase-dot" style="background:var(--gold)"></div>
+        <div class="phase-label" style="color:var(--gold)">Use it for Real</div>
+        <div class="phase-desc">5–8 min</div>
+      </div>
+      <div class="listen-box" style="border-color:var(--gold)">
+        Do the activity with your child. Use <strong>only the target phrases</strong>. Gesture freely. If you forget a word, gesture + say the Hungarian word you do know. Your partner praises meaning, not accuracy.
+      </div>
+
+      <div class="tip-box">
+        <strong>Golden rule:</strong> Your partner should never correct your grammar mid-sentence. They can model the right form by repeating it naturally ("Igen, a parkba megyünk!") — this is how children absorb corrections without shame.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OUT & ABOUT TAB -->
+<div class="tab-section" id="tab-out">
+  <div class="section-intro">
+    <div class="tag tag-out">Topic 1</div>
+    <h2>Out & About</h2>
+    <p>Five lessons covering getting out of the house, crossing roads, the playground, library, school run, and meeting people. These are your high-frequency, high-stakes moments.</p>
+  </div>
+
+  <!-- LESSON O1 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--blue-light)">01</div>
+      <div class="lesson-meta">
+        <h3>Going Somewhere</h3>
+        <div class="sub">Where we're going · Getting ready · Crossing the street</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--blue)"></div><div class="phase-label" style="color:var(--blue)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Menjünk!</td><td>Men-yünk</td><td>Let's go!</td></tr>
+          <tr><td>A parkba megyünk.</td><td>A park-ba me-dyünk</td><td>We're going to the park.</td></tr>
+          <tr><td>A boltba megyünk.</td><td>A bolt-ba me-dyünk</td><td>We're going to the shop.</td></tr>
+          <tr><td>Hova megyünk?</td><td>Ho-va me-dyünk</td><td>Where are we going?</td></tr>
+          <tr><td>Megállj!</td><td>Meg-áj</td><td>Stop!</td></tr>
+          <tr><td>Várj!</td><td>Várj</td><td>Wait!</td></tr>
+          <tr><td>Gyere ide!</td><td>Dye-reh i-deh</td><td>Come here!</td></tr>
+          <tr><td>Fogd a kezemet!</td><td>Fogd a ke-ze-met</td><td>Hold my hand!</td></tr>
+          <tr><td>Nézz körbe!</td><td>Nézz kör-beh</td><td>Look around! (before crossing)</td></tr>
+          <tr><td>Átmehetünk.</td><td>Át-me-he-tünk</td><td>We can cross now.</td></tr>
+          <tr><td>Piros lámpa.</td><td>Pi-rosh lám-pa</td><td>Red light.</td></tr>
+          <tr><td>Zöld lámpa.</td><td>Zöld lám-pa</td><td>Green light.</td></tr>
+        </table>
+      </div>
+
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>real life</span></div>
+        <div class="game-box">
+          <div class="game-title">The Announcement Game</div>
+          Before you leave the house for anywhere — shop, park, school — announce it in Hungarian. Point at the door. "A boltba megyünk." Your child repeats it. When you reach the crossing say "Megállj! Nézz körbe!" and wait for them to look before saying "Átmehetünk."
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>Pattern notice:</strong> "-ba / -be" at the end of a place means "into/to" that place. You don't need to know the grammar rule — just notice that park → parkba, bolt → boltba. Your brain will absorb the pattern through repetition.
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON O2 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--blue-light)">02</div>
+      <div class="lesson-meta">
+        <h3>At the Playground</h3>
+        <div class="sub">Equipment · Playing · Safety</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--blue)"></div><div class="phase-label" style="color:var(--blue)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Csúszdázzunk!</td><td>Chúz-dá-zunk</td><td>Let's go on the slide!</td></tr>
+          <tr><td>Hintázzunk!</td><td>Hin-táz-zunk</td><td>Let's swing!</td></tr>
+          <tr><td>Mássz fel!</td><td>Más-fel</td><td>Climb up!</td></tr>
+          <tr><td>Vigyázz!</td><td>Vi-dyáz</td><td>Be careful!</td></tr>
+          <tr><td>Gyere, csússz le!</td><td>Dye-reh, chús-leh</td><td>Come, slide down!</td></tr>
+          <tr><td>Én tolom!</td><td>Én to-lom</td><td>I'll push you!</td></tr>
+          <tr><td>Elég?</td><td>El-ég</td><td>Enough? / Is that enough?</td></tr>
+          <tr><td>Még egyszer!</td><td>Még edy-ser</td><td>One more time!</td></tr>
+          <tr><td>Fáj?</td><td>Fáy</td><td>Does it hurt?</td></tr>
+          <tr><td>Nem baj.</td><td>Nem bay</td><td>Never mind. / It's okay.</td></tr>
+          <tr><td>Menjünk haza.</td><td>Men-yünk ho-zo</td><td>Let's go home.</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>real life</span></div>
+        <div class="game-box">
+          <div class="game-title">Playground Narrator</div>
+          Narrate what's happening as it happens. When your child goes on the slide: "Csússz le!" When they want more: wait for them to say "Még egyszer!" (model it first a few visits). You say "Én tolom!" before you push the swing every single time — repetition is the method.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON O3 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--blue-light)">03</div>
+      <div class="lesson-meta">
+        <h3>At the Library</h3>
+        <div class="sub">Books · Quiet · Choosing · Reading together</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--blue)"></div><div class="phase-label" style="color:var(--blue)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>A könyvtárba megyünk.</td><td>A könyv-tár-ba me-dyünk</td><td>We're going to the library.</td></tr>
+          <tr><td>Csend legyen!</td><td>Chend le-dyen</td><td>Let's be quiet! / Quiet please.</td></tr>
+          <tr><td>Melyik könyvet akarod?</td><td>Me-yik köny-vet o-ko-rod</td><td>Which book do you want?</td></tr>
+          <tr><td>Ezt akarom.</td><td>Ezt o-ko-rom</td><td>I want this one.</td></tr>
+          <tr><td>Olvassunk együtt!</td><td>Ol-vosh-shunk e-dyütt</td><td>Let's read together!</td></tr>
+          <tr><td>Mi ez?</td><td>Mi ez</td><td>What's this?</td></tr>
+          <tr><td>Nézd meg!</td><td>Nézd meg</td><td>Look at this!</td></tr>
+          <tr><td>Tetszik?</td><td>Tet-shik</td><td>Do you like it?</td></tr>
+          <tr><td>Igen, tetszik.</td><td>I-gen, tet-shik</td><td>Yes, I like it.</td></tr>
+          <tr><td>Vigyük haza.</td><td>Vi-dyük ho-zo</td><td>Let's take it home.</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>at home</span></div>
+        <div class="game-box">
+          <div class="game-title">Book Corner</div>
+          Before going to sleep, point to your child's bookshelf: "Melyik könyvet akarod?" Let them point. You say "Ezt akarod?" and hand it over. During the book say "Mi ez?" pointing at pictures. This builds vocabulary from things they already love and know.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON O4 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--blue-light)">04</div>
+      <div class="lesson-meta">
+        <h3>School & Nursery Run</h3>
+        <div class="sub">Arrivals · Drop-off feelings · Pickup</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--blue)"></div><div class="phase-label" style="color:var(--blue)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Iskolába megyünk.</td><td>Ish-ko-lá-ba me-dyünk</td><td>We're going to school.</td></tr>
+          <tr><td>Óvodába megyünk.</td><td>Ó-vo-dá-ba me-dyünk</td><td>We're going to nursery.</td></tr>
+          <tr><td>Szia, viszontlátásra!</td><td>Si-ya, vi-sont-lá-tá-shro</td><td>Bye, see you later!</td></tr>
+          <tr><td>Hamarosan jövök érted.</td><td>Ho-mo-ro-shon yö-vök ér-ted</td><td>I'll come for you soon.</td></tr>
+          <tr><td>Milyen napod volt?</td><td>Mi-yen no-pod volt</td><td>How was your day?</td></tr>
+          <tr><td>Jó napom volt.</td><td>Yó no-pom volt</td><td>I had a good day.</td></tr>
+          <tr><td>Szomorú vagyok.</td><td>So-mo-rú vo-dyok</td><td>I'm sad.</td></tr>
+          <tr><td>Boldog vagyok.</td><td>Bol-dog vo-dyok</td><td>I'm happy.</td></tr>
+          <tr><td>Fáradt vagyok.</td><td>Fá-rott vo-dyok</td><td>I'm tired.</td></tr>
+          <tr><td>Gyere, menjünk haza!</td><td>Dye-reh, men-yünk ho-zo</td><td>Come on, let's go home!</td></tr>
+        </table>
+      </div>
+      <div class="tip-box">
+        Use the feelings words every day at pickup — even if you just point at their face and ask "Boldog? Szomorú? Fáradt?" You're building emotional vocabulary which is how children first learn to express themselves.
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON O5 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--blue-light)">05</div>
+      <div class="lesson-meta">
+        <h3>Meeting Friends & Family</h3>
+        <div class="sub">Who we're seeing · Greetings · Introductions</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--blue)"></div><div class="phase-label" style="color:var(--blue)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Nagyihoz megyünk.</td><td>No-dyi-hoz me-dyünk</td><td>We're going to grandma's.</td></tr>
+          <tr><td>Barátoddal játszol.</td><td>Bo-rá-tod-dol yát-sol</td><td>You're playing with your friend.</td></tr>
+          <tr><td>Ki jön ma?</td><td>Ki yön mo</td><td>Who's coming today?</td></tr>
+          <tr><td>Ő a barátom.</td><td>Ő o bo-rá-tom</td><td>He/She is my friend.</td></tr>
+          <tr><td>Szia!</td><td>Si-ya</td><td>Hi! / Bye!</td></tr>
+          <tr><td>Hogy vagy?</td><td>Hody vody</td><td>How are you?</td></tr>
+          <tr><td>Jól vagyok, köszönöm.</td><td>Yól vo-dyok, kö-sö-nöm</td><td>I'm well, thank you.</td></tr>
+          <tr><td>Örülök, hogy látlak!</td><td>Ö-rü-lök hody lát-lok</td><td>I'm glad to see you!</td></tr>
+          <tr><td>Viszontlátásra!</td><td>Vi-sont-lá-tá-shro</td><td>Goodbye! (See you again)</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>preparation</span></div>
+        <div class="game-box">
+          <div class="game-title">Before You Arrive</div>
+          In the car or on the way, tell your child in Hungarian who you are visiting: "Nagyihoz megyünk!" or "Barátoddal játszol!" Make it exciting. When you arrive, you say "Szia!" first and model the greeting. Let them copy naturally — never force it.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYING AT HOME TAB -->
+<div class="tab-section" id="tab-play">
+  <div class="section-intro">
+    <div class="tag tag-play">Topic 2</div>
+    <h2>Playing at Home</h2>
+    <p>Four lessons covering the language of play — toys, turns, sharing, consequences, and ownership. These are the words you'll use dozens of times every day.</p>
+  </div>
+
+  <!-- LESSON P1 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--green-light)">06</div>
+      <div class="lesson-meta">
+        <h3>Toy Names & "What's This?"</h3>
+        <div class="sub">Core toy vocabulary · Asking names · Labelling the world</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--green)"></div><div class="phase-label" style="color:var(--green)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Hogy hívják ezt?</td><td>Hody híy-yák ezt</td><td>What's this called?</td></tr>
+          <tr><td>Ez egy kirakós.</td><td>Ez egy ki-ro-kósh</td><td>This is a jigsaw/puzzle.</td></tr>
+          <tr><td>Ez egy baba.</td><td>Ez egy bo-bo</td><td>This is a doll.</td></tr>
+          <tr><td>Ez egy autó.</td><td>Ez egy o-u-tó</td><td>This is a car.</td></tr>
+          <tr><td>Ez egy labda.</td><td>Ez egy lob-do</td><td>This is a ball.</td></tr>
+          <tr><td>Ez egy könyv.</td><td>Ez egy könyv</td><td>This is a book.</td></tr>
+          <tr><td>Ez egy épülőkocka.</td><td>Ez egy é-pü-lő-kots-ko</td><td>This is a building block.</td></tr>
+          <tr><td>Hol van a...?</td><td>Hol von o...</td><td>Where is the...?</td></tr>
+          <tr><td>Itt van!</td><td>Itt von</td><td>Here it is!</td></tr>
+          <tr><td>Ott van!</td><td>Ott von</td><td>There it is!</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>5 mins daily</span></div>
+        <div class="game-box">
+          <div class="game-title">The Label Game</div>
+          Pick up any toy and ask "Hogy hívják ezt?" Your child tells you the Hungarian. You repeat it. Then say "Ez egy [toy]!" together. Do 3–4 toys per session. Over a week you'll have 20+ toy words locked in — through the child's voice, not a list.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON P2 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--green-light)">07</div>
+      <div class="lesson-meta">
+        <h3>Turns, Jigsaws & Games</h3>
+        <div class="sub">Your turn · My turn · Turn it around · Winning & losing</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--green)"></div><div class="phase-label" style="color:var(--green)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Te jössz!</td><td>Teh yösh</td><td>Your turn!</td></tr>
+          <tr><td>Én jövök!</td><td>Én yö-vök</td><td>My turn!</td></tr>
+          <tr><td>Fordítsd meg!</td><td>For-díchd meg</td><td>Turn it around!</td></tr>
+          <tr><td>Passzol?</td><td>Pos-sol</td><td>Does it fit?</td></tr>
+          <tr><td>Nem passzol.</td><td>Nem pos-sol</td><td>It doesn't fit.</td></tr>
+          <tr><td>Próbáld meg ott!</td><td>Pró-báld meg ott</td><td>Try it there!</td></tr>
+          <tr><td>Megvan!</td><td>Meg-von</td><td>Got it! / Found it!</td></tr>
+          <tr><td>Jól csináltad!</td><td>Yól chi-nál-tod</td><td>Well done!</td></tr>
+          <tr><td>Kezdjük újra!</td><td>Kezd-yük úy-ro</td><td>Let's start again!</td></tr>
+          <tr><td>Ki nyert?</td><td>Ki nyert</td><td>Who won?</td></tr>
+          <tr><td>Én nyertem!</td><td>Én nyer-tem</td><td>I won!</td></tr>
+          <tr><td>Legközelebb te nyersz.</td><td>Leg-kö-ze-lebb teh nyerss</td><td>You'll win next time.</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>during play</span></div>
+        <div class="game-box">
+          <div class="game-title">Turn Announcer</div>
+          Every single time a turn changes in any game, say it out loud. "Te jössz!" when it's theirs, "Én jövök!" when it's yours. Say it every time for a week — it will become automatic. Then add "Fordítsd meg!" whenever a puzzle piece is wrong-way around.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON P3 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--green-light)">08</div>
+      <div class="lesson-meta">
+        <h3>Sharing & Apologising</h3>
+        <div class="sub">Mine · Yours · His · Hers · Sorry · It's okay</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--green)"></div><div class="phase-label" style="color:var(--green)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Ez az enyém.</td><td>Ez oz e-nyém</td><td>This is mine.</td></tr>
+          <tr><td>Ez a tiéd.</td><td>Ez o ti-éd</td><td>This is yours.</td></tr>
+          <tr><td>Ez az övé.</td><td>Ez oz ö-vé</td><td>This is his/hers.</td></tr>
+          <tr><td>Osztozunk.</td><td>Os-to-zunk</td><td>We're sharing.</td></tr>
+          <tr><td>Add ide, kérlek!</td><td>Odd i-deh, kér-lek</td><td>Give it to me, please!</td></tr>
+          <tr><td>Kölcsön adom.</td><td>Köl-chön o-dom</td><td>I'll lend it to you.</td></tr>
+          <tr><td>Bocsánat.</td><td>Bo-chá-not</td><td>Sorry.</td></tr>
+          <tr><td>Nem baj.</td><td>Nem bay</td><td>That's okay / Never mind.</td></tr>
+          <tr><td>Megbocsátok.</td><td>Meg-bo-chá-tok</td><td>I forgive you.</td></tr>
+          <tr><td>Légy kedves!</td><td>Lédy ked-vesh</td><td>Be kind!</td></tr>
+        </table>
+      </div>
+      <div class="tip-box">
+        <strong>Ownership words</strong> are tricky in Hungarian because they attach to the noun, but as a chunk — "Ez az enyém" (this is mine) — just learn it as one phrase first. Your child will naturally begin to extend the pattern.
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON P4 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--green-light)">09</div>
+      <div class="lesson-meta">
+        <h3>Consequences & Boundaries</h3>
+        <div class="sub">If/then · Stop · Not allowed · Calm down</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--green)"></div><div class="phase-label" style="color:var(--green)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Elég!</td><td>El-ég</td><td>Enough! / That's enough.</td></tr>
+          <tr><td>Abbahagyod!</td><td>Ab-bo-ho-dyod</td><td>Stop that! / Cut it out.</td></tr>
+          <tr><td>Ez nem szabad.</td><td>Ez nem so-bod</td><td>That's not allowed.</td></tr>
+          <tr><td>Ha ezt csinálod, akkor...</td><td>Ho ezt chi-ná-lod, ok-kor</td><td>If you do that, then...</td></tr>
+          <tr><td>Tedd vissza!</td><td>Tedd vis-so</td><td>Put it back!</td></tr>
+          <tr><td>Nyugodj le!</td><td>Nyu-godj leh</td><td>Calm down!</td></tr>
+          <tr><td>Lélegezz!</td><td>Lé-le-gezz</td><td>Breathe!</td></tr>
+          <tr><td>Gyere, megbeszéljük.</td><td>Dye-reh, meg-be-sél-yük</td><td>Come, let's talk about it.</td></tr>
+          <tr><td>Értem.</td><td>Ér-tem</td><td>I understand.</td></tr>
+          <tr><td>Rendben.</td><td>Rend-ben</td><td>Okay. / Alright.</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Key Insight <span>child development</span></div>
+        <div class="game-box">
+          <div class="game-title">Why this matters linguistically</div>
+          Consequence language is emotionally loaded — which means it gets remembered fast. "Elég!" said firmly once in context will stick in your memory better than 20 vocabulary drills. Use it authentically in real moments. Your child will also pick up on your consistency.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOD TAB -->
+<div class="tab-section" id="tab-food">
+  <div class="section-intro">
+    <div class="tag tag-food">Topic 3</div>
+    <h2>Food</h2>
+    <p>Three lessons built around mealtimes — the most reliable daily repetition window you have. These phrases will be said multiple times every single day.</p>
+  </div>
+
+  <!-- LESSON F1 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--gold-light)">10</div>
+      <div class="lesson-meta">
+        <h3>What Do You Want?</h3>
+        <div class="sub">Asking · Answering · Offering · Refusing</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--gold)"></div><div class="phase-label" style="color:var(--gold)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Mit szeretnél?</td><td>Mit se-ret-nél</td><td>What would you like?</td></tr>
+          <tr><td>Kérsz valamit?</td><td>Kérsz vo-lo-mit</td><td>Do you want something?</td></tr>
+          <tr><td>Kérsz ebből?</td><td>Kérsz eb-ből</td><td>Do you want some of this?</td></tr>
+          <tr><td>Igen, kérek.</td><td>I-gen, ké-rek</td><td>Yes please.</td></tr>
+          <tr><td>Nem kérek, köszönöm.</td><td>Nem ké-rek, kö-sö-nöm</td><td>No thank you.</td></tr>
+          <tr><td>Kérsz még?</td><td>Kérsz még</td><td>Do you want more?</td></tr>
+          <tr><td>Elég volt.</td><td>El-ég volt</td><td>That was enough. / I'm done.</td></tr>
+          <tr><td>Finom!</td><td>Fi-nom</td><td>Delicious!</td></tr>
+          <tr><td>Nem szeretem.</td><td>Nem se-re-tem</td><td>I don't like it.</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>every meal</span></div>
+        <div class="game-box">
+          <div class="game-title">Mealtime Script</div>
+          Commit to asking "Kérsz ebből?" before you put anything on your child's plate — every single meal. This one phrase said 3x a day = 90 repetitions a month. Say "Kérsz még?" before seconds. Let them answer "Igen, kérek" or point — both count.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON F2 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--gold-light)">11</div>
+      <div class="lesson-meta">
+        <h3>I'm Making / This Is For...</h3>
+        <div class="sub">Cooking language · Announcing meals · Who made it</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--gold)"></div><div class="phase-label" style="color:var(--gold)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Főzök.</td><td>Fő-zök</td><td>I'm cooking / I'm making food.</td></tr>
+          <tr><td>Ebédet készítek.</td><td>E-bé-det ké-sí-tek</td><td>I'm making lunch.</td></tr>
+          <tr><td>Vacsorát készítek.</td><td>Voch-o-rát ké-sí-tek</td><td>I'm making dinner.</td></tr>
+          <tr><td>Ez az ebéd.</td><td>Ez oz e-béd</td><td>This is lunch.</td></tr>
+          <tr><td>Ez a vacsora.</td><td>Ez o voch-o-ro</td><td>This is dinner.</td></tr>
+          <tr><td>Ebédre ezt eszünk.</td><td>E-béd-re ezt e-sünk</td><td>For lunch we're having this.</td></tr>
+          <tr><td>Anya csinálta.</td><td>O-nyo chi-nál-to</td><td>Mum made this.</td></tr>
+          <tr><td>Apa csinálta.</td><td>O-po chi-nál-to</td><td>Dad made this.</td></tr>
+          <tr><td>Megcsináljuk együtt!</td><td>Meg-chi-nály-yuk e-dyütt</td><td>Let's make it together!</td></tr>
+          <tr><td>Segíts nekem!</td><td>She-gíts ne-kem</td><td>Help me!</td></tr>
+        </table>
+      </div>
+      <div class="tip-box">
+        Use "Anya csinálta" when your partner made the food — it reinforces both the word for mum and the past tense as a chunk without needing to explain tense at all.
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON F3 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--gold-light)">12</div>
+      <div class="lesson-meta">
+        <h3>Mealtimes Together</h3>
+        <div class="sub">Setting the table · Sitting down · Finishing · Gratitude</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--gold)"></div><div class="phase-label" style="color:var(--gold)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Gyertek enni!</td><td>Dyer-tek en-ni</td><td>Come and eat! (calling everyone)</td></tr>
+          <tr><td>Ülj le!</td><td>Ülj leh</td><td>Sit down!</td></tr>
+          <tr><td>Jó étvágyat!</td><td>Yó ét-vá-dyot</td><td>Enjoy your meal! / Bon appétit!</td></tr>
+          <tr><td>Egyél!</td><td>E-dyél</td><td>Eat up!</td></tr>
+          <tr><td>Lassan egyél.</td><td>Losh-shon e-dyél</td><td>Eat slowly.</td></tr>
+          <tr><td>Igyál vizet!</td><td>I-dyál vi-zet</td><td>Drink some water!</td></tr>
+          <tr><td>Megettél mindent?</td><td>Meg-et-tél min-dent</td><td>Did you eat everything?</td></tr>
+          <tr><td>Köszönöm az ételt.</td><td>Kö-sö-nöm oz é-telt</td><td>Thank you for the food.</td></tr>
+          <tr><td>Felállhatok?</td><td>Fel-áll-ho-tok</td><td>May I get up?</td></tr>
+          <tr><td>Persze!</td><td>Per-seh</td><td>Of course!</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>the full ritual</span></div>
+        <div class="game-box">
+          <div class="game-title">Mealtime Ritual</div>
+          Build a consistent mealtime ritual entirely in Hungarian: call everyone with "Gyertek enni!", say "Jó étvágyat!" before eating, ask "Kérsz még?" mid-meal, and end with "Köszönöm az ételt." Three fixed phrases at the start, middle, and end. Ritual repetition is the most powerful memory tool there is.
+        </div>
+      </div>
+
+      <div class="tip-box">
+        After 4–6 weeks of consistent use, your child will prompt <em>you</em> if you forget to say something. That's the moment you know it's working — you've built a family language habit, not just a lesson.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- GETTING READY TAB -->
+<div class="tab-section" id="tab-ready">
+  <div class="section-intro">
+    <div class="tag tag-ready">Topic 4</div>
+    <h2>Getting Ready</h2>
+    <p>Three lessons for the morning and leaving routine — naming clothes, putting them on correctly, and the essential orientation phrases. Repeated every single day, this topic builds fast.</p>
+  </div>
+
+  <!-- LESSON R1 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--rose-light)">13</div>
+      <div class="lesson-meta">
+        <h3>Clothes Names</h3>
+        <div class="sub">What to wear · Naming each item · Asking what comes next</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--rose)"></div><div class="phase-label" style="color:var(--rose)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Mit vegyél fel?</td><td>Mit ve-dyél fel</td><td>What should you put on?</td></tr>
+          <tr><td>Vedd fel a...</td><td>Vedd fel o...</td><td>Put on the...</td></tr>
+          <tr><td>a nadrágot</td><td>o nod-rá-got</td><td>the trousers</td></tr>
+          <tr><td>a zoknit</td><td>o zok-nit</td><td>the socks</td></tr>
+          <tr><td>a harisnyát</td><td>o ho-rish-nyát</td><td>the tights</td></tr>
+          <tr><td>a pólót</td><td>o pó-lót</td><td>the t-shirt</td></tr>
+          <tr><td>a pulóvert</td><td>o pu-ló-vert</td><td>the jumper</td></tr>
+          <tr><td>a szoknyát</td><td>o sok-nyát</td><td>the skirt</td></tr>
+          <tr><td>a cipőt</td><td>o chi-pőt</td><td>the shoes</td></tr>
+          <tr><td>a kabátot</td><td>o ko-bá-tot</td><td>the coat</td></tr>
+          <tr><td>a bugyit</td><td>o bu-dyi-t</td><td>the pants/underwear</td></tr>
+          <tr><td>Kész vagy!</td><td>Kész vody</td><td>You're ready!</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>every morning</span></div>
+        <div class="game-box">
+          <div class="game-title">Dress Announcer</div>
+          As you hand each item to your child, name it: "A zoknit!" Hand it. "A nadrágot!" Hand it. After a few days, hold the item up silently and wait — see if they say the word first. This turns a chore into a daily vocabulary drill that takes zero extra time.
+        </div>
+      </div>
+      <div class="tip-box">
+        <strong>Pattern notice:</strong> You'll see lots of words ending in <em>-t</em> here (nadrágot, zoknit, pólót). In Hungarian, the direct object of a verb gets a <em>-t</em> ending. You don't need to know the rule — just notice that when you're telling someone to put something on, it sounds like the word has a little "t" on the end.
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON R2 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--rose-light)">14</div>
+      <div class="lesson-meta">
+        <h3>It's the Wrong Way Round</h3>
+        <div class="sub">Turn it around · Other arm · Other leg · Back to front</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--rose)"></div><div class="phase-label" style="color:var(--rose)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Fordítsd meg!</td><td>For-díchd meg</td><td>Turn it around!</td></tr>
+          <tr><td>Fordítva van.</td><td>For-dít-vo von</td><td>It's the wrong way round.</td></tr>
+          <tr><td>Visszájára van.</td><td>Vis-sá-yá-ro von</td><td>It's inside out.</td></tr>
+          <tr><td>A másik karод.</td><td>O má-shik ko-rod</td><td>The other arm.</td></tr>
+          <tr><td>A másik lábad.</td><td>O má-shik lá-bod</td><td>The other leg.</td></tr>
+          <tr><td>Dugd be a kezed!</td><td>Dugd be o ke-zed</td><td>Put your hand through!</td></tr>
+          <tr><td>Húzd fel!</td><td>Húzd fel</td><td>Pull it up!</td></tr>
+          <tr><td>Húzd le!</td><td>Húzd leh</td><td>Pull it down!</td></tr>
+          <tr><td>Így van!</td><td>Í-dy von</td><td>That's right! / Like this!</td></tr>
+          <tr><td>Majdnem!</td><td>Mayd-nem</td><td>Nearly! / Almost!</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>real moments</span></div>
+        <div class="game-box">
+          <div class="game-title">The Correction Ritual</div>
+          Every time something goes on wrong — and it will, every day — use the phrase instead of fixing it silently. "Fordítva van. Fordítsd meg!" Then guide with your hands. The repetition of real mistakes makes these phrases stick within a week.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON R3 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--rose-light)">15</div>
+      <div class="lesson-meta">
+        <h3>Choosing What to Wear</h3>
+        <div class="sub">Weather · Picking · Expressing preference</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--rose)"></div><div class="phase-label" style="color:var(--rose)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Melyiket vegyük fel?</td><td>Me-yyi-ket ve-dyük fel</td><td>Which one should we put on?</td></tr>
+          <tr><td>Hideg van ma.</td><td>Hi-deg von mo</td><td>It's cold today.</td></tr>
+          <tr><td>Meleg van ma.</td><td>Me-leg von mo</td><td>It's warm today.</td></tr>
+          <tr><td>Esik az eső.</td><td>E-shik oz e-shő</td><td>It's raining.</td></tr>
+          <tr><td>Vedd fel a meleg pulóvert.</td><td>Vedd fel o me-leg pu-ló-vert</td><td>Put on the warm jumper.</td></tr>
+          <tr><td>Ez tetszik neked?</td><td>Ez tet-shik ne-ked</td><td>Do you like this one?</td></tr>
+          <tr><td>Ezt akarom.</td><td>Ezt o-ko-rom</td><td>I want this one.</td></tr>
+          <tr><td>Nem, azt szeretném.</td><td>Nem, ozt se-ret-ném</td><td>No, I'd like that one.</td></tr>
+          <tr><td>Rendben, vedd fel!</td><td>Rend-ben, vedd fel</td><td>Okay, put it on!</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>daily</span></div>
+        <div class="game-box">
+          <div class="game-title">Weather Check</div>
+          Each morning, look out the window together and say either "Hideg van ma" or "Meleg van ma" before choosing clothes. A two-second ritual that builds weather vocabulary and gives the clothes choice a real-world context.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- READING TAB -->
+<div class="tab-section" id="tab-read">
+  <div class="section-intro">
+    <div class="tag tag-read">Topic 5</div>
+    <h2>Reading Together</h2>
+    <p>Three lessons for book time — choosing, discussing, narrating, and asking questions about what's on the page. Bedtime reading gives you a daily, low-pressure practice window.</p>
+  </div>
+
+  <!-- LESSON RD1 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--teal-light)">16</div>
+      <div class="lesson-meta">
+        <h3>Choosing a Book</h3>
+        <div class="sub">Which book · Do you want to read · Long or short</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--teal)"></div><div class="phase-label" style="color:var(--teal)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Melyik könyvet olvassuk?</td><td>Me-yik köny-vet ol-vosh-shuk</td><td>Which book shall we read?</td></tr>
+          <tr><td>Akarod ezt olvasni?</td><td>O-ko-rod ezt ol-vosh-ni</td><td>Do you want to read this?</td></tr>
+          <tr><td>Ez egy hosszú könyv.</td><td>Ez egy hos-sú könyv</td><td>This is a long book.</td></tr>
+          <tr><td>Ez egy rövid könyv.</td><td>Ez egy rö-vid könyv</td><td>This is a short book.</td></tr>
+          <tr><td>A könyv vége.</td><td>O könyv vé-ge</td><td>The end of the book. / The book is finished.</td></tr>
+          <tr><td>Olvassunk még egyet?</td><td>Ol-vosh-shunk még e-dyet</td><td>Shall we read another one?</td></tr>
+          <tr><td>Igen, még egyet!</td><td>I-gen, még e-dyet</td><td>Yes, one more!</td></tr>
+          <tr><td>Ez a könyv arról szól...</td><td>Ez o könyv or-ról sól</td><td>This book is about...</td></tr>
+          <tr><td>Tetszett?</td><td>Tet-sett</td><td>Did you like it?</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>bedtime</span></div>
+        <div class="game-box">
+          <div class="game-title">The Book Offer</div>
+          Hold up two books every bedtime: "Melyik könyvet olvassuk?" Let them point or say. Before you open it, say "Ez a könyv arról szól..." and try to describe it in one Hungarian word (the animal, the main character's name, etc). When it's done: "A könyv vége. Olvassunk még egyet?"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON RD2 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--teal-light)">17</div>
+      <div class="lesson-meta">
+        <h3>Who Is That? What Are They Doing?</h3>
+        <div class="sub">Asking about characters · Actions · Pointing & naming</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--teal)"></div><div class="phase-label" style="color:var(--teal)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Ki ez?</td><td>Ki ez</td><td>Who is that?</td></tr>
+          <tr><td>Ez egy kisfiú.</td><td>Ez egy kish-fi-ú</td><td>This is a little boy.</td></tr>
+          <tr><td>Ez egy kislány.</td><td>Ez egy kish-lány</td><td>This is a little girl.</td></tr>
+          <tr><td>Mit csinál?</td><td>Mit chi-nál</td><td>What is he/she doing?</td></tr>
+          <tr><td>Fut.</td><td>Fut</td><td>He/She is running.</td></tr>
+          <tr><td>Alszik.</td><td>Ol-shik</td><td>He/She is sleeping.</td></tr>
+          <tr><td>Eszik.</td><td>E-shik</td><td>He/She is eating.</td></tr>
+          <tr><td>Sír.</td><td>Shír</td><td>He/She is crying.</td></tr>
+          <tr><td>Nevet.</td><td>Ne-vet</td><td>He/She is laughing.</td></tr>
+          <tr><td>Játszik.</td><td>Yát-sik</td><td>He/She is playing.</td></tr>
+          <tr><td>Nézd!</td><td>Nézd</td><td>Look!</td></tr>
+          <tr><td>Ott van!</td><td>Ott von</td><td>There he/she is!</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>during reading</span></div>
+        <div class="game-box">
+          <div class="game-title">Point & Ask</div>
+          As you read, point at any character on any page and ask "Ki ez?" or "Mit csinál?" Even if you don't know the full answer in Hungarian, your child will — and you repeat what they say. This flips the roles beautifully: the child becomes the teacher for a moment.
+        </div>
+      </div>
+      <div class="tip-box">
+        Hungarian doesn't distinguish he/she — "ő" covers both. So "Mit csinál?" works for any character regardless of gender. One less thing to worry about!
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON RD3 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--teal-light)">18</div>
+      <div class="lesson-meta">
+        <h3>Talking About the Book</h3>
+        <div class="sub">Reactions · What happened · What's coming next</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--teal)"></div><div class="phase-label" style="color:var(--teal)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Mi történik itt?</td><td>Mi tör-té-nik itt</td><td>What's happening here?</td></tr>
+          <tr><td>Mit gondolsz?</td><td>Mit gon-dolsz</td><td>What do you think?</td></tr>
+          <tr><td>Szerinted mi lesz?</td><td>Se-rin-ted mi less</td><td>What do you think will happen?</td></tr>
+          <tr><td>Emlékszel erre?</td><td>Em-lék-sel er-re</td><td>Do you remember this?</td></tr>
+          <tr><td>Ez vicces!</td><td>Ez vit-chess</td><td>This is funny!</td></tr>
+          <tr><td>Ez szomorú.</td><td>Ez so-mo-rú</td><td>This is sad.</td></tr>
+          <tr><td>Ez félelmetes!</td><td>Ez fé-lel-me-tesh</td><td>This is scary!</td></tr>
+          <tr><td>Ez a kedvencem.</td><td>Ez o ked-ven-tsem</td><td>This is my favourite part.</td></tr>
+          <tr><td>Fordíts lapot!</td><td>For-díts lo-pot</td><td>Turn the page!</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>bedtime</span></div>
+        <div class="game-box">
+          <div class="game-title">One Question Per Book</div>
+          Pick just one question per reading session to use consistently. Start with "Mit csinál?" pointing at pictures. Next week add "Ez vicces!" as a reaction. Build the script one phrase at a time — don't try to use the whole table at once.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW WAS YOUR DAY TAB -->
+<div class="tab-section" id="tab-day">
+  <div class="section-intro">
+    <div class="tag tag-day">Topic 6</div>
+    <h2>How Was Your Day?</h2>
+    <p>Three lessons for end-of-day conversation — asking about school, sharing your own day, and expressing feelings. This is your family's daily debrief ritual in Hungarian.</p>
+  </div>
+
+  <!-- LESSON D1 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--plum-light)">19</div>
+      <div class="lesson-meta">
+        <h3>Asking About Their Day</h3>
+        <div class="sub">What did you do · Where did you go · What did you play</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--plum)"></div><div class="phase-label" style="color:var(--plum)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Mit csináltál ma?</td><td>Mit chi-nál-tál mo</td><td>What did you do today?</td></tr>
+          <tr><td>Hova mentetek?</td><td>Ho-vo men-te-tek</td><td>Where did you go?</td></tr>
+          <tr><td>Mit csináltál az iskolában?</td><td>Mit chi-nál-tál oz ish-ko-lá-bon</td><td>What did you do at school?</td></tr>
+          <tr><td>Mit játszottál?</td><td>Mit yát-sot-tál</td><td>What did you play?</td></tr>
+          <tr><td>Mit tanultál?</td><td>Mit to-nul-tál</td><td>What did you learn?</td></tr>
+          <tr><td>Kivel voltál?</td><td>Ki-vel vol-tál</td><td>Who were you with?</td></tr>
+          <tr><td>Mi volt a legjobb?</td><td>Mi volt o leg-yobb</td><td>What was the best part?</td></tr>
+          <tr><td>Történt valami érdekes?</td><td>Tör-tént vo-lo-mi ér-de-kesh</td><td>Did anything interesting happen?</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>daily pickup</span></div>
+        <div class="game-box">
+          <div class="game-title">The Two-Question Ritual</div>
+          On the walk home from school, use exactly two questions every day: "Mit csináltál ma?" and "Mi volt a legjobb?" Just two — consistent, every day. Add more only when these two feel completely automatic. Ritual beats variety every time.
+        </div>
+      </div>
+      <div class="tip-box">
+        <strong>Pattern notice:</strong> You'll see <em>-tál / -tél</em> at the end of these questions — that's the past tense "you did" ending. You don't need to form it yourself yet, but you'll start recognising it everywhere once you notice it here.
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON D2 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--plum-light)">20</div>
+      <div class="lesson-meta">
+        <h3>Sharing Your Own Day</h3>
+        <div class="sub">I worked · I went for a run · I went cycling · What I did</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--plum)"></div><div class="phase-label" style="color:var(--plum)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Én dolgоztam ma.</td><td>Én dol-goz-tom mo</td><td>I worked today.</td></tr>
+          <tr><td>Futottam ma.</td><td>Fu-tot-tom mo</td><td>I went for a run today.</td></tr>
+          <tr><td>Bicikliztем ma.</td><td>Bi-tsik-liz-tem mo</td><td>I went cycling today.</td></tr>
+          <tr><td>Bevásároltam.</td><td>Be-vá-shá-rol-tom</td><td>I went shopping.</td></tr>
+          <tr><td>Főztem.</td><td>Főz-tem</td><td>I cooked.</td></tr>
+          <tr><td>Sétáltam.</td><td>Shé-tál-tom</td><td>I went for a walk.</td></tr>
+          <tr><td>Találkoztam egy barátommal.</td><td>To-lál-koz-tom egy bo-rá-tom-mol</td><td>I met a friend.</td></tr>
+          <tr><td>Tanultam valamit.</td><td>To-nul-tom vo-lo-mit</td><td>I learnt something.</td></tr>
+          <tr><td>Megtanultam...</td><td>Meg-to-nul-tom</td><td>I learnt... (specific thing)</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>evening</span></div>
+        <div class="game-box">
+          <div class="game-title">Your Turn to Share</div>
+          After asking your child about their day, tell them one thing you did — in Hungarian. Just one sentence. "Futottam ma." That's enough. It models that grown-ups share too, and it shows your child that Hungarian is a real language you're learning together, not just something you test them on.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON D3 -->
+  <div class="lesson-card">
+    <div class="lesson-header" onclick="toggle(this)">
+      <div class="lesson-num" style="color:var(--plum-light)">21</div>
+      <div class="lesson-meta">
+        <h3>How Was Your Day? — Feelings & Reactions</h3>
+        <div class="sub">Good · Bad · Fun · Interesting · Tired · Proud</div>
+      </div>
+      <div class="lesson-toggle">▾</div>
+    </div>
+    <div class="lesson-body">
+      <div class="phase-bar"><div class="phase-dot" style="background:var(--plum)"></div><div class="phase-label" style="color:var(--plum)">Core Phrases</div></div>
+      <div class="activity">
+        <table class="phrase-table">
+          <tr><td>Milyen volt a napod?</td><td>Mi-yen volt o no-pod</td><td>How was your day?</td></tr>
+          <tr><td>Jó napom volt.</td><td>Yó no-pom volt</td><td>My day was good.</td></tr>
+          <tr><td>Rossz napom volt.</td><td>Ross no-pom volt</td><td>My day was bad.</td></tr>
+          <tr><td>Szórakoztató volt.</td><td>Só-ro-koz-to-tó volt</td><td>It was fun.</td></tr>
+          <tr><td>Érdekes volt.</td><td>Ér-de-kesh volt</td><td>It was interesting.</td></tr>
+          <tr><td>Unalmas volt.</td><td>U-nol-mosh volt</td><td>It was boring.</td></tr>
+          <tr><td>Fáradt vagyok.</td><td>Fá-rott vo-dyok</td><td>I'm tired.</td></tr>
+          <tr><td>Büszke vagyok rád.</td><td>Büsh-ke vo-dyok rád</td><td>I'm proud of you.</td></tr>
+          <tr><td>Szeretlek.</td><td>Se-ret-lek</td><td>I love you.</td></tr>
+        </table>
+      </div>
+      <div class="activity">
+        <div class="activity-title">Practice Activity <span>end of day</span></div>
+        <div class="game-box">
+          <div class="game-title">The Feelings Check-In</div>
+          At dinner or before bed, everyone at the table answers "Milyen volt a napod?" in Hungarian — you, your partner, and your child. Even one word counts: "Jó." "Fáradt." This makes it a family ritual rather than a lesson, which is exactly where language lives best.
+        </div>
+      </div>
+      <div class="tip-box">
+        End every day with "Szeretlek." It costs nothing to say, requires no grammar knowledge, and will be the most remembered phrase in this entire course.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  <strong>A note on pronunciation:</strong> Hungarian is phonetically very consistent — once you know how each letter sounds, you can pronounce any word. The sounds to focus on first: <em>gy</em> (like "dy"), <em>sz</em> (like "s"), <em>cs</em> (like "ch"), and the long vowels <em>á, é, í, ó, ő, ú, ű</em> which are held longer than their short versions. Ask your partner to say each phrase first — your best pronunciation resource is already in the room.
+</div>
+
+</main>
+
+<script>
+  function showTab(name, btn) {
+    document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggle(header) {
+    const card = header.closest('.lesson-card');
+    card.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
