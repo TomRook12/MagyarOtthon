@@ -581,6 +581,10 @@ function generateQuestions(lesson,weakPhrases,count=15){
 // ─── STYLES ────────────────────────────────────────────────────────────────
 const C={bg:"#0F1117",card:"#161822",border:"#1E2030",text:"#E8E6E1",sub:"#7A7B8A",dim:"#555668",green:"#3A8F6E",red:"#D94A4A",amber:"#E8913A"};
 
+// ─── SPEECH UTILITY ──────────────────────────────────────────────────────
+function speakHu(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="hu-HU";u.rate=0.85;window.speechSynthesis.speak(u);}
+function SpeakBtn({text,color,size=18}){return <button onClick={e=>{e.stopPropagation();speakHu(text);}} title="Hear pronunciation" style={{background:"none",border:"none",cursor:"pointer",fontSize:size,padding:"2px 4px",color:color||C.sub,lineHeight:1,flexShrink:0}}>🔊</button>;}
+
 // ─── FEEDBACK MODAL ────────────────────────────────────────────────────────
 const FEEDBACK_CATEGORIES=[
   {value:"wrong-translation",label:"Wrong translation",gh_label:"wrong-translation"},
@@ -758,6 +762,8 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
   const [qi,setQi]=useState(0);const [score,setScore]=useState(0);const [ans,setAns]=useState(null);const [typed,setTyped]=useState("");
   const [ms,setMs]=useState({sel:null,matched:[],wrong:null});
   useEffect(()=>{statsApi.startTimer();},[]);
+  useEffect(()=>{ if(q.type==="mc_hu_en"||q.type==="tf")speakHu(q.prompt); else if(q.type==="fill")speakHu(q.phrase.hu); },[qi]);
+  useEffect(()=>{ if(ans!==null&&q.type==="type")speakHu(q.answer); },[ans]);
   const q=qs[qi];const total=qs.length;
   const matchItems=useMemo(()=>{if(q.type!=="match")return[];return[...shuffle(q.pairs.map(p=>({text:p.hu,lang:"hu",key:p.hu}))),...shuffle(q.pairs.map(p=>({text:p.en,lang:"en",key:p.hu})))];},[qi]);
   const advance=(correct)=>{if(q.phrase)statsApi.recordPhrase(q.phrase.hu,correct);if(correct)setScore(s=>s+1);
@@ -776,7 +782,7 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
   const label={mc_en_hu:"Pick the Hungarian",mc_hu_en:"Pick the English",type:"Type the Hungarian",tf:"True or false?",fill:"Fill the gap",match:"Match pairs"}[q.type];
 
   const mcBtn=(opt,i,isAns,isSel)=>{let st=null;if(ans!==null){if(isAns)st="correct";else if(isSel)st="wrong";}
-    return <button key={i} disabled={ans!==null} onClick={()=>{setAns(opt);advance(isAns);}}
+    return <button key={i} disabled={ans!==null} onClick={()=>{if(q.type==="mc_en_hu")speakHu(q.answer);setAns(opt);advance(isAns);}}
       style={{width:"100%",padding:"13px 15px",borderRadius:12,border:`2px solid ${st==="correct"?C.green:st==="wrong"?C.red:C.border}`,background:st==="correct"?`${C.green}12`:st==="wrong"?`${C.red}12`:C.card,color:st==="correct"?"#5FD4A0":st==="wrong"?"#FF8888":C.text,fontSize:15,fontWeight:600,cursor:ans?"default":"pointer",marginBottom:6,textAlign:"left"}}>{opt}</button>;};
 
   const typeInput=(placeholder)=>(<>
@@ -801,7 +807,7 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
     </div>}
     {q.type==="mc_hu_en"&&<div>
       <div style={{fontSize:13,color:C.sub,textAlign:"center"}}>What does this mean:</div>
-      <div style={{fontSize:21,fontWeight:800,color:C.text,textAlign:"center",margin:"6px 0 2px"}}>{q.prompt}</div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,margin:"6px 0 2px"}}><div style={{fontSize:21,fontWeight:800,color:C.text}}>{q.prompt}</div><SpeakBtn text={q.prompt} color={color}/></div>
       <div style={{fontSize:12,color:C.dim,textAlign:"center",fontStyle:"italic",marginBottom:14}}>{q.promptPr}</div>
       {q.options.map((o,i)=>mcBtn(o,i,o===q.answer,o===ans))}
     </div>}
@@ -812,7 +818,7 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
     </div>}
     {q.type==="tf"&&<div>
       <div style={{fontSize:13,color:C.sub,textAlign:"center",marginBottom:6}}>Does this Hungarian:</div>
-      <div style={{fontSize:19,fontWeight:800,color:C.text,textAlign:"center"}}>{q.prompt}</div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}><div style={{fontSize:19,fontWeight:800,color:C.text}}>{q.prompt}</div><SpeakBtn text={q.prompt} color={color}/></div>
       <div style={{fontSize:12,color:C.dim,textAlign:"center",fontStyle:"italic",marginBottom:6}}>{q.promptPr}</div>
       <div style={{fontSize:13,color:C.sub,textAlign:"center",marginBottom:3}}>mean:</div>
       <div style={{fontSize:17,fontWeight:700,color:"#9A9BAA",textAlign:"center",marginBottom:16}}>"{q.shown}"</div>
@@ -825,7 +831,7 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
     {q.type==="fill"&&<div>
       <div style={{fontSize:13,color:C.sub,textAlign:"center"}}>Fill the missing word:</div>
       <div style={{fontSize:12,color:C.dim,textAlign:"center",margin:"6px 0"}}>{q.prompt}</div>
-      <div style={{fontSize:19,fontWeight:800,color:C.text,textAlign:"center",margin:"10px 0 18px"}}>{q.display}</div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,margin:"10px 0 18px"}}><div style={{fontSize:19,fontWeight:800,color:C.text}}>{q.display}</div><SpeakBtn text={q.phrase.hu} color={color}/></div>
       {typeInput("Missing word...")}
     </div>}
     {q.type==="match"&&<div>
@@ -834,7 +840,7 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
         {matchItems.map((item,i)=>{
           const matched=ms.matched.includes(item.key+item.lang);const sel=ms.sel&&ms.sel.text===item.text;const wr=ms.wrong===item.text;
           return <button key={i} disabled={matched} onClick={()=>{
-            if(matched)return;if(!ms.sel){setMs({...ms,sel:item,wrong:null});return;}if(ms.sel.lang===item.lang){setMs({...ms,sel:item,wrong:null});return;}
+            if(item.lang==="hu")speakHu(item.text);if(matched)return;if(!ms.sel){setMs({...ms,sel:item,wrong:null});return;}if(ms.sel.lang===item.lang){setMs({...ms,sel:item,wrong:null});return;}
             const pair=q.pairs.find(p=>(p.hu===ms.sel.text&&p.en===item.text)||(p.en===ms.sel.text&&p.hu===item.text));
             if(pair){const nm=[...ms.matched,pair.hu+"hu",pair.hu+"en"];setMs({sel:null,matched:nm,wrong:null});
               if(nm.length===q.pairs.length*2){statsApi.recordPhrase(q.phrase.hu,true);setScore(s=>s+1);
@@ -855,7 +861,7 @@ function PhraseView({lesson,color}){const [exp,setExp]=useState(null);
     {lesson.tip&&<div style={{background:`${color}10`,border:`1px solid ${color}22`,borderRadius:12,padding:"10px 12px",margin:"10px 0",fontSize:12,color:"#C8C7D0",lineHeight:1.5}}><span style={{fontWeight:800,color}}>Tip: </span>{lesson.tip}</div>}
     {lesson.pat&&<div style={{background:"#1A1428",border:"1px solid #2D2548",borderRadius:12,padding:"10px 12px",margin:"6px 0",fontSize:12,color:"#B8A8D8",lineHeight:1.5}}><span style={{fontWeight:800,color:"#A78BFA"}}>Pattern: </span>{lesson.pat}</div>}
     {lesson.phrases.map((p,i)=><div key={i} style={{background:C.card,borderRadius:11,padding:"11px 13px",marginBottom:5,border:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setExp(exp===i?null:i)}>
-      <div style={{fontSize:16,fontWeight:700,color:C.text}}>{p.hu}</div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div style={{fontSize:16,fontWeight:700,color:C.text}}>{p.hu}</div><SpeakBtn text={p.hu} color={color}/></div>
       {exp===i?<><div style={{fontSize:12,color:C.dim,marginTop:2,fontStyle:"italic"}}>{p.pr}</div><div style={{fontSize:13,color:C.sub,marginTop:3}}>{p.en}</div></>
       :<div style={{fontSize:10,color:C.dim,marginTop:1}}>tap to reveal</div>}
     </div>)}
@@ -863,12 +869,15 @@ function PhraseView({lesson,color}){const [exp,setExp]=useState(null);
 
 function FlashView({lesson,color}){const [dir,setDir]=useState("hu");const [cards,setCards]=useState(()=>shuffle(lesson.phrases));const [idx,setIdx]=useState(0);const [flip,setFlip]=useState(false);
   const reset=()=>{setCards(shuffle(lesson.phrases));setIdx(0);setFlip(false);};const card=cards[idx];
+  useEffect(()=>{ if(dir==="hu") speakHu(card.hu); },[idx,dir]);
+  const handleFlip=()=>{ const nf=!flip;setFlip(nf);if(dir==="en"&&nf)speakHu(card.hu); };
   return <div style={{padding:"20px 16px",display:"flex",flexDirection:"column",alignItems:"center",minHeight:"50vh"}}>
     <div style={{display:"flex",gap:6,marginBottom:14}}>
       {["hu","en"].map(d=><button key={d} onClick={()=>{setDir(d);reset();}} style={{padding:"6px 13px",borderRadius:20,border:dir===d?`2px solid ${color}`:`2px solid ${C.border}`,background:dir===d?`${color}10`:"transparent",color:dir===d?color:C.sub,fontSize:11,fontWeight:700,cursor:"pointer"}}>{d==="hu"?"HU → EN":"EN → HU"}</button>)}
     </div>
     <div style={{fontSize:12,color:C.sub}}>{idx+1}/{cards.length}</div>
-    <div onClick={()=>setFlip(!flip)} style={{width:"100%",maxWidth:320,minHeight:190,borderRadius:16,padding:"26px 20px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",background:flip?C.card:`linear-gradient(145deg, ${color}20, ${color}06)`,border:`2px solid ${flip?"#2A2C3E":color+"38"}`,textAlign:"center",marginTop:10,userSelect:"none"}}>
+    <div onClick={handleFlip} style={{width:"100%",maxWidth:320,minHeight:190,borderRadius:16,padding:"26px 20px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",background:flip?C.card:`linear-gradient(145deg, ${color}20, ${color}06)`,border:`2px solid ${flip?"#2A2C3E":color+"38"}`,textAlign:"center",marginTop:10,userSelect:"none",position:"relative"}}>
+      <div style={{position:"absolute",top:8,right:8}}><SpeakBtn text={card.hu} color={color} size={16}/></div>
       <div style={{fontSize:22,fontWeight:800,color:C.text}}>{dir==="hu"?card.hu:card.en}</div>
       {dir==="hu"&&!flip&&<div style={{fontSize:13,color:C.dim,marginTop:6,fontStyle:"italic"}}>{card.pr}</div>}
       {flip&&<div style={{fontSize:16,color:C.sub,marginTop:12}}>{dir==="hu"?card.en:card.hu}</div>}
