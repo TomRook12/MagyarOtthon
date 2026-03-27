@@ -766,9 +766,9 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
   useEffect(()=>{ if(ans!==null&&q.type==="type")speakHu(q.answer); },[ans]);
   const q=qs[qi];const total=qs.length;
   const matchItems=useMemo(()=>{if(q.type!=="match")return[];return[...shuffle(q.pairs.map(p=>({text:p.hu,lang:"hu",key:p.hu}))),...shuffle(q.pairs.map(p=>({text:p.en,lang:"en",key:p.hu})))];},[qi]);
-  const advance=(correct)=>{if(q.phrase)statsApi.recordPhrase(q.phrase.hu,correct);if(correct)setScore(s=>s+1);
-    setTimeout(()=>{if(qi<total-1){setQi(i=>i+1);setAns(null);setTyped("");setMs({sel:null,matched:[],wrong:null});}
-    else{statsApi.stopTimer();statsApi.recordSession(lesson.id,score+(correct?1:0),total);setAns("done");}},correct?600:1200);};
+  const advance=(correct)=>{if(q.phrase)statsApi.recordPhrase(q.phrase.hu,correct);if(correct)setScore(s=>s+1);};
+  const goNext=()=>{if(qi<total-1){setQi(i=>i+1);setAns(null);setTyped("");setMs({sel:null,matched:[],wrong:null});}
+    else{statsApi.stopTimer();statsApi.recordSession(lesson.id,score,total);setAns("done");}};
 
   if(ans==="done"){return <div style={{padding:"40px 20px",textAlign:"center"}}>
     <div style={{fontSize:52}}>{score>=total*0.8?"🎉":score>=total*0.5?"👏":"💪"}</div>
@@ -843,15 +843,14 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
             if(item.lang==="hu")speakHu(item.text);if(matched)return;if(!ms.sel){setMs({...ms,sel:item,wrong:null});return;}if(ms.sel.lang===item.lang){setMs({...ms,sel:item,wrong:null});return;}
             const pair=q.pairs.find(p=>(p.hu===ms.sel.text&&p.en===item.text)||(p.en===ms.sel.text&&p.hu===item.text));
             if(pair){const nm=[...ms.matched,pair.hu+"hu",pair.hu+"en"];setMs({sel:null,matched:nm,wrong:null});
-              if(nm.length===q.pairs.length*2){statsApi.recordPhrase(q.phrase.hu,true);setScore(s=>s+1);
-                setTimeout(()=>{if(qi<total-1){setQi(i2=>i2+1);setAns(null);setTyped("");setMs({sel:null,matched:[],wrong:null});}
-                else{statsApi.stopTimer();statsApi.recordSession(lesson.id,score+1,total);setAns("done");}},500);}}
+              if(nm.length===q.pairs.length*2){statsApi.recordPhrase(q.phrase.hu,true);setScore(s=>s+1);setAns("match_done");}}
             else{setMs({...ms,sel:null,wrong:item.text});setTimeout(()=>setMs(m=>({...m,wrong:null})),600);}
           }} style={{padding:"12px 8px",borderRadius:11,border:`2px solid ${matched?C.green:sel?color:wr?C.red:C.border}`,background:matched?`${C.green}10`:sel?`${color}10`:wr?`${C.red}10`:C.card,color:matched?"#5FD4A0":C.text,fontSize:13,fontWeight:600,cursor:matched?"default":"pointer",opacity:matched?0.4:1,textAlign:"center"}}>{item.text}</button>;
         })}
       </div>
     </div>}
     </div>
+    {ans!==null&&<button onClick={goNext} style={{width:"100%",padding:"14px",borderRadius:14,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:15,fontWeight:700,cursor:"pointer",marginTop:16}}>{qi<total-1?"Next →":"Finish"}</button>}
   </div>;
 }
 
