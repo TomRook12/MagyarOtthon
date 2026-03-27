@@ -33,7 +33,7 @@ const LESSONS = [
       {hu:"Álmodtál valamit?",pr:"Ál-mod-tál vo-lo-mit",en:"Did you dream?"},
       {hu:"Kelj fel!",pr:"Kely fel",en:"Get up!"},
       {hu:"Gyere reggelizni!",pr:"Dye-reh reg-ge-liz-ni",en:"Come have breakfast!"},
-      {hu:"Mit szeretnél reggelire?",pr:"Mit se-ret-nél reg-ge-li-re",en:"What for breakfast?"},
+      {hu:"Mit szeretnél reggelire?",pr:"Mit se-ret-nél reg-ge-li-re",en:"What do you want for breakfast?"},
       {hu:"Kész a reggeli!",pr:"Kés o reg-ge-li",en:"Breakfast is ready!"},
     ], tip:"Start every morning with 'Jó reggelt!' and 'Hogy aludtál?'", pat:"-tál = past tense 'you did'"},
   { id:2, phase:1, title:"Teeth & Hands", sub:"Brushing · Washing · Toilet", aud:"kids",
