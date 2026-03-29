@@ -2,7 +2,7 @@
   "name": "Magyar Otthon",
   "short_name": "Magyar",
   "description": "Family Hungarian learning app",
-  "start_url": "/magyar-otthon/",
+  "start_url": "/MagyarOtthon/",
   "display": "standalone",
   "background_color": "#0F1117",
   "theme_color": "#0F1117",
