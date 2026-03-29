@@ -14,13 +14,13 @@ const PHASES = [
 
 // Time-of-day relevance tags for the focus engine
 const TIME_TAGS = {
-  morning: [1,2,3,4,5,6], // Phase 1 (morning routines) + Phase 1 wife
-  midday: [7,8,9,10,11,12,13,14,21,22,23,24,25], // Going out + food
-  afternoon: [15,16,17,18,19,20,26,27,28,29], // Playing + reading
+  morning: [1,2,3,4,5,6,40], // Phase 1 (morning routines) + Phase 1 wife + rooms
+  midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42], // Going out + food + bikes
+  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42], // Playing + reading + locations + bikes
   evening: [30,31,32,33,34,35], // Bath, bed, end of day
 };
 // Weekend = more playing, outings, reading; Weekday = school run, routines
-const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28]; // playground, library, playing, reading
+const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42]; // playground, library, playing, reading, bikes
 const WEEKDAY_BOOST = [1,2,3,4,5,7,8,11,13,23]; // morning routine, school, car, mealtimes
 
 const LESSONS = [
@@ -330,13 +330,17 @@ const LESSONS = [
       {hu:"Kivel voltál?",pr:"Ki-vel vol-tál",en:"Who with?"},
       {hu:"Történt valami érdekes?",pr:"Tör-tént vo-lo-mi ér-de-kesh",en:"Anything interesting?"},
     ], tip:"Two questions daily on the walk home."},
-  { id:33, phase:7, title:"Your Day", sub:"I worked · I ran", aud:"kids",
+  { id:33, phase:7, title:"Your Day", sub:"Good day · Bad day · Sleepy", aud:"kids",
     phrases:[
       {hu:"Én dolgoztam ma.",pr:"Én dol-goz-tom mo",en:"I worked today."},
       {hu:"Futottam ma.",pr:"Fu-tot-tom mo",en:"I ran today."},
       {hu:"Főztem.",pr:"Főz-tem",en:"I cooked."},
       {hu:"Sétáltam.",pr:"Shé-tál-tom",en:"I walked."},
-    ], tip:"One sentence. 'Futottam ma.' That's enough."},
+      {hu:"Jó volt a napom.",pr:"Yó volt o no-pom",en:"My day was good."},
+      {hu:"Rossz napom volt.",pr:"Ross no-pom volt",en:"My day was bad."},
+      {hu:"Nehéz nap volt.",pr:"Ne-héz nop volt",en:"It was a tough day."},
+      {hu:"Álmos vagyok.",pr:"Ál-mosh vo-dyok",en:"I'm sleepy."},
+    ], tip:"Start with one sentence about your day. 'Jó napom volt.' is enough."},
   { id:34, phase:7, title:"Feelings", sub:"Good · Bad · Proud · Love", aud:"kids",
     phrases:[
       {hu:"Milyen volt a napod?",pr:"Mi-yen volt o no-pod",en:"How was your day?"},
@@ -366,6 +370,7 @@ const LESSONS = [
       {hu:"Persze!",pr:"Per-seh",en:"Of course!"},
       {hu:"Figyelj!",pr:"Fi-dyely",en:"Pay attention!"},
       {hu:"Ugye?",pr:"U-dye",en:"Right?"},
+      {hu:"Biztos?",pr:"Biz-tosh",en:"Are you sure?"},
     ], tip:"React to everything in Hungarian for one full day."},
   { id:37, phase:8, title:"Quick Questions", sub:"Why · When · How", aud:"both",
     phrases:[
@@ -398,6 +403,40 @@ const LESSONS = [
       {hu:"Mesélj még!",pr:"Me-shély még",en:"Tell me more!"},
       {hu:"Egyébként...",pr:"E-dyéb-ként",en:"By the way..."},
     ], tip:"Active listening counts. 'Komolyan?' keeps conversations alive."},
+  { id:40, phase:1, title:"Rooms", sub:"Kitchen · Bedroom · Garden", aud:"kids",
+    phrases:[
+      {hu:"Gyere a konyhába!",pr:"Dye-reh o kon-yá-bo",en:"Come to the kitchen!"},
+      {hu:"Menj a fürdőszobába!",pr:"Meny o für-dő-so-bá-bo",en:"Go to the bathroom!"},
+      {hu:"Menj a szobádba!",pr:"Meny o so-bád-bo",en:"Go to your room!"},
+      {hu:"Hol vagy?",pr:"Hol vody",en:"Where are you?"},
+      {hu:"A nappaliban vagyok.",pr:"O nop-po-li-bon vo-dyok",en:"I'm in the living room."},
+      {hu:"A konyhában vagyok.",pr:"O kon-yá-bon vo-dyok",en:"I'm in the kitchen."},
+      {hu:"Kint vagyok a kertben.",pr:"Kint vo-dyok o kert-ben",en:"I'm out in the garden."},
+    ], tip:"Name the room every time you call or move through the house.", pat:"-ban/-ben = 'in'. -ba/-be = 'into'"},
+  { id:41, phase:8, title:"Where Is It?", sub:"On · Under · Next to", aud:"kids",
+    phrases:[
+      {hu:"Az asztalon van.",pr:"Az os-to-lon von",en:"It's on the table."},
+      {hu:"A padlón van.",pr:"O pod-lón von",en:"It's on the floor."},
+      {hu:"A polcon van.",pr:"O pol-tson von",en:"It's on the shelf."},
+      {hu:"A fiókban van.",pr:"O fi-ók-bon von",en:"It's in the drawer."},
+      {hu:"Alatta van.",pr:"O-lot-to von",en:"It's underneath."},
+      {hu:"Mellette van.",pr:"Mel-let-te von",en:"It's next to it."},
+      {hu:"Balra.",pr:"Bol-ro",en:"On the left."},
+      {hu:"Jobbra.",pr:"Yobb-ro",en:"On the right."},
+      {hu:"Középen.",pr:"Kö-zé-pen",en:"In the middle."},
+    ], tip:"'Hol van?' then point and answer. Three locations per day.", pat:"-on/-en/-ön = on. -ban/-ben = in"},
+  { id:42, phase:2, title:"Bikes & Scooters", sub:"Get on · Pedal · Well done", aud:"kids",
+    phrases:[
+      {hu:"Sisakot fel!",pr:"Shi-sho-kot fel",en:"Helmet on!"},
+      {hu:"Szállj fel a biciklire!",pr:"Sáyj fel o bi-tsik-li-re",en:"Get on your bike!"},
+      {hu:"Szállj fel a rollerre!",pr:"Sáyj fel o rol-ler-re",en:"Get on the scooter!"},
+      {hu:"Szállj fel hozzám!",pr:"Sáyj fel hoz-zám",en:"Get on with me!"},
+      {hu:"Szállj le!",pr:"Sáyj leh",en:"Get off!"},
+      {hu:"Tekerd!",pr:"Te-kerd",en:"Pedal!"},
+      {hu:"Fékezz!",pr:"Fé-kezz",en:"Brake!"},
+      {hu:"Lassan!",pr:"Losh-shon",en:"Slow down!"},
+      {hu:"Jól csináltad!",pr:"Yól chi-nál-tod",en:"Well done!"},
+    ], tip:"'Sisakot fel!' every single time — no exceptions."},
 ];
 
 // ─── UTILITIES ─────────────────────────────────────────────────────────────
