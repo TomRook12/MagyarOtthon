@@ -16,11 +16,11 @@ const PHASES = [
 const TIME_TAGS = {
   morning: [1,2,3,4,5,6,40], // Phase 1 (morning routines) + Phase 1 wife + rooms
   midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42], // Going out + food + bikes
-  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42], // Playing + reading + locations + bikes
+  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44], // Playing + reading + locations + bikes + drawing + counting
   evening: [30,31,32,33,34,35], // Bath, bed, end of day
 };
 // Weekend = more playing, outings, reading; Weekday = school run, routines
-const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42]; // playground, library, playing, reading, bikes
+const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44]; // playground, library, playing, reading, bikes, drawing, counting
 const WEEKDAY_BOOST = [1,2,3,4,5,7,8,11,13,23]; // morning routine, school, car, mealtimes
 
 const LESSONS = [
@@ -303,7 +303,7 @@ const LESSONS = [
       {hu:"Beszélnünk kell erről.",pr:"Be-szél-nünk kell er-ről",en:"We need to talk."},
       {hu:"Mi legyen a szabály?",pr:"Mi le-dyen o so-bály",en:"What's the rule?"},
     ], tip:"Start with celebration."},
-  { id:30, phase:6, title:"Bath Time", sub:"Wash · Rinse · Dry", aud:"kids",
+  { id:30, phase:6, title:"Bath Time", sub:"Wash · Toys · Splash", aud:"kids",
     phrases:[
       {hu:"Fürdés ideje!",pr:"Für-désh i-de-ye",en:"Bath time!"},
       {hu:"Vetkőzz le!",pr:"Vet-kőzz leh",en:"Get undressed!"},
@@ -312,6 +312,11 @@ const LESSONS = [
       {hu:"Csukd be a szemed!",pr:"Chukd be o se-med",en:"Close your eyes!"},
       {hu:"Szállj ki!",pr:"Sáyj ki",en:"Get out!"},
       {hu:"Töröld meg magad!",pr:"Tö-röld meg mo-god",en:"Dry yourself!"},
+      {hu:"Mosd meg a hajad!",pr:"Moshd meg o ho-yod",en:"Wash your hair!"},
+      {hu:"Mosd meg a pocakod!",pr:"Moshd meg o po-tso-kod",en:"Wash your tummy!"},
+      {hu:"Hol a kacsa?",pr:"Hol o ko-cho",en:"Where's the duck?"},
+      {hu:"Ne fröcsögj!",pr:"Ne fröch-ögy",en:"Don't splash!"},
+      {hu:"Meleg vagy hideg?",pr:"Me-leg vody hi-deg",en:"Warm or cold?"},
     ], tip:"Start with 3 phrases. Add 2 each bath.", pat:"verb + meg = 'completely'"},
   { id:31, phase:6, title:"Bedtime", sub:"Pyjamas · Tuck in · Goodnight", aud:"kids",
     phrases:[
@@ -437,6 +442,31 @@ const LESSONS = [
       {hu:"Lassan!",pr:"Losh-shon",en:"Slow down!"},
       {hu:"Jól csináltad!",pr:"Yól chi-nál-tod",en:"Well done!"},
     ], tip:"'Sisakot fel!' every single time — no exceptions."},
+  { id:43, phase:3, title:"Drawing & Colouring", sub:"Draw · Colour · Lines", aud:"kids",
+    phrases:[
+      {hu:"Mit rajzolsz?",pr:"Mit roy-zols",en:"What are you drawing?"},
+      {hu:"Rajzoljunk egy cicát!",pr:"Roy-zol-yunk edy tsi-tsát",en:"Let's draw a cat!"},
+      {hu:"Rajzoljunk egy autót!",pr:"Roy-zol-yunk edy o-u-tót",en:"Let's draw a car!"},
+      {hu:"Színezd ki!",pr:"Sí-nezd ki",en:"Colour it in!"},
+      {hu:"A vonalon belül!",pr:"O vo-no-lon be-lül",en:"Inside the lines!"},
+      {hu:"Milyen színt kérsz?",pr:"Mi-yen sínt kérs",en:"What colour do you want?"},
+      {hu:"Szép lett!",pr:"Sép lett",en:"It turned out nice!"},
+      {hu:"Még egyet!",pr:"Még e-dyet",en:"One more!"},
+      {hu:"Mutasd meg!",pr:"Mu-toshd meg",en:"Show me!"},
+    ], tip:"Ask 'Mit rajzolsz?' any time they pick up a crayon.", pat:"rajzol = draw · színez = colour"},
+  { id:44, phase:3, title:"Counting & Numbers", sub:"1-10 · How many · Count", aud:"kids",
+    phrases:[
+      {hu:"Számoljunk!",pr:"Sá-mol-yunk",en:"Let's count!"},
+      {hu:"Egy, kettő, három.",pr:"Edy, ket-tő, há-rom",en:"One, two, three."},
+      {hu:"Négy, öt, hat.",pr:"Nédy, öt, hot",en:"Four, five, six."},
+      {hu:"Hét, nyolc, kilenc, tíz.",pr:"Hét, nyolts, ki-lents, tíz",en:"Seven, eight, nine, ten."},
+      {hu:"Hány van?",pr:"Hány von",en:"How many are there?"},
+      {hu:"Számold meg!",pr:"Sá-mold meg",en:"Count them!"},
+      {hu:"Ez mennyi?",pr:"Ez men-nyi",en:"How many is this?"},
+      {hu:"Kettő van.",pr:"Ket-tő von",en:"There are two."},
+      {hu:"Még egy!",pr:"Még edy",en:"One more!"},
+      {hu:"Hány ujjad van?",pr:"Hány uy-yod von",en:"How many fingers do you have?"},
+    ], tip:"Count everything: stairs, grapes, toy cars. Use fingers.", pat:"Hány = how many (countable)"},
 ];
 
 // ─── UTILITIES ─────────────────────────────────────────────────────────────
