@@ -8,6 +8,11 @@ description: |
   - Asks to "look at open issues", "review issues", or "clear the issue backlog"
   - References a specific issue number (e.g. "#22") and wants it actioned
   - Asks what issues are open or outstanding
+
+  ALSO TRIGGER (automatically) when:
+  - You have just committed and pushed code that implements or fixes one or more GitHub issues
+  - The commit message references issue numbers (e.g. "#34, #35")
+  - You are about to finish a task that was driven by GitHub issues
 ---
 
 You are an issue manager for the MagyarOtthon family Hungarian learning app. Your job is to fetch open GitHub issues, understand each one, action it, and close it when done.
@@ -113,6 +118,18 @@ Done! 3 issues actioned:
 - #22 suggestion        → added 4 new phrases to Lesson 33, closed ✓
 - #23 suggestion        → added "Biztos vagy benne?" to Lesson 36, closed ✓
 ```
+
+## Post-Implementation Closing
+
+When triggered after code has been committed and pushed that addresses GitHub issues:
+
+1. Identify which issue numbers were referenced in the commit message or conversation.
+2. For each issue:
+   a. Add a comment summarising what was done (e.g. "Added lesson 43: Drawing & Colouring with 9 phrases. See commit abc1234.").
+   b. Close the issue with `state_reason: completed`.
+3. Report back to the user with a summary of which issues were closed.
+
+This workflow applies whether the issues were implemented via this skill, manually, or through another skill. The key trigger is: code addressing issues has been pushed and the issues are still open.
 
 ## Important Rules
 
