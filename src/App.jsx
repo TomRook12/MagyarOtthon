@@ -10,6 +10,7 @@ const PHASES = [
   { id: 6, emoji: "🛁", title: "Bath & Bed", color: "#5B7FC1" },
   { id: 7, emoji: "💬", title: "End of Day", color: "#C17B3A" },
   { id: 8, emoji: "🧰", title: "Toolkit", color: "#8B8B8B" },
+  { id: 9, emoji: "🧱", title: "Grammar Spine", color: "#3AA8A8" },
 ];
 
 // Time-of-day relevance tags for the focus engine
@@ -927,7 +928,7 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
 function PhraseView({lesson,color}){const [exp,setExp]=useState(null);
   return <div style={{padding:"0 16px 80px"}}>
     {lesson.tip&&<div style={{background:`${color}10`,border:`1px solid ${color}22`,borderRadius:12,padding:"10px 12px",margin:"10px 0",fontSize:12,color:"#C8C7D0",lineHeight:1.5}}><span style={{fontWeight:800,color}}>Tip: </span>{lesson.tip}</div>}
-    {lesson.pat&&<div style={{background:"#1A1428",border:"1px solid #2D2548",borderRadius:12,padding:"10px 12px",margin:"6px 0",fontSize:12,color:"#B8A8D8",lineHeight:1.5}}><span style={{fontWeight:800,color:"#A78BFA"}}>Pattern: </span>{lesson.pat}</div>}
+    {lesson.pat&&<div style={{background:"#1A1428",border:"1px solid #2D2548",borderRadius:12,padding:"10px 12px",margin:"6px 0",fontSize:12,color:"#B8A8D8",lineHeight:1.5,whiteSpace:"pre-wrap"}}><span style={{fontWeight:800,color:"#A78BFA"}}>Pattern: </span>{lesson.pat}</div>}
     {lesson.phrases.map((p,i)=><div key={i} style={{background:C.card,borderRadius:11,padding:"11px 13px",marginBottom:5,border:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setExp(exp===i?null:i)}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div style={{fontSize:16,fontWeight:700,color:C.text}}>{p.hu}</div><SpeakBtn text={p.hu} color={color}/></div>
       {exp===i?<><div style={{fontSize:12,color:C.dim,marginTop:2,fontStyle:"italic"}}>{p.pr}</div><div style={{fontSize:13,color:C.sub,marginTop:3}}>{p.en}</div></>
