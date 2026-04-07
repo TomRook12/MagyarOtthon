@@ -7,15 +7,16 @@ Magyar Otthon is a **single-file React app**. All lesson data, business logic, a
 ## Data model
 
 ```
-PHASES[]          — 8 thematic groups (Morning, Going Out, Playing, …)
-LESSONS[]         — 35+ lesson objects, each belonging to one phase
+PHASES[]          — 9 thematic groups (Morning, Going Out, …, Grammar Spine)
+LESSONS[]         — 51+ lesson objects, each belonging to one phase
   └─ phrases[]    — array of { hu, pr, en } (Hungarian, pronunciation, English)
 ```
 
 Each lesson also has:
-- `aud` — target audience: `"kids"` or `"wife"`
+- `aud` — target audience: `"kids"`, `"wife"`, or `"both"`
 - `tip` — a short teaching note
-- `pat` — optional grammar pattern note
+- `pat` — optional grammar pattern note; if it contains `\n`, it is rendered as `<pre>`-style preformatted text in the lesson view so paradigm tables stay aligned
+- `patternId` — optional string tag naming the grammar paradigm the lesson drills (e.g. `"past-indef"`, `"dative"`, `"conditional"`). Present only on Phase 9 Grammar Spine lessons (ids 45–56). Existing lessons without this field are unaffected.
 
 ## State
 
