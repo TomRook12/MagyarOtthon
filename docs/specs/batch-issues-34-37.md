@@ -1,6 +1,6 @@
 # Spec: New Lessons & PWA Icon (Issues #34, #35, #36, #37)
 
-> **Status:** In Progress
+> **Status:** Done
 > **Branch:** `claude/plan-lesson-suggestions-OHwVa`
 
 ## Goal
@@ -49,13 +49,13 @@ The PWA icon is a new SVG file in `/public/` with PNG fallbacks, plus a manifest
 
 ## Implementation tasks
 
-- [ ] Expand lesson 30 with 5 new phrases, update sub field
-- [ ] Append lesson 43 (Drawing & Colouring) to LESSONS
-- [ ] Append lesson 44 (Counting & Numbers) to LESSONS
-- [ ] Add 43, 44 to TIME_TAGS.afternoon and WEEKEND_BOOST
-- [ ] Create SVG icon, generate PNGs, update manifest
-- [ ] Run hungarian-teacher validation
-- [ ] Verify build succeeds
+- [x] Expand lesson 30 with 5 new phrases, update sub field
+- [x] Append lesson 43 (Drawing & Colouring) to LESSONS
+- [x] Append lesson 44 (Counting & Numbers) to LESSONS
+- [x] Add 43, 44 to TIME_TAGS.afternoon and WEEKEND_BOOST
+- [x] Create SVG icon, generate PNGs, update manifest
+- [x] Run hungarian-teacher validation
+- [x] Verify build succeeds
 
 ## Open questions
 

@@ -2,7 +2,7 @@
 
 > **Update 2026-04-10:** Phase 9 was dissolved. Lessons 45–56 still exist (same ids, same phrases, same `patternId` and `pat` paradigm tables) but now live inside everyday phases 1–8 with everyday-themed titles — e.g. "Past Tense — Full Paradigm" is now "What Everyone Did Today" in End of Day; "Conditional" is now "I Would Like…" in Food. See [`docs/decisions/grammar-dissolved-into-everyday-phases.md`](../decisions/grammar-dissolved-into-everyday-phases.md). References below to "Phase 9" and the standalone "Grammar Spine" header are historical.
 >
-> **Status:** Approved (implemented, then restructured — see update above)
+> **Status:** Done
 > **Branch:** `claude/review-hungarian-curriculum-inyIG`
 
 ## Goal
