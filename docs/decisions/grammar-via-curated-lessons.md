@@ -1,7 +1,9 @@
 # Decision: Grammar is taught via curated phrase lessons, not a separate grammar mode
 
 > **Date:** 2026-04-07
-> **Status:** Accepted
+> **Status:** Superseded by [`grammar-dissolved-into-everyday-phases.md`](./grammar-dissolved-into-everyday-phases.md) (2026-04-10)
+>
+> The core principle (grammar via curated phrase lessons, not a grammar mode) still holds. What changed: the 12 paradigm lessons no longer live in a dedicated Phase 9 "Grammar Spine" header — they are distributed across everyday phases 1–8 with everyday-themed titles. See the superseding decision for details.
 
 ## Context
 

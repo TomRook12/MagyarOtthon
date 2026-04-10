@@ -10,11 +10,11 @@ Add a content phase covering future plans, wishes, conditional reasoning, and hy
 ## Background
 
 After Milestones 1 and 2, the learner has:
-- Grammar foundations (Grammar Spine): future with `fog`, conditional `-nék/-nél/-na`, imperative
+- Grammar foundations (paradigm-anchored lessons 45–56): future with `fog`, conditional `-nék/-nél/-na`, imperative
 - Reasoning connectors (Phase 10): `mert`, `ha…akkor`, `szerintem`
 - Narrative past (Phase 11): sequencing events, reported speech
 
-What's missing is *sustained use* of future and conditional in real family conversations. The Grammar Spine teaches the paradigm; Phase 10 introduces `ha…akkor`; this phase provides the extended practice needed for fluency with these structures.
+What's missing is *sustained use* of future and conditional in real family conversations. The paradigm-anchored lessons (45–56) teach the paradigm; Phase 10 introduces `ha…akkor`; this phase provides the extended practice needed for fluency with these structures.
 
 CEFR B1 descriptor: "Can describe hopes, dreams, and ambitions. Can give reasons and explanations for opinions and plans."
 
@@ -44,7 +44,7 @@ CEFR B1 descriptor: "Can describe hopes, dreams, and ambitions. Can give reasons
 
 ### Nice to have
 
-- [ ] `tip` fields reference Grammar Spine lessons for paradigm review (e.g. "See lesson 48 for full conditional endings")
+- [ ] `tip` fields reference paradigm-anchored lessons (ids 45–56) for paradigm review (e.g. "See lesson 48 'I Would Like…' for full conditional endings")
 - [ ] A "Planning Conversation" prompt card: a scenario (e.g. "Plan a birthday party") that encourages stringing multiple phrases together
 
 ### Out of scope

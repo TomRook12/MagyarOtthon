@@ -41,10 +41,10 @@ The app's zero-dependency constraint is respected: browser `SpeechSynthesis` API
 
 #### Grammar-Pattern Quiz Filter
 
-- [ ] A "Drill Pattern" mode accessible from any Grammar Spine lesson
+- [ ] A "Drill Pattern" mode accessible from any lesson with a `patternId`
 - [ ] Collects all phrases across all lessons sharing the same `patternId`
 - [ ] Generates a cross-lesson quiz of up to 15 phrases using existing `generateQuestions` logic
-- [ ] Example: tapping "Drill" on the dative lesson pulls dative phrases from Grammar Spine, Reasoning, Stories, and Breadth lessons
+- [ ] Example: tapping "Drill" on "Give it to Your Sister" (lesson 52, the dative paradigm lesson) pulls dative phrases from paradigm-anchored lessons, Reasoning, Stories, and Breadth lessons
 
 ### Nice to have
 
@@ -229,7 +229,7 @@ No persistence. Recording is discarded when navigating away.
 - [ ] Tapping a story sentence reveals its English translation
 - [ ] "Read aloud" plays full story via TTS
 - [ ] Listening mode auto-plays phrases with timed English reveal
-- [ ] "Drill this pattern" button appears on Grammar Spine lessons and generates a cross-lesson quiz
+- [ ] "Drill this pattern" button appears on lessons with a `patternId` and generates a cross-lesson quiz
 - [ ] (If implemented) Reconstruct quiz type works: tiles can be reordered, correct order scores a point
 - [ ] (If implemented) Shadow mode records and plays back user audio
 - [ ] No regressions in existing flows
