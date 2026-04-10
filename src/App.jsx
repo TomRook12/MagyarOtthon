@@ -10,15 +10,14 @@ const PHASES = [
   { id: 6, emoji: "🛁", title: "Bath & Bed", color: "#5B7FC1" },
   { id: 7, emoji: "💬", title: "End of Day", color: "#C17B3A" },
   { id: 8, emoji: "🧰", title: "Toolkit", color: "#8B8B8B" },
-  { id: 9, emoji: "🧱", title: "Grammar Spine", color: "#3AA8A8" },
 ];
 
 // Time-of-day relevance tags for the focus engine
 const TIME_TAGS = {
-  morning: [1,2,3,4,5,6,40], // Phase 1 (morning routines) + Phase 1 wife + rooms
-  midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42], // Going out + food + bikes
-  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44], // Playing + reading + locations + bikes + drawing + counting
-  evening: [30,31,32,33,34,35], // Bath, bed, end of day
+  morning: [1,2,3,4,5,6,40,49,51,55], // Morning routines + rooms + plans + shoe hunt + room movement
+  midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42,48,53,54], // Going out + food + bikes + politeness + transport + coming home
+  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44,50,52,56], // Playing + reading + imperatives + sharing + comparison
+  evening: [30,31,32,33,34,35,45,46], // Bath, bed, end of day + storytime + what-everyone-did
 };
 // Weekend = more playing, outings, reading; Weekday = school run, routines
 const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44]; // playground, library, playing, reading, bikes, drawing, counting
@@ -329,13 +328,20 @@ const LESSONS = [
       {hu:"Szép álmokat!",pr:"Sép ál-mo-kot",en:"Sweet dreams!"},
       {hu:"Szeretlek.",pr:"Se-ret-lek",en:"I love you."},
     ], tip:"Same order every night."},
-  { id:32, phase:7, title:"Their Day", sub:"What did you do · Best part", aud:"kids",
+  { id:32, phase:7, title:"Their Day", sub:"What did you do · Yesterday · Best part", aud:"kids", patternId:"past-use",
     phrases:[
       {hu:"Mit csináltál ma?",pr:"Mit chi-nál-tál mo",en:"What did you do?"},
       {hu:"Mi volt a legjobb?",pr:"Mi volt o leg-yobb",en:"What was the best part?"},
       {hu:"Kivel voltál?",pr:"Ki-vel vol-tál",en:"Who with?"},
       {hu:"Történt valami érdekes?",pr:"Tör-tént vo-lo-mi ér-de-kesh",en:"Anything interesting?"},
-    ], tip:"Two questions daily on the walk home."},
+      {hu:"Tegnap az iskolában voltam.",pr:"Teg-nop oz ish-ko-lá-bon vol-tom",en:"Yesterday I was at school."},
+      {hu:"Aludtál egyet?",pr:"O-lud-tál e-dyet",en:"Did you have a nap?"},
+      {hu:"Mentünk a parkba.",pr:"Men-tünk o pork-bo",en:"We went to the park."},
+      {hu:"Ettetek otthon?",pr:"Et-te-tek ot-hon",en:"Did you eat at home?"},
+      {hu:"Megcsináltam a házimat.",pr:"Meg-chi-nál-tom o há-zi-mot",en:"I did my homework."},
+      {hu:"Olvastunk egy könyvet.",pr:"Ol-vosh-tunk edy kön-yet",en:"We read a book."},
+      {hu:"Jól aludtál éjjel?",pr:"Yól o-lud-tál éy-yel",en:"Did you sleep well last night?"},
+    ], tip:"Two questions daily on the walk home. Try narrating what you did today — past tense becomes natural through story.", pat:"Common irregular pasts:\nvan   → volt    |  megy  → ment\nalszik → aludt  |  eszik → evett\nolvas → olvasott|  csinál → csinált"},
   { id:33, phase:7, title:"Your Day", sub:"Good day · Bad day · Sleepy", aud:"kids",
     phrases:[
       {hu:"Én dolgoztam ma.",pr:"Én dol-goz-tom mo",en:"I worked today."},
@@ -469,8 +475,7 @@ const LESSONS = [
       {hu:"Hány ujjad van?",pr:"Hány uy-yod von",en:"How many fingers do you have?"},
     ], tip:"Count everything: stairs, grapes, toy cars. Use fingers.", pat:"Hány = how many (countable)"},
 
-  // ── PHASE 9: GRAMMAR SPINE ─────────────────────────────────────────────
-  { id:45, phase:9, title:"Definite vs Indefinite Verbs", sub:"Olvasok vs olvasom — when you know which one", aud:"both", patternId:"def-vs-indef",
+  { id:45, phase:5, title:"Reading the Book vs a Book", sub:"Olvasok egy könyvet · olvasom a könyvet", aud:"both", patternId:"def-vs-indef",
     phrases:[
       {hu:"Olvasok egy könyvet.",pr:"Ol-vo-shok edy kön-yet",en:"I'm reading a book."},
       {hu:"Olvasom a könyvet.",pr:"Ol-vo-shom o kön-yet",en:"I'm reading the book."},
@@ -481,7 +486,7 @@ const LESSONS = [
       {hu:"Látok egy madarat.",pr:"Lá-tok edy mo-do-rot",en:"I see a bird."},
       {hu:"Látom a madarat.",pr:"Lá-tom o mo-do-rot",en:"I see the bird."},
     ], tip:"Use 'a/az' before the object to trigger definite conjugation — if you say 'the', the verb ending changes.", pat:"Indefinite: -ok/-ek/-ök (unknown/unspecified)\nDefinite:   -om/-em/-öm (known — 'the')\n\nolvas: olvas-ok  /  olvas-om\neszik: esz-ek    /  esz-em\nkeres: keres-ek  /  keres-em"},
-  { id:46, phase:9, title:"Past Tense — Full Paradigm", sub:"All six persons with csinál", aud:"both", patternId:"past-indef",
+  { id:46, phase:7, title:"What Everyone Did Today", sub:"Csináltam · csináltál · csináltunk", aud:"both", patternId:"past-indef",
     phrases:[
       {hu:"Csináltam.",pr:"Chi-nál-tom",en:"I did it."},
       {hu:"Csináltál valamit?",pr:"Chi-nál-tál vo-lo-mit",en:"Did you do something?"},
@@ -492,18 +497,7 @@ const LESSONS = [
       {hu:"Mit csináltál ma?",pr:"Mit chi-nál-tál mo",en:"What did you do today?"},
       {hu:"Jól csináltad!",pr:"Yól chi-nál-tod",en:"You did it well!"},
     ], tip:"Drill all six forms with csinál, then swap in any regular verb.", pat:"Past -t- + personal ending:\nén:  csinál-t-am\nte:  csinál-t-ál\nő:   csinál-t     (no ending)\nmi:  csinál-t-unk\nti:  csinál-t-atok\nők:  csinál-t-ak"},
-  { id:47, phase:9, title:"Past Tense — Talking About Yesterday", sub:"Mixed verbs, narrative flow", aud:"both", patternId:"past-use",
-    phrases:[
-      {hu:"Tegnap az iskolában voltam.",pr:"Teg-nop oz ish-ko-lá-bon vol-tom",en:"Yesterday I was at school."},
-      {hu:"Mit csináltál tegnap?",pr:"Mit chi-nál-tál teg-nop",en:"What did you do yesterday?"},
-      {hu:"Aludtál egyet?",pr:"O-lud-tál e-dyet",en:"Did you have a nap?"},
-      {hu:"Mentünk a parkba.",pr:"Men-tünk o pork-bo",en:"We went to the park."},
-      {hu:"Ettetek otthon?",pr:"Et-te-tek ot-hon",en:"Did you eat at home?"},
-      {hu:"Megcsináltam a házimat.",pr:"Meg-chi-nál-tom o há-zi-mot",en:"I did my homework."},
-      {hu:"Olvastunk egy könyvet.",pr:"Ol-vosh-tunk edy kön-yet",en:"We read a book."},
-      {hu:"Jól aludtál éjjel?",pr:"Yól o-lud-tál éy-yel",en:"Did you sleep well last night?"},
-    ], tip:"Try telling your child what you did today — past tense becomes natural through narrative.", pat:"Common irregular pasts:\nvan   → volt    |  megy  → ment\nalszik → aludt  |  eszik → evett\nolvas → olvasott|  csinál → csinált"},
-  { id:48, phase:9, title:"Conditional — I Would…", sub:"-nék/-nél/-na and friends", aud:"both", patternId:"conditional",
+  { id:48, phase:4, title:"I Would Like…", sub:"Szeretnék · kérnék · jó lenne", aud:"both", patternId:"conditional",
     phrases:[
       {hu:"Szeretnék fagylaltot.",pr:"Se-ret-nék fody-lol-tot",en:"I would like an ice cream."},
       {hu:"Szeretnél te is?",pr:"Se-ret-nél te ish",en:"Would you like some too?"},
@@ -514,7 +508,7 @@ const LESSONS = [
       {hu:"Jó lenne!",pr:"Yó len-ne",en:"That would be good!"},
       {hu:"Megcsinálnád?",pr:"Meg-chi-nál-nád",en:"Would you do it?"},
     ], tip:"Szeretnék + noun is the polite 'I'd like'. Use it at shops and restaurants too.", pat:"Conditional -ná-/-né- + ending:\nén:  csinál-nék\nte:  csinál-nál\nő:   csinál-na\nmi:  csinál-nánk\nti:  csinál-nátok\nők:  csinál-nának"},
-  { id:49, phase:9, title:"Future with fog", sub:"fogok menni — I'm going to go", aud:"both", patternId:"future-fog",
+  { id:49, phase:1, title:"What We'll Do Today", sub:"Fogok · fogsz · fog · fogunk", aud:"both", patternId:"future-fog",
     phrases:[
       {hu:"Fogok menni.",pr:"Fo-gok men-ni",en:"I'm going to go."},
       {hu:"Fogsz enni?",pr:"Fogsz en-ni",en:"Are you going to eat?"},
@@ -525,7 +519,7 @@ const LESSONS = [
       {hu:"Ma fogunk sütni.",pr:"Mo fo-gunk shüt-ni",en:"Today we're going to bake."},
       {hu:"Holnap fogok takarítani.",pr:"Hol-nop fo-gok to-ko-rí-to-ni",en:"Tomorrow I'm going to clean."},
     ], tip:"fog is always followed by the infinitive (-ni). One helper verb, unlimited futures.", pat:"fog + infinitive (-ni):\nén:  fog-ok\nte:  fog-sz\nő:   fog\nmi:  fog-unk\nti:  fog-tok\nők:  fog-nak"},
-  { id:50, phase:9, title:"Imperative — Asking & Telling", sub:"Gyere! Edd meg! Feküdj le!", aud:"both", patternId:"imperative",
+  { id:50, phase:3, title:"Come Here! Go Back!", sub:"Gyere · menj · edd meg · ne csináld", aud:"both", patternId:"imperative",
     phrases:[
       {hu:"Gyere ide!",pr:"Dye-re i-de",en:"Come here!"},
       {hu:"Menj vissza!",pr:"Meny vis-so",en:"Go back!"},
@@ -536,7 +530,7 @@ const LESSONS = [
       {hu:"Gyerünk!",pr:"Dye-rünk",en:"Let's go!"},
       {hu:"Kérd meg szépen!",pr:"Kérd meg sé-pen",en:"Ask nicely!"},
     ], tip:"Imperatives are the most useful forms for parents — you use them dozens of times a day.", pat:"Imperative: stem + -j- + ending\nenni  → egyél!  |  inni  → igyál!\nmenni → menj!   |  jönni → gyere!\nfeküdni → feküdj!\nNegative: Ne + imperative form"},
-  { id:51, phase:9, title:"My, Your, His — Possessive Suffixes", sub:"könyvem, könyved, könyve…", aud:"both", patternId:"possessive",
+  { id:51, phase:1, title:"Where's Your Shoe?", sub:"Könyvem · cipőd · táskája", aud:"both", patternId:"possessive",
     phrases:[
       {hu:"Ez az én könyvem.",pr:"Ez oz én kön-vem",en:"This is my book."},
       {hu:"Ez a te játékod.",pr:"Ez o te yá-té-kod",en:"This is your toy."},
@@ -547,7 +541,7 @@ const LESSONS = [
       {hu:"Ez a kis szobánk.",pr:"Ez o kish so-bánk",en:"This is our little room."},
       {hu:"Apukád vár rád.",pr:"O-pu-kád vár rád",en:"Your daddy is waiting for you."},
     ], tip:"Try 'Hol van a ...d/ed/öd?' for every lost item hunt.", pat:"Possessive suffixes (one owner):\n1st: könyv-em   my book\n2nd: könyv-ed   your book\n3rd: könyv-e    their book\n1pl: könyv-ünk  our book\n2pl: könyv-etek your (pl) book\n3pl: könyv-ük   their book"},
-  { id:52, phase:9, title:"Giving & Telling — Dative -nak/-nek", sub:"Adok apának · Mondd anyának", aud:"both", patternId:"dative",
+  { id:52, phase:3, title:"Give it to Your Sister", sub:"Add oda testvérednek · mondd apának", aud:"both", patternId:"dative",
     phrases:[
       {hu:"Add oda a testvérednek!",pr:"Od-do o-do o tesht-vé-red-nek",en:"Give it to your sibling!"},
       {hu:"Mondd meg apának!",pr:"Mondd meg o-pá-nok",en:"Tell dad!"},
@@ -558,7 +552,7 @@ const LESSONS = [
       {hu:"Ajándékot hoztam nektek.",pr:"O-yán-dé-kot hoz-tom nek-tek",en:"I brought a gift for you all."},
       {hu:"Szólj a tanárnak!",pr:"Sóly o to-nár-nok",en:"Tell the teacher!"},
     ], tip:"Add -nak/-nek to any name to say 'to/for' them. Personal forms: nekem, neked, neki.", pat:"Dative -nak/-nek = to / for\napa   → apá-nak\nanya  → anyá-nak\nkutya → kutyá-nak\nPersonal:\nén→nekem  te→neked  ő→neki\nmi→nekünk ti→nektek ők→nekik"},
-  { id:53, phase:9, title:"With — Instrumental -val/-vel", sub:"Autóval · késsel · anyával", aud:"both", patternId:"instrumental",
+  { id:53, phase:2, title:"Going Together", sub:"Autóval · veled · anyával", aud:"both", patternId:"instrumental",
     phrases:[
       {hu:"Jövök veled.",pr:"Yö-vök ve-led",en:"I'm coming with you."},
       {hu:"Játssz a testvéreddel!",pr:"Yáts o tesht-vé-red-del",en:"Play with your sibling!"},
@@ -569,7 +563,7 @@ const LESSONS = [
       {hu:"Vágd késsel!",pr:"Vágd kés-sel",en:"Cut it with a knife!"},
       {hu:"Jöttél baráttal?",pr:"Yöt-tél bo-rát-tol",en:"Did you come with a friend?"},
     ], tip:"The suffix assimilates to the final consonant: autóval, but baráttal, késsel.", pat:"Instrumental -val/-vel (assimilates):\nautó  + val → autóval\nkés   + vel → késsel\nanya  + val → anyával\nbarát + tal → baráttal\nPersonal: velem · veled · vele\nvelünk · veletek · velük"},
-  { id:54, phase:9, title:"From — -tól/-ről/-ből", sub:"Three ways to say 'from'", aud:"both", patternId:"from-cases",
+  { id:54, phase:2, title:"Coming Home From…", sub:"Jövök a parkból · leszálltam a bicikliről", aud:"both", patternId:"from-cases",
     phrases:[
       {hu:"Jövök az iskolából.",pr:"Yö-vök oz ish-ko-lá-ból",en:"I'm coming from school."},
       {hu:"Hazajöttem a parkból.",pr:"Ho-zo-yöt-tem o pork-ból",en:"I came home from the park."},
@@ -580,7 +574,7 @@ const LESSONS = [
       {hu:"Kiveszem a fiókból.",pr:"Ki-ve-sem o fi-ók-ból",en:"I take it out of the drawer."},
       {hu:"Elvettem tőle a labdát.",pr:"El-vet-tem tő-le o lob-dát",en:"I took the ball from them."},
     ], tip:"Three different 'from': ból/ből from inside, ról/ről off a surface, tól/től away from nearby.", pat:"Three 'from' cases:\n-ból/-ből  out of (was inside)\n-ról/-ről  off of (was on surface)\n-tól/-től  away from (was beside)\n\niskola  → iskolá-ból\nbicikli → bicikli-ről\napa     → apá-tól"},
-  { id:55, phase:9, title:"Prefixes Compared — be/ki/fel/le/át/vissza", sub:"Same verb, six directions", aud:"both", patternId:"prefixes",
+  { id:55, phase:1, title:"In, Out, Up, Down", sub:"Bemegyek · kimegy · felmegyünk · lemész", aud:"both", patternId:"prefixes",
     phrases:[
       {hu:"Bemegyek a szobába.",pr:"Be-me-dyek o so-bá-bo",en:"I'm going into the room."},
       {hu:"Kimegy az ajtón.",pr:"Ki-medy oz oy-tón",en:"They go out through the door."},
@@ -591,7 +585,7 @@ const LESSONS = [
       {hu:"Bejön hozzánk.",pr:"Be-yön hoz-zánk",en:"They're coming in to us."},
       {hu:"Gyere ki ide!",pr:"Dye-re ki i-de",en:"Come out here!"},
     ], tip:"The prefix separates from the verb when negating: Bemegyek → Nem megyek be.", pat:"Prefixes with megy/jön:\nbe-     into     |  ki-    out of\nfel-    up       |  le-    down\nát-     across   |  vissza- back\n\nWith negation, prefix moves after the verb:\nBemegyek. → Nem megyek be."},
-  { id:56, phase:9, title:"Bigger, Biggest — Comparison", sub:"-bb · leg- · mint", aud:"both", patternId:"comparative",
+  { id:56, phase:3, title:"Bigger, Smaller, Best", sub:"Nagyobb · kisebb · legjobb · mint", aud:"both", patternId:"comparative",
     phrases:[
       {hu:"Ez nagyobb.",pr:"Ez nod-yobb",en:"This is bigger."},
       {hu:"A kék kisebb.",pr:"O kék ki-shebb",en:"The blue one is smaller."},
@@ -1133,7 +1127,7 @@ export default function App(){
     {screen==="home"&&<div>
       {/* Header with goal ring */}
       <div style={{padding:"16px 16px 12px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <div><div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div><div style={{fontSize:11,color:C.sub}}>Family Hungarian · 51 lessons</div></div>
+        <div><div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div><div style={{fontSize:11,color:C.sub}}>Family Hungarian · 55 lessons</div></div>
         <GoalRing todayMins={statsApi.todayMins} goal={statsApi.stats.dailyGoal} onTap={()=>setShowGoalSettings(true)}/>
       </div>
 

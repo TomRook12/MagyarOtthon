@@ -65,7 +65,7 @@ This milestone is a **vocabulary and domain expansion**, not a grammar or engine
 ### Out of scope
 
 - New phases (all lessons slot into existing phases 1–8)
-- Grammar paradigm lessons (covered by Grammar Spine)
+- Grammar paradigm lessons (already covered by paradigm-anchored lessons 45–56, distributed across phases 1–8)
 - Engine changes (SRS, new quiz types)
 - Audio/listening features
 - Splitting App.jsx

@@ -9,7 +9,7 @@ Add two new content phases that bridge the learner from A2 to B1 by teaching the
 
 ## Background
 
-The current 44 lessons (plus 12 planned in the Grammar Spine spec) cover situational phrases for daily routines. The learner can give instructions, name objects, and handle basic social exchanges — but cannot yet:
+The current 55 lessons (including the 12 paradigm-anchored lessons 45–56, distributed across phases 1–8) cover situational phrases for daily routines. The learner can give instructions, name objects, and handle basic social exchanges — but cannot yet:
 
 - Explain *why* ("because the road is wet")
 - Express opinions with reasons ("I think we should go, because…")
@@ -17,11 +17,13 @@ The current 44 lessons (plus 12 planned in the Grammar Spine spec) cover situati
 - Report what someone said ("She said that…")
 - Connect ideas across sentences
 
-CEFR B1 requires all of these. The Grammar Spine (Milestone 1a) provides the verb/case foundations; this milestone builds discourse and pragmatics on top of that grammar.
+CEFR B1 requires all of these. The paradigm-anchored lessons (Milestone 1a, ids 45–56 distributed across phases 1–8) provide the verb/case foundations; this milestone builds discourse and pragmatics on top of that grammar.
 
 ### Phase numbering
 
-- Phase 9: Grammar Spine (Milestone 1a, already specced)
+> **Note (2026-04-10):** Phase 9 "Grammar Spine" was dissolved — its lessons now live inside phases 1–8. The phase numbers below are pre-existing draft placeholders; when implemented, they may be renumbered to start at Phase 9 now that the slot is free. See `docs/decisions/grammar-dissolved-into-everyday-phases.md`.
+
+- Milestone 1a: paradigm-anchored lessons (ids 45–56, distributed across phases 1–8)
 - **Phase 10: Reasoning & Opinion** (this spec)
 - **Phase 11: Telling Stories** (this spec)
 
@@ -51,13 +53,13 @@ CEFR B1 requires all of these. The Grammar Spine (Milestone 1a) provides the ver
 
 - [ ] Phase 10 and Phase 11 added to `PHASES` array with distinct emoji + color
 - [ ] All lessons follow existing schema: `{ id, phase, title, sub, aud, phrases[], tip, pat }`
-- [ ] All lessons include optional `patternId` field (introduced in Grammar Spine spec)
+- [ ] All lessons include optional `patternId` field (introduced by the paradigm-anchored lessons 45–56)
 - [ ] `TIME_TAGS` updated: Reasoning lessons are time-agnostic; Story lessons boosted in `evening` (bedtime storytelling context)
 - [ ] `aud` set per lesson: Reasoning lessons → `"both"`, Story lessons → mix of `"kids"` and `"wife"`
 
 ### Nice to have
 
-- [ ] Cross-references in `tip` fields pointing back to Grammar Spine lessons ("See lesson 48 for conditional paradigm")
+- [ ] Cross-references in `tip` fields pointing back to paradigm-anchored lessons ("See lesson 48 'I Would Like…' for conditional paradigm")
 - [ ] A "Conversation Builder" exercise type: given a prompt, pick 3 connected phrases in order (beyond current quiz types — could be a follow-up)
 
 ### Out of scope
@@ -98,13 +100,13 @@ Each lesson follows the existing pattern. Example:
 
 ### ID allocation
 
-Grammar Spine uses ids 45–56. This spec uses:
+Paradigm-anchored lessons use ids 45–56. This spec uses:
 - Phase 10 (Reasoning): ids **57–62**
 - Phase 11 (Stories): ids **63–68**
 
 ### Vocabulary targets
 
-Each phase adds ~100 distinct new words (connectors, abstract nouns, narrative verbs, opinion vocabulary). Combined with Grammar Spine and existing lessons, this pushes total vocabulary toward ~800–900 words.
+Each phase adds ~100 distinct new words (connectors, abstract nouns, narrative verbs, opinion vocabulary). Combined with the paradigm-anchored lessons and existing lessons, this pushes total vocabulary toward ~800–900 words.
 
 ### Grammar patterns covered
 
@@ -135,7 +137,7 @@ Each phase adds ~100 distinct new words (connectors, abstract nouns, narrative v
 
 ## Open questions
 
-- Should "Comparing Things" (Phase 10) overlap with Grammar Spine lesson 56 (Bigger, Biggest)? Recommendation: minimal overlap — Spine teaches the paradigm, this lesson teaches usage in arguments ("I think the park is better because…"). — *owner: user*
+- Should "Comparing Things" (Phase 10) overlap with paradigm-anchored lesson 56 "Bigger, Smaller, Best"? Recommendation: minimal overlap — lesson 56 teaches the paradigm, this lesson teaches usage in arguments ("I think the park is better because…"). — *owner: user*
 - Should reported speech (lesson "What She Said") cover only `hogy`-clauses, or also indirect questions (`megkérdezte, hogy…`)? Recommendation: both — they use the same `hogy` connector. — *owner: user*
 
 ## Acceptance criteria
