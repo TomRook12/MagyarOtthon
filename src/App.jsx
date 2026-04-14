@@ -12,6 +12,7 @@ const PHASES = [
   { id: 8, emoji: "🧰", title: "Toolkit", color: "#8B8B8B" },
   { id: 9, emoji: "💡", title: "Reasoning", color: "#D4A843" },
   { id: 10, emoji: "📝", title: "Stories", color: "#8B5E3C" },
+  { id: 11, emoji: "🔮", title: "Plans & What-ifs", color: "#7B4FA0" },
 ];
 
 // Time-of-day relevance tags for the focus engine
@@ -19,10 +20,10 @@ const TIME_TAGS = {
   morning: [1,2,3,4,5,6,40,49,51,55], // Morning routines + rooms + plans + shoe hunt + room movement
   midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42,48,53,54], // Going out + food + bikes + politeness + transport + coming home
   afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44,50,52,56], // Playing + reading + imperatives + sharing + comparison
-  evening: [30,31,32,33,34,35,45,46,63,64,65,66,67,68], // Bath, bed, end of day + storytime + what-everyone-did + narrative/stories
+  evening: [30,31,32,33,34,35,45,46,63,64,65,66,67,68,69,70,71,72,73,74], // Bath, bed, end of day + storytime + what-everyone-did + narrative/stories + plans & what-ifs
 };
 // Weekend = more playing, outings, reading; Weekday = school run, routines
-const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44]; // playground, library, playing, reading, bikes, drawing, counting
+const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44,69,73]; // playground, library, playing, reading, bikes, drawing, counting, tomorrow plans, decision-making
 const WEEKDAY_BOOST = [1,2,3,4,5,7,8,11,13,23]; // morning routine, school, car, mealtimes
 
 const LESSONS = [
@@ -730,6 +731,72 @@ const LESSONS = [
       {hu:"Képzeld, elfelejtette a cipőjét!",pr:"Kép-zeld, el-fe-ley-tet-te o tsi-pő-yét",en:"Imagine, she forgot her shoe!"},
       {hu:"Aztán kiderült, hogy nálam volt.",pr:"Oz-tán ki-de-rült, hogy ná-lom volt",en:"Then it turned out I had it."},
     ], tip:"Képzeld! (Imagine!) is your go-to opener for any funny story — it signals 'you won't believe this'.", pat:"képzeld! = imagine! / you won't believe it!\ntudod mit? = you know what?\nés akkor = and then\negyszerre = all at once / suddenly\nkiderült, hogy = it turned out that"},
+  { id:69, phase:11, title:"Tomorrow We Will…", sub:"fog + infinitive · holnap · a hétvégén", aud:"both", patternId:"future-plans",
+    phrases:[
+      {hu:"Mit fogunk csinálni holnap?",pr:"Mit fo-gunk chi-nál-ni hol-nop",en:"What are we going to do tomorrow?"},
+      {hu:"Holnap elmegyünk a parkba.",pr:"Hol-nop el-me-dyünk o pork-bo",en:"Tomorrow we're going to the park."},
+      {hu:"A hétvégén meglátogatjuk a nagymamát.",pr:"O hét-vé-gén meg-lá-to-got-yuk o nody-mo-mát",en:"At the weekend we'll visit grandma."},
+      {hu:"Jövő héten el fogunk menni kirándulni.",pr:"Yö-vő hé-ten el fo-gunk men-ni ki-rán-dul-ni",en:"Next week we'll go on a trip."},
+      {hu:"Este fogunk vacsorázni.",pr:"Esh-te fo-gunk vo-cho-ráz-ni",en:"We'll have dinner this evening."},
+      {hu:"Holnap korán fogunk kelni.",pr:"Hol-nop ko-rán fo-gunk kel-ni",en:"Tomorrow we'll get up early."},
+      {hu:"Nyáron Magyarországra fogunk menni.",pr:"Nyá-ron Mo-dyor-or-ság-ro fo-gunk men-ni",en:"In summer we'll go to Hungary."},
+      {hu:"Tervezzük meg a hétvégét!",pr:"Ter-vez-zük meg o hét-vé-gét",en:"Let's plan the weekend!"},
+    ], tip:"Weekend mornings are perfect for this lesson — plan the day together in Hungarian. See lesson 49 for the full fog paradigm table.", pat:"fog + infinitive = will / going to\nholnap = tomorrow\na hétvégén = at the weekend\njövő héten = next week\nnyáron = in summer\nhamarosan = soon"},
+  { id:70, phase:11, title:"I Would Like To…", sub:"szeretnék · szeretnénk · + infinitive", aud:"both", patternId:"conditional-wishes",
+    phrases:[
+      {hu:"Szeretnék kávét inni.",pr:"Se-ret-nék ká-vét in-ni",en:"I'd like to have a coffee."},
+      {hu:"Szeretnénk ma sétálni menni.",pr:"Se-ret-nénk mo shé-tál-ni men-ni",en:"We'd like to go for a walk today."},
+      {hu:"Szeretnél jönni velünk?",pr:"Se-ret-nél yön-ni ve-lünk",en:"Would you like to come with us?"},
+      {hu:"Szeretném megmutatni neked a kedvenc helyemet.",pr:"Se-ret-ném meg-mu-tot-ni ne-ked o ked-vents he-ye-met",en:"I'd like to show you my favourite place."},
+      {hu:"Szeretnénk egy szép nyarat tölteni.",pr:"Se-ret-nénk edy sép nyá-rot töl-te-ni",en:"We'd like to spend a lovely summer."},
+      {hu:"Szeretnék megtanulni úszni.",pr:"Se-ret-nék meg-to-nul-ni ús-ni",en:"I'd like to learn to swim."},
+      {hu:"Szeretnénk együtt moziba menni.",pr:"Se-ret-nénk e-dyütt mo-zi-bo men-ni",en:"We'd like to go to the cinema together."},
+      {hu:"Szeretném, ha boldogok lennétek.",pr:"Se-ret-ném, ho bol-do-gok len-né-tek",en:"I'd like you to be happy."},
+    ], tip:"Szeretnék is the most natural way to say 'I'd like to' — use it anywhere you'd say 'I want' in English. See lesson 48 for the full conditional paradigm.", pat:"szeretnék = I would like\nszeretnél = you would like\nszeretne = he/she would like\nszeretnénk = we would like\n+ infinitive follows"},
+  { id:71, phase:11, title:"If I Could…", sub:"ha + conditional · lenne · tudnék", aud:"both", patternId:"conditional-if",
+    phrases:[
+      {hu:"Ha tudnék, segítenék neked.",pr:"Ho tud-nék, she-gí-te-nék ne-ked",en:"If I could, I'd help you."},
+      {hu:"Ha lenne időm, sokat olvasnék.",pr:"Ho len-ne i-dőm, sho-kot ol-vosh-nék",en:"If I had time, I'd read a lot."},
+      {hu:"Ha szép idő lenne, kimennénk a parkba.",pr:"Ho sép i-dő len-ne, ki-men-nénk o pork-bo",en:"If the weather were nice, we'd go to the park."},
+      {hu:"Ha tehetnénk, elmennénk Magyarországra.",pr:"Ho te-het-nénk, el-men-nénk Mo-dyor-or-ság-ro",en:"If we could, we'd go to Hungary."},
+      {hu:"Ha tudnál repülni, hova mennél?",pr:"Ho tud-nál re-pül-ni, ho-vo men-nél",en:"If you could fly, where would you go?"},
+      {hu:"Ha gazdag lennék, sokat utaznánk.",pr:"Ho goz-dog len-nék, sho-kot u-toz-nánk",en:"If I were rich, we'd travel a lot."},
+      {hu:"Ha nem kellene dolgoznom, itthon maradnék.",pr:"Ho nem kel-le-ne dol-goz-nom, itt-hon mo-rod-nék",en:"If I didn't have to work, I'd stay home."},
+      {hu:"Ha lenne egy kívánságom, a ti boldogságotokat kérném.",pr:"Ho len-ne edy kí-ván-shá-gom, o ti bol-dog-shá-go-to-kot kér-ném",en:"If I had one wish, I'd ask for your happiness."},
+    ], tip:"Ha + conditional is your 'what if' construction. Great for dreaming out loud with the family. See lesson 48 for the conditional -nék endings.", pat:"ha = if\nha…, …nék / …nénk = if…, I / we would…\nlenne = there would be / it would be\ntudnék = I could\nmennénk = we would go\nha…akkor… = if…then…"},
+  { id:72, phase:11, title:"Maybe, Probably, Definitely", sub:"talán · valószínűleg · biztosan · lehet, hogy", aud:"both", patternId:"modal-hedging",
+    phrases:[
+      {hu:"Talán elmegyünk a parkba.",pr:"To-lán el-me-dyünk o pork-bo",en:"Maybe we'll go to the park."},
+      {hu:"Valószínűleg esni fog.",pr:"Vo-ló-sí-nű-leg esh-ni fog",en:"It will probably rain."},
+      {hu:"Biztosan ott lesz ő is.",pr:"Biz-to-shon ott les ő ish",en:"She'll definitely be there too."},
+      {hu:"Lehet, hogy késő lesz.",pr:"Le-het, hogy ké-shő les",en:"It might be late."},
+      {hu:"Talán megvesszük azt a játékot.",pr:"To-lán meg-ves-sük ozt o yá-té-kot",en:"Maybe we'll buy that toy."},
+      {hu:"Biztosan jól fogod érezni magad.",pr:"Biz-to-shon yól fo-god é-rez-ni mo-god",en:"You'll definitely enjoy yourself."},
+      {hu:"Lehet, hogy holnap találkozunk velük.",pr:"Le-het, hogy hol-nop to-lál-ko-zunk ve-lük",en:"Maybe we'll meet them tomorrow."},
+      {hu:"Valószínűleg hamarosan hazaérünk.",pr:"Vo-ló-sí-nű-leg ho-mo-ro-shon ho-zo-é-rünk",en:"We'll probably be home soon."},
+    ], tip:"Layer these hedges onto any plan to sound more natural: Talán… / Valószínűleg… / Biztosan… — they give you the full spectrum from 'maybe' to 'for sure'.", pat:"talán = maybe / perhaps\nvalószínűleg = probably\nbiztosan = definitely / certainly\nlehet, hogy = it may be that / maybe\nbiztos, hogy = it is certain that"},
+  { id:73, phase:11, title:"Making Decisions Together", sub:"mit szólsz · melyiket · inkább · megegyeztünk", aud:"both", patternId:"decision-questions",
+    phrases:[
+      {hu:"Mit szólsz, elmenjünk?",pr:"Mit sólsh, el-men-yünk",en:"What do you say, shall we go?"},
+      {hu:"Melyiket válasszuk?",pr:"Me-yi-ket vá-los-suk",en:"Which one shall we choose?"},
+      {hu:"Inkább maradjunk otthon.",pr:"In-kább mo-rod-yunk ott-hon",en:"Let's rather stay home."},
+      {hu:"Mi legyen ebédre?",pr:"Mi le-dyen e-béd-re",en:"What should we have for lunch?"},
+      {hu:"Megegyeztünk!",pr:"Meg-e-dyez-tünk",en:"We've agreed! It's settled!"},
+      {hu:"Szavazzunk!",pr:"So-voz-zunk",en:"Let's vote!"},
+      {hu:"Te mit gondolsz?",pr:"Te mit gon-dolsh",en:"What do you think?"},
+      {hu:"Ezt a tervet elfogadom.",pr:"Ezt o ter-vet el-fo-go-dom",en:"I agree to this plan."},
+    ], tip:"Mit szólsz…? is your go-to for including your partner or kids in any decision — much warmer than just announcing a plan.", pat:"mit szólsz? = what do you say? / how about…?\nmelyiket? = which one?\ninkább = rather / preferably\nmegegyeztünk = we agreed / it's settled\nszavazzunk = let's vote"},
+  { id:74, phase:11, title:"Dreams & Hopes", sub:"remélem · szeretném, ha · álom · cél", aud:"both", patternId:"hopes-subjunctive",
+    phrases:[
+      {hu:"Remélem, hogy egészségesek lesztek.",pr:"Re-mé-lem, hogy e-gés-shé-ge-shek les-tek",en:"I hope you'll be healthy."},
+      {hu:"Az álmom az, hogy egyszer visszamegyünk Magyarországra.",pr:"Oz ál-mom oz, hogy edy-ser vis-so-me-dyünk Mo-dyor-or-ság-ro",en:"My dream is that one day we'll go back to Hungary."},
+      {hu:"Szeretném, ha boldogok lennétek.",pr:"Se-ret-ném, ho bol-do-gok len-né-tek",en:"I'd like you to be happy."},
+      {hu:"Remélem, hogy teljesülnek az álmaid.",pr:"Re-mé-lem, hogy tel-ye-shül-nek oz ál-mo-id",en:"I hope your dreams come true."},
+      {hu:"Az a célom, hogy folyékonyan beszéljek magyarul.",pr:"Oz o tsé-lom, hogy fo-yé-ko-nyon be-sél-yek mo-dyo-rul",en:"My goal is to speak Hungarian fluently."},
+      {hu:"Reméljük, hogy szép emlékeink lesznek.",pr:"Re-mél-yük, hogy sép em-lé-ke-ink les-nek",en:"We hope we'll have beautiful memories."},
+      {hu:"Szeretném, ha szeretnétek a magyar kultúrát.",pr:"Se-ret-ném, ho se-ret-né-tek o mo-dyor kul-tú-rát",en:"I'd like you to love Hungarian culture."},
+      {hu:"Azt kívánom neked, hogy sok barátod legyen.",pr:"Ozt kí-vá-nom ne-ked, hogy shok bo-rá-tod le-dyen",en:"I wish for you to have many friends."},
+    ], tip:"Remélem… and Szeretném, ha… are the most-used hope and wish openers. Teach them as fixed phrases first — the grammar behind szeretném, ha + conditional is B1+, but the chunks are everyday.", pat:"remélem, hogy = I hope that\nszeretném, ha = I'd like it if / I wish that\naz álmom az, hogy = my dream is that\na célom az, hogy = my goal is that\nteljesül = comes true / is fulfilled\nkívánom = I wish (for someone)"},
 ];
 
 // ─── UTILITIES ─────────────────────────────────────────────────────────────

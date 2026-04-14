@@ -1,7 +1,7 @@
-# Spec: Plans & Hypotheticals — Phase 12
+# Spec: Plans & Hypotheticals — Phase 11
 
-> **Status:** Draft
-> **Branch:** `claude/review-hungarian-curriculum-inyIG`
+> **Status:** Done
+> **Branch:** `claude/spec-plans-hypotheticals-iw2bl`
 
 ## Goal
 
@@ -11,16 +11,16 @@ Add a content phase covering future plans, wishes, conditional reasoning, and hy
 
 After Milestones 1 and 2, the learner has:
 - Grammar foundations (paradigm-anchored lessons 45–56): future with `fog`, conditional `-nék/-nél/-na`, imperative
-- Reasoning connectors (Phase 10): `mert`, `ha…akkor`, `szerintem`
-- Narrative past (Phase 11): sequencing events, reported speech
+- Reasoning connectors (Phase 9): `mert`, `ha…akkor`, `szerintem`
+- Narrative past (Phase 10): sequencing events, reported speech
 
-What's missing is *sustained use* of future and conditional in real family conversations. The paradigm-anchored lessons (45–56) teach the paradigm; Phase 10 introduces `ha…akkor`; this phase provides the extended practice needed for fluency with these structures.
+What's missing is *sustained use* of future and conditional in real family conversations. The paradigm-anchored lessons (45–56) teach the paradigm; Phase 9 introduces `ha…akkor`; this phase provides the extended practice needed for fluency with these structures.
 
 CEFR B1 descriptor: "Can describe hopes, dreams, and ambitions. Can give reasons and explanations for opinions and plans."
 
 ### Phase numbering
 
-- Phase 12: Plans, Hopes, What-ifs (this spec)
+- Phase 11: Plans, Hopes, What-ifs (this spec)
 - Lesson IDs: **69–74** (following Milestone 2's 57–68)
 
 ## Requirements
@@ -36,7 +36,7 @@ CEFR B1 descriptor: "Can describe hopes, dreams, and ambitions. Can give reasons
 
 #### Infrastructure
 
-- [ ] Phase 12 added to `PHASES` array
+- [ ] Phase 11 added to `PHASES` array
 - [ ] All lessons follow existing schema with `patternId`
 - [ ] `TIME_TAGS.evening` updated to include these lessons (planning conversations happen in the evening)
 - [ ] `WEEKEND_BOOST` updated for "Making Decisions Together" and "Tomorrow We Will" (weekend planning)
@@ -58,14 +58,14 @@ CEFR B1 descriptor: "Can describe hopes, dreams, and ambitions. Can give reasons
 ### Phase registration
 
 ```js
-{ id: 12, emoji: "🔮", title: "Plans & What-ifs", color: "#7B4FA0" },
+{ id: 11, emoji: "🔮", title: "Plans & What-ifs", color: "#7B4FA0" },
 ```
 
 ### Lesson structure example
 
 ```js
 {
-  id: 69, phase: 12, title: "Tomorrow We Will…",
+  id: 69, phase: 11, title: "Tomorrow We Will…",
   sub: "Making plans · fog + infinitive",
   aud: "both", patternId: "future-plans",
   phrases: [
@@ -96,14 +96,14 @@ Combined with previous milestones, total vocabulary reaches ~1,000–1,100 words
 
 ## Implementation tasks
 
-- [ ] Add Phase 12 to `PHASES` array
-- [ ] Draft 8 family-context phrases for each of the 6 lessons (48 phrases total)
-- [ ] Append lessons 69–74 to the `LESSONS` array with `patternId` fields
-- [ ] Update `TIME_TAGS.evening` with lesson IDs 69–74
-- [ ] Update `WEEKEND_BOOST` with lesson IDs 69, 73
-- [ ] Run `hungarian-teacher` skill on all new phrases
-- [ ] Verify `npm run build` succeeds
-- [ ] Update `docs/architecture.md` to reflect Phase 12
+- [x] Add Phase 11 to `PHASES` array
+- [x] Draft 8 family-context phrases for each of the 6 lessons (48 phrases total)
+- [x] Append lessons 69–74 to the `LESSONS` array with `patternId` fields
+- [x] Update `TIME_TAGS.evening` with lesson IDs 69–74
+- [x] Update `WEEKEND_BOOST` with lesson IDs 69, 73
+- [x] Run `hungarian-teacher` skill on all new phrases
+- [x] Verify `npm run build` succeeds
+- [x] Update `docs/architecture.md` to reflect Phase 11
 
 ## Open questions
 
@@ -112,9 +112,9 @@ Combined with previous milestones, total vocabulary reaches ~1,000–1,100 words
 
 ## Acceptance criteria
 
-- [ ] 6 new lessons (ids 69–74) visible under Phase 12 in the app
-- [ ] Each lesson has 8 phrases, `tip`, `pat`, and `patternId`
-- [ ] Lessons appear in evening Daily Focus and weekend boost where specified
-- [ ] All Hungarian content validated by `hungarian-teacher` skill
-- [ ] No regressions in existing lesson/quiz/stats flows
-- [ ] `npm run build` succeeds
+- [x] 6 new lessons (ids 69–74) visible under Phase 11 in the app
+- [x] Each lesson has 8 phrases, `tip`, `pat`, and `patternId`
+- [x] Lessons appear in evening Daily Focus and weekend boost where specified
+- [x] All Hungarian content validated by `hungarian-teacher` skill
+- [x] No regressions in existing lesson/quiz/stats flows
+- [x] `npm run build` succeeds
