@@ -10,6 +10,8 @@ const PHASES = [
   { id: 6, emoji: "🛁", title: "Bath & Bed", color: "#5B7FC1" },
   { id: 7, emoji: "💬", title: "End of Day", color: "#C17B3A" },
   { id: 8, emoji: "🧰", title: "Toolkit", color: "#8B8B8B" },
+  { id: 9, emoji: "💡", title: "Reasoning", color: "#D4A843" },
+  { id: 10, emoji: "📝", title: "Stories", color: "#8B5E3C" },
 ];
 
 // Time-of-day relevance tags for the focus engine
@@ -17,7 +19,7 @@ const TIME_TAGS = {
   morning: [1,2,3,4,5,6,40,49,51,55], // Morning routines + rooms + plans + shoe hunt + room movement
   midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42,48,53,54], // Going out + food + bikes + politeness + transport + coming home
   afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44,50,52,56], // Playing + reading + imperatives + sharing + comparison
-  evening: [30,31,32,33,34,35,45,46], // Bath, bed, end of day + storytime + what-everyone-did
+  evening: [30,31,32,33,34,35,45,46,63,64,65,66,67,68], // Bath, bed, end of day + storytime + what-everyone-did + narrative/stories
 };
 // Weekend = more playing, outings, reading; Weekday = school run, routines
 const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44]; // playground, library, playing, reading, bikes, drawing, counting
