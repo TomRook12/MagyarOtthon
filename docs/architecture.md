@@ -29,17 +29,30 @@ All runtime state lives in two places:
 
 `useStats` exposes: `recordPhrase`, `recordSession`, `startTimer`, `stopTimer`, `getWeakPhrases`, `setDailyGoal`.
 
-Stats schema (key: `"magyarStats"`):
+Stats schema (key: `"magyar-otthon-stats-v1"`):
 ```js
 {
   totalTime,       // seconds
-  dailyTime,       // { "Mon Jan 01 2025": seconds }
+  todayTime,       // seconds today
+  todayDate,       // toDateString() of last active day
   streakDays,      // ["Mon Jan 01 2025", …]
   lessonScores,    // { lessonId: { best, attempts } }
-  phraseScores,    // { huText: { right, wrong } }
+  phraseScores,    // { huText: { right, wrong, ease, interval, due, lastSeen } }
   dailyGoal,       // minutes
 }
 ```
+
+`phraseScores` entry fields:
+| Field | Type | Description |
+|-------|------|-------------|
+| `right` | number | Correct answer count |
+| `wrong` | number | Incorrect answer count |
+| `ease` | number | SM-2 ease factor (starts 2.5, min 1.3, max 3.0) |
+| `interval` | number | Days until next review |
+| `due` | string | ISO date (`"YYYY-MM-DD"`) when phrase is next due |
+| `lastSeen` | string | ISO date of last review |
+
+On first load with old data (missing `ease`), `loadStats()` migrates all entries automatically, setting `due` to today so they enter the review queue immediately. Max interval is capped at 60 days.
 
 ## Daily Focus Engine
 
@@ -48,8 +61,9 @@ Stats schema (key: `"magyarStats"`):
 2. **Day of week** — `WEEKEND_BOOST` / `WEEKDAY_BOOST` arrays
 3. **Weakness** — phrase error rate from `phraseScores`
 4. **Recency** — lessons not recently attempted score higher
+5. **SRS due count** — lessons with 2+ due phrases score +2; 5+ due phrases score +4
 
-Returns the top-scored lesson and a human-readable reason string.
+Returns up to 3 top-scored lessons (max 2 per phase) with human-readable reason strings.
 
 ## Quiz engine
 
@@ -65,6 +79,16 @@ Returns the top-scored lesson and a human-readable reason string.
 | `match` | Match 4 pairs (shown as a pairing UI) |
 
 Weak phrases (wrong > 0) are over-represented in the pool.
+
+## SRS scheduler
+
+`schedulePhraseReview(entry, correct)` implements a simplified SM-2 variant:
+- Correct answer: interval grows (0→1, 1→3, then `round(interval × ease)`, capped at 60 days); ease increases by 0.1
+- Wrong answer: interval resets to 1 day; ease decreases by 0.2 (min 1.3)
+
+`getDuePhrases(stats)` returns all phrases (from attempted lessons only) where `due <= today`.
+
+The **Review Due** screen (`screen="review-due"`) presents a cross-lesson quiz of up to 15 due phrases, accessible from the home screen via `ReviewDueCard`.
 
 ## Speech
 

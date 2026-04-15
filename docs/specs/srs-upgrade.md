@@ -1,7 +1,7 @@
 # Spec: SRS Upgrade — Spaced Repetition Scheduler
 
-> **Status:** Draft
-> **Branch:** `claude/review-hungarian-curriculum-inyIG`
+> **Status:** Done
+> **Branch:** `claude/complete-srs-upgrade-spec-HwQOi`
 
 ## Goal
 
@@ -128,17 +128,17 @@ No new top-level keys in stats. The `phraseScores` object grows richer per entry
 
 ## Implementation tasks
 
-- [ ] Add migration logic in `loadStats()` to initialise SRS fields on existing phraseScores
-- [ ] Implement `schedulePhraseReview(phraseKey, correct, stats)` utility function
-- [ ] Update `recordPhrase` in `useStats` to call the scheduler and update due/interval/ease
-- [ ] Add `getDuePhrases(stats)` utility that returns all phrases due today or earlier
-- [ ] Add due-phrase count to Daily Focus scoring in `getDailyFocus`
-- [ ] Build "Review Due" quiz mode: cross-lesson quiz from due phrases
-- [ ] Add "Review Due" button/card to home screen UI
-- [ ] Verify existing quiz flow still works (regression)
-- [ ] Verify migration: load app with old-format localStorage, confirm no errors and phrases gain SRS fields
-- [ ] Update `docs/architecture.md` with new phraseScores schema
-- [ ] `npm run build` succeeds
+- [x] Add migration logic in `loadStats()` to initialise SRS fields on existing phraseScores
+- [x] Implement `schedulePhraseReview(phraseKey, correct, stats)` utility function
+- [x] Update `recordPhrase` in `useStats` to call the scheduler and update due/interval/ease
+- [x] Add `getDuePhrases(stats)` utility that returns all phrases due today or earlier
+- [x] Add due-phrase count to Daily Focus scoring in `getDailyFocus`
+- [x] Build "Review Due" quiz mode: cross-lesson quiz from due phrases
+- [x] Add "Review Due" button/card to home screen UI
+- [x] Verify existing quiz flow still works (regression)
+- [x] Verify migration: load app with old-format localStorage, confirm no errors and phrases gain SRS fields
+- [x] Update `docs/architecture.md` with new phraseScores schema
+- [x] `npm run build` succeeds
 
 ## Open questions
 
@@ -148,10 +148,10 @@ No new top-level keys in stats. The `phraseScores` object grows richer per entry
 
 ## Acceptance criteria
 
-- [ ] Answering a phrase correctly increases its interval; answering wrong resets to 1 day
-- [ ] Old localStorage data loads without errors; phrases gain SRS fields on first load
-- [ ] "Review Due" button appears on home screen with accurate count
-- [ ] Completing a "Review Due" quiz updates due dates for all reviewed phrases
-- [ ] Daily Focus scoring reflects due-phrase counts
-- [ ] No regressions in existing lesson/quiz/stats flows
-- [ ] `npm run build` succeeds
+- [x] Answering a phrase correctly increases its interval; answering wrong resets to 1 day
+- [x] Old localStorage data loads without errors; phrases gain SRS fields on first load
+- [x] "Review Due" button appears on home screen with accurate count
+- [x] Completing a "Review Due" quiz updates due dates for all reviewed phrases
+- [x] Daily Focus scoring reflects due-phrase counts
+- [x] No regressions in existing lesson/quiz/stats flows
+- [x] `npm run build` succeeds

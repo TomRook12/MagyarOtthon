@@ -810,6 +810,7 @@ function getDailyFocus(stats){
   const day=now.getDay(); // 0=Sun, 6=Sat
   const isWeekend=day===0||day===6;
   const timeSlot=hour<11?"morning":hour<14?"midday":hour<17?"afternoon":"evening";
+  const today=todayISO();
 
   const scored=[];
 
@@ -844,7 +845,12 @@ function getDailyFocus(stats){
     // 6. Toolkit lessons always get a small boost (survival)
     if(lesson.phase===8&&!ls){score+=2;reasons.push("essential");}
 
-    scored.push({lesson,phase,score,reasons,ls,weakCount});
+    // 7. SRS due phrases in this lesson (0-4 points)
+    const dueCount=lesson.phrases.filter(p=>{const ps=stats.phraseScores[p.hu];return ps&&ps.due&&ps.due<=today;}).length;
+    if(dueCount>=5){score+=4;reasons.push("many_due");}
+    else if(dueCount>=2){score+=2;reasons.push("some_due");}
+
+    scored.push({lesson,phase,score,reasons,ls,weakCount,dueCount});
   });
 
   // Sort by score descending, take top suggestions
@@ -872,6 +878,8 @@ function getDailyFocus(stats){
     if(r.includes("timely")&&r.includes("some_weak"))return "Relevant now · some phrases to revise";
     if(r.includes("timely"))return "You'll use this today";
     if(r.includes("improve"))return `${item.ls.best}% — room to grow`;
+    if(r.includes("many_due"))return`${item.dueCount} phrases due for review`;
+    if(r.includes("some_due"))return`${item.dueCount} phrases due for review`;
     return "Suggested for you";
   };
 
@@ -889,7 +897,24 @@ const STORAGE_KEY = "magyar-otthon-stats-v1";
 function loadStats() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed=JSON.parse(raw);
+      const today=new Date().toISOString().slice(0,10);
+      const scores=parsed.phraseScores||{};
+      Object.keys(scores).forEach(hu=>{
+        const s=scores[hu];
+        if(s.ease===undefined){
+          const{right=0,wrong=0}=s;
+          let ease,interval;
+          if(right===0&&wrong===0){ease=2.5;interval=0;}
+          else if(right>wrong*2){ease=2.5;interval=7;}
+          else if(right>wrong){ease=2.3;interval=3;}
+          else{ease=1.8;interval=1;}
+          scores[hu]={...s,ease,interval,due:today,lastSeen:today};
+        }
+      });
+      return parsed;
+    }
   } catch(e) {}
   return {
     totalTime:0, sessionsCompleted:0, streakDays:[], phraseScores:{},
@@ -899,6 +924,38 @@ function loadStats() {
 
 function saveStats(stats) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(stats)); } catch(e) {}
+}
+
+// ─── SRS UTILITIES ────────────────────────────────────────────────────────
+const SRS_MAX_INTERVAL=60;
+function todayISO(){return new Date().toISOString().slice(0,10);}
+function schedulePhraseReview(entry,correct){
+  let{ease=2.5,interval=0}=entry;
+  if(correct){
+    if(interval===0)interval=1;
+    else if(interval===1)interval=3;
+    else interval=Math.min(SRS_MAX_INTERVAL,Math.round(interval*ease));
+    ease=Math.min(3.0,ease+0.1);
+  }else{
+    interval=1;
+    ease=Math.max(1.3,ease-0.2);
+  }
+  const d=new Date();d.setDate(d.getDate()+interval);
+  return{...entry,ease,interval,due:d.toISOString().slice(0,10),lastSeen:todayISO()};
+}
+function getDuePhrases(stats){
+  const today=todayISO();
+  const attempted=new Set(Object.keys(stats.lessonScores));
+  const due=[];
+  LESSONS.forEach(lesson=>{
+    if(!attempted.has(String(lesson.id)))return;
+    lesson.phrases.forEach(p=>{
+      const sc=stats.phraseScores[p.hu];
+      if(!sc)return;
+      if((sc.due||today)<=today)due.push(p);
+    });
+  });
+  return due;
 }
 
 function useStats(){
@@ -923,7 +980,8 @@ function useStats(){
   const recordPhrase=useCallback((phraseHu,correct)=>{
     setStats(s=>{
       const prev=s.phraseScores[phraseHu]||{right:0,wrong:0};
-      return {...s,phraseScores:{...s.phraseScores,[phraseHu]:{right:prev.right+(correct?1:0),wrong:prev.wrong+(correct?0:1)}}};
+      const updated={...prev,right:prev.right+(correct?1:0),wrong:prev.wrong+(correct?0:1)};
+      return{...s,phraseScores:{...s.phraseScores,[phraseHu]:schedulePhraseReview(updated,correct)}};
     });
   },[]);
   const recordSession=useCallback((lessonId,score,total)=>{
@@ -1096,6 +1154,22 @@ function DailyFocusCard({focus,onSelectLesson}){
         <span style={{color:C.dim,fontSize:16}}>›</span>
       </div>
     ))}
+  </div>;
+}
+
+// ─── REVIEW DUE CARD ─────────────────────────────────────────────────────
+function ReviewDueCard({dueCount,onStart}){
+  const color="#4A90D9";
+  if(dueCount===0)return null;
+  return <div style={{padding:"0 16px",marginBottom:14}}>
+    <div onClick={onStart} style={{background:`linear-gradient(135deg, ${color}18, ${color}06)`,border:`1px solid ${color}28`,borderRadius:14,padding:"12px 14px",cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
+      <div style={{width:36,height:36,borderRadius:10,background:`${color}20`,color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🔁</div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontSize:14,fontWeight:700,color:C.text}}>Review Due</div>
+        <div style={{fontSize:11,color,fontWeight:600,marginTop:1}}>{dueCount} phrase{dueCount!==1?"s":""} ready to review</div>
+      </div>
+      <span style={{color:C.dim,fontSize:16}}>›</span>
+    </div>
   </div>;
 }
 
@@ -1288,6 +1362,23 @@ function FlashView({lesson,color}){const [dir,setDir]=useState("hu");const [card
     </div>
   </div>;}
 
+// ─── REVIEW DUE QUIZ ─────────────────────────────────────────────────────
+function ReviewDueQuiz({onBack,statsApi}){
+  const [duePhrases]=useState(()=>getDuePhrases(statsApi.stats).slice(0,15));
+  const syntheticLesson=useMemo(()=>({id:"review-due",phrases:duePhrases}),[]);
+  const color="#4A90D9";
+  if(duePhrases.length===0)return <div style={{padding:"40px 20px",textAlign:"center"}}>
+    <div style={{fontSize:48}}>✓</div>
+    <div style={{fontSize:22,fontWeight:900,color:C.text,marginTop:12}}>All caught up!</div>
+    <div style={{fontSize:14,color:C.sub,marginTop:4}}>No phrases are due right now.</div>
+    <button onClick={onBack} style={{marginTop:20,padding:"12px 28px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Back</button>
+  </div>;
+  return <div>
+    <Header title="Review Due" sub={`${duePhrases.length} phrase${duePhrases.length!==1?"s":""}`} onBack={onBack}/>
+    <QuizEngine lesson={syntheticLesson} color={color} onFinish={onBack} statsApi={statsApi}/>
+  </div>;
+}
+
 // ─── LESSON VIEW ──────────────────────────────────────────────────────────
 function LessonView({lessonId,onBack,statsApi}){const lesson=LESSONS.find(l=>l.id===lessonId);const phase=PHASES.find(p=>p.id===lesson.phase);const [mode,setMode]=useState("phrases");const color=phase.color;const sc=statsApi.stats.lessonScores[lessonId];
   return <div><Header title={lesson.title} sub={lesson.sub} onBack={onBack} right={sc&&<div style={{fontSize:12,fontWeight:700,color:sc.best>=80?C.green:sc.best>=50?C.amber:C.red}}>{sc.best}%</div>}/>
@@ -1308,6 +1399,7 @@ export default function App(){
   const [showFeedback,setShowFeedback]=useState(false);
   const statsApi=useStats();
   const focus=useMemo(()=>getDailyFocus(statsApi.stats),[statsApi.stats]);
+  const duePhrases=useMemo(()=>getDuePhrases(statsApi.stats),[statsApi.stats]);
 
   const feedbackContext=useMemo(()=>{
     if(screen==="lesson"&&lessonId){const l=LESSONS.find(x=>x.id===lessonId);return l?`Lesson ${lessonId}: ${l.title}`:"Lesson";}
@@ -1334,6 +1426,9 @@ export default function App(){
 
       {/* Daily Focus */}
       <DailyFocusCard focus={focus} onSelectLesson={goToLesson}/>
+
+      {/* Review Due */}
+      <ReviewDueCard dueCount={duePhrases.length} onStart={()=>setScreen("review-due")}/>
 
       {/* Quick actions */}
       <div style={{padding:"0 16px",marginBottom:12,display:"flex",gap:8}}>
@@ -1375,5 +1470,6 @@ export default function App(){
     </div>}
 
     {screen==="lesson"&&<LessonView lessonId={lessonId} onBack={()=>setScreen("phase")} statsApi={statsApi}/>}
+    {screen==="review-due"&&<ReviewDueQuiz onBack={()=>setScreen("home")} statsApi={statsApi}/>}
   </div>;
 }
