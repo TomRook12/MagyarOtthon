@@ -59,6 +59,17 @@ Load `CLAUDE.md` and `docs/conventions.md` once at the start of each run — the
 ### 9. Section order (advisory)
 - `src/App.jsx` section banners should stay in order: DATA → UTILITIES → ENGINES → HOOKS → QUESTION GENERATORS → STYLES → COMPONENTS → APP. Flag any diff that inserts code out of order, but treat as advisory rather than blocking.
 
+### 10. app-map.md staleness (advisory)
+- `docs/app-map.md` is the structural reference for App.jsx. If the diff does any of the following, flag that `docs/app-map.md` may need updating before the commit is complete:
+  - Adds or removes a field from the lesson schema or phrase schema
+  - Adds, removes, or renames a `gen*` question-generator function
+  - Adds, removes, or renames a method in `useStats` or its return object
+  - Changes any value in `TIME_TAGS`, `WEEKEND_BOOST`, or `WEEKDAY_BOOST`
+  - Adds or renames a key in the `C` colour constants object
+  - Adds a new top-level section banner to App.jsx
+  - Changes `STORAGE_KEY` or `SRS_MAX_INTERVAL`
+- Treat as advisory (not blocking), but be specific: name which section of app-map.md (A–H) needs the update.
+
 ## Workflow
 
 1. `Read` `CLAUDE.md` and `docs/conventions.md` to pick up any rule updates. Don't re-read on every run if you already have them in context.

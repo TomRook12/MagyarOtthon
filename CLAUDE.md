@@ -19,6 +19,7 @@ A family Hungarian language learning PWA. The goal is natural, daily language us
 | Path | Purpose |
 |------|---------|
 | `src/App.jsx` | Entire app — data, logic, and UI (single file by design) |
+| `docs/app-map.md` | Compact structural reference — read before App.jsx for schemas, constants, section locations |
 | `public/manifest.json` | PWA manifest |
 | `vite.config.js` | Build config; `base` must match GitHub Pages path |
 | `docs/architecture.md` | Deeper architecture notes |
@@ -32,6 +33,7 @@ A family Hungarian language learning PWA. The goal is natural, daily language us
 2. **Reference the spec** throughout implementation; check off tasks as they complete.
 3. **Don't split `App.jsx`** into multiple files without a decision record in `docs/decisions/`.
 4. **Don't add dependencies** without discussing trade-offs first; the app is intentionally zero-dependency beyond React and Vite.
+5. **Before reading `App.jsx`**, check `docs/app-map.md` for schemas, constants, and section banner names. To jump to a specific region, `Grep` the banner text listed there rather than reading the whole file.
 
 ## Deploy
 
