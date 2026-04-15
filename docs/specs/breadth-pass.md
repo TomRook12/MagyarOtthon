@@ -1,7 +1,7 @@
 # Spec: Breadth Pass — Expanding Existing Phases Toward B2
 
-> **Status:** Draft
-> **Branch:** `claude/review-hungarian-curriculum-inyIG`
+> **Status:** Done
+> **Branch:** `claude/execute-breadth-pass-spec-ibjCV`
 
 ## Goal
 
@@ -111,13 +111,13 @@ The Formal Register lesson is particularly important: it introduces `Ön` (forma
 
 ## Implementation tasks
 
-- [ ] Draft 8 phrases for each of 18–20 new lessons (~160 phrases)
-- [ ] Assign `patternId` where a grammar pattern is prominent
-- [ ] Append all new lessons to `LESSONS` array
-- [ ] Update `TIME_TAGS`, `WEEKEND_BOOST`, `WEEKDAY_BOOST` arrays
-- [ ] Run `hungarian-teacher` skill on all new phrases
-- [ ] Verify `npm run build` succeeds
-- [ ] Update `docs/architecture.md` with revised lesson count and phase totals
+- [x] Draft 8 phrases for each of 18–20 new lessons (~160 phrases)
+- [x] Assign `patternId` where a grammar pattern is prominent
+- [x] Append all new lessons to `LESSONS` array
+- [x] Update `TIME_TAGS`, `WEEKEND_BOOST`, `WEEKDAY_BOOST` arrays
+- [x] Run `hungarian-teacher` skill on all new phrases
+- [x] Verify `npm run build` succeeds
+- [x] Update `docs/architecture.md` with revised lesson count and phase totals
 
 ## Open questions
 
@@ -127,10 +127,10 @@ The Formal Register lesson is particularly important: it introduces `Ön` (forma
 
 ## Acceptance criteria
 
-- [ ] 18+ new lessons distributed across phases 1–8, visible in the app under their respective phase headers
-- [ ] Each lesson has 8 phrases, `tip`, `pat`, and optional `patternId`
-- [ ] TIME_TAGS and boost arrays updated appropriately
+- [x] 18+ new lessons distributed across phases 1–8, visible in the app under their respective phase headers
+- [x] Each lesson has 8 phrases, `tip`, `pat`, and optional `patternId`
+- [x] TIME_TAGS and boost arrays updated appropriately
 - [ ] Total distinct vocabulary across all lessons exceeds 2,000 words
-- [ ] All Hungarian content validated by `hungarian-teacher` skill
-- [ ] No regressions in existing flows
-- [ ] `npm run build` succeeds
+- [x] All Hungarian content validated by `hungarian-teacher` skill
+- [x] No regressions in existing flows
+- [x] `npm run build` succeeds
