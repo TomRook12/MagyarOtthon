@@ -10,6 +10,9 @@ Magyar Otthon is a **single-file React app**. All lesson data, business logic, a
 PHASES[]          — 11 thematic groups (Morning, Going Out, Playing, Food, Reading, Bath & Bed, End of Day, Toolkit, Reasoning, Stories, Plans & What-ifs)
 LESSONS[]         — 92 lesson objects, each belonging to one phase
   └─ phrases[]    — array of { hu, pr, en } (Hungarian, pronunciation, English)
+STORIES[]         — 10 short narrative stories for comprehensible input (read-only, no quiz)
+  └─ sentences[]  — array of { hu, en }
+  └─ glossary[]   — array of { hu, pr, en } for new vocabulary items per story
 ```
 
 Each lesson also has:
@@ -65,6 +68,24 @@ On first load with old data (missing `ease`), `loadStats()` migrates all entries
 
 Returns up to 3 top-scored lessons (max 2 per phase) with human-readable reason strings.
 
+## Engine depth features (Milestone 5)
+
+### Story cards
+
+`STORIES[]` holds 10 short family narratives (8–15 sentences). Stories are read-only — no SRS, no scoring. They appear in a "Stories" section on the home screen once the learner has attempted ≥ 20 lessons. Each story has a `minLessons` threshold so harder stories are unlocked later.
+
+`StoryView` renders tap-to-reveal sentences (tap → shows English), a "New words" glossary block, and a 🔊 button that plays the full story via TTS using sequential `SpeechSynthesisUtterance` calls.
+
+### Listening mode
+
+`ListenView` is a new study mode added alongside Phrases / Cards / Quiz in `LessonView`. It auto-advances through a lesson's phrases: plays Hungarian TTS (`hu-HU`, rate 0.85), waits for utterance end, pauses 2 s, reveals English for 1.5 s, then advances. Uses a generation counter (`genRef`) to safely cancel stale callbacks when the user pauses or skips.
+
+Controls: ▶/⏸ play-pause, ↺ replay current phrase, ⏭ skip to next.
+
+### Grammar-pattern drill
+
+`getPatternPhrases(patternId)` scans `LESSONS[]` for all entries sharing a `patternId` and flattens their phrases. `LessonView` exposes a "Drill" tab on any lesson that has a `patternId`; it feeds a synthetic lesson object into the existing `generateQuestions` engine, producing a cross-lesson quiz of up to 15 phrases.
+
 ## Quiz engine
 
 `generateQuestions(lesson, weakPhrases, count)` produces a mixed question set from six types:
@@ -100,11 +121,13 @@ The **Review Due** screen (`screen="review-due"`) presents a cross-lesson quiz o
 
 ## Navigation model
 
-Single-page, screen-based navigation managed with a `view` state string:
+Single-page, screen-based navigation managed with a `screen` state string:
 
 ```
-"home" → "phases" → "lessons" → "lesson" → "quiz" → "result"
-                                          → "stats"
+"home" → "phase" → "lesson" (tabs: Phrases / Cards / Quiz / Listen / Drill*)
+       → "story"                    (* Drill tab shown only when lesson.patternId exists)
+       → "stats"
+       → "review-due"
 ```
 
 No router library; `onBack` callbacks walk back up the stack.

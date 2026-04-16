@@ -998,6 +998,150 @@ const LESSONS = [
     ], tip:"Meg- prefix marks completion: szerelek (I'm fixing) → megszerelem (I'll fix it). Apply to any household task: megjavítom (I'll repair it), megtisztítom (I'll clean it), megcsinálom (I'll do/fix it).", pat:"csavar = screw\ncsavarhúzó = screwdriver\nfúró = drill\nfesteni = to paint\nszerelni = to fix / repair\nöntözni = to water (plants)\nvillanykörte = light bulb\nkicserél = replaces\nás = digs\nkitakarít = cleans out"},
 ];
 
+// ─── STORIES DATA ─────────────────────────────────────────────────────────
+const STORIES=[
+  {id:1,title:"A parkban",titleEn:"At the park",level:"A2",minLessons:20,
+    glossary:[{hu:"hinta",pr:"hin-to",en:"swing"},{hu:"homokozó",pr:"ho-mo-ko-zó",en:"sandpit"}],
+    sentences:[
+      {hu:"Ma a parkba mentünk.",en:"Today we went to the park."},
+      {hu:"Az idő gyönyörű volt.",en:"The weather was beautiful."},
+      {hu:"A gyerekek nagyon örültek.",en:"The children were very happy."},
+      {hu:"Én sétáltam, ők játszottak.",en:"I was walking, they were playing."},
+      {hu:"Péter a hintán ült.",en:"Péter sat on the swing."},
+      {hu:"Anna a homokozóban épített várat.",en:"Anna built a castle in the sandpit."},
+      {hu:"Ebédeltünk a padon.",en:"We ate lunch on the bench."},
+      {hu:"Szendvicset ettünk és vizet ittunk.",en:"We ate sandwiches and drank water."},
+      {hu:"Délután hazamentünk.",en:"In the afternoon we went home."},
+      {hu:"A gyerekek fáradtak voltak, de örültek.",en:"The children were tired but happy."},
+    ]},
+  {id:2,title:"Reggeli",titleEn:"Breakfast",level:"A2",minLessons:15,
+    glossary:[{hu:"pirítós",pr:"pi-rí-tósh",en:"toast"},{hu:"lekvár",pr:"lek-vár",en:"jam"}],
+    sentences:[
+      {hu:"Korán felébredtünk.",en:"We woke up early."},
+      {hu:"Éhes voltam.",en:"I was hungry."},
+      {hu:"Tojást sütöttem.",en:"I fried eggs."},
+      {hu:"A gyerekek pirítóst ettek.",en:"The children ate toast."},
+      {hu:"Anya megkente a pirítóst lekvárral.",en:"Mum spread jam on the toast."},
+      {hu:"Kakaót ittunk.",en:"We drank cocoa."},
+      {hu:"Péter nem szerette a tojást.",en:"Péter didn't like the eggs."},
+      {hu:"De megevett egy egész pirítóst.",en:"But he ate a whole slice of toast."},
+      {hu:"Reggelinél mindenki sokat nevetett.",en:"Everyone laughed a lot at breakfast."},
+      {hu:"Jó reggel volt.",en:"It was a good morning."},
+    ]},
+  {id:3,title:"A bevásárlás",titleEn:"Shopping",level:"A2",minLessons:20,
+    glossary:[{hu:"bevásárlókosár",pr:"be-vá-shár-ló-ko-shár",en:"shopping basket"},{hu:"pénztár",pr:"pénz-tár",en:"checkout"}],
+    sentences:[
+      {hu:"Szombaton a boltba mentünk.",en:"On Saturday we went to the shop."},
+      {hu:"Volt egy hosszú listánk.",en:"We had a long list."},
+      {hu:"Kenyeret, tejet és gyümölcsöt vettünk.",en:"We bought bread, milk and fruit."},
+      {hu:"Anna a bevásárlókosarat tartotta.",en:"Anna held the shopping basket."},
+      {hu:"Péter almát választott.",en:"Péter chose apples."},
+      {hu:"Én sajtot és sonkát vettem.",en:"I bought cheese and ham."},
+      {hu:"Aztán a pénztárhoz mentünk.",en:"Then we went to the checkout."},
+      {hu:"Sokat kellett várni.",en:"We had to wait a long time."},
+      {hu:"A gyerekek türelmesek voltak.",en:"The children were patient."},
+      {hu:"Végül hazamentünk a sok zacskóval.",en:"Finally we went home with lots of bags."},
+    ]},
+  {id:4,title:"Az iskolában",titleEn:"At School",level:"A2",minLessons:25,
+    glossary:[{hu:"füzet",pr:"fü-zet",en:"exercise book"},{hu:"szünet",pr:"sü-net",en:"break / recess"}],
+    sentences:[
+      {hu:"Ma sok mindent tanultunk az iskolában.",en:"Today we learned a lot of things at school."},
+      {hu:"Az első óra matekból volt.",en:"The first lesson was maths."},
+      {hu:"Számokat írtam a füzetbe.",en:"I wrote numbers in my exercise book."},
+      {hu:"Aztán jött a szünet.",en:"Then came the break."},
+      {hu:"A barátaimmal fociztem.",en:"I played football with my friends."},
+      {hu:"Az ebédlőben szendvicset ettünk.",en:"We ate sandwiches in the canteen."},
+      {hu:"Délután rajzoltunk.",en:"In the afternoon we drew pictures."},
+      {hu:"A tanárnő megdicsérte a rajzomat.",en:"The teacher praised my drawing."},
+      {hu:"Boldog voltam.",en:"I was happy."},
+      {hu:"Hazafelé sokat mesélt Anna is.",en:"On the way home Anna talked a lot too."},
+    ]},
+  {id:5,title:"Esti mese",titleEn:"Bedtime Story",level:"A2",minLessons:20,
+    glossary:[{hu:"farkas",pr:"far-kosh",en:"wolf"},{hu:"erdő",pr:"er-dő",en:"forest"}],
+    sentences:[
+      {hu:"Este eljött a lefekvés ideje.",en:"Evening came and it was time for bed."},
+      {hu:"A gyerekek már pizsamában voltak.",en:"The children were already in pyjamas."},
+      {hu:"Péter egy mesét kért.",en:"Péter asked for a story."},
+      {hu:"Egy farkasról szólt a mese.",en:"The story was about a wolf."},
+      {hu:"A farkas az erdőben lakott.",en:"The wolf lived in the forest."},
+      {hu:"Volt egy jó barátja, egy nyúl.",en:"He had a good friend, a rabbit."},
+      {hu:"Minden nap együtt játszottak.",en:"Every day they played together."},
+      {hu:"Anna közben elaludt.",en:"Meanwhile Anna fell asleep."},
+      {hu:"Péter is lassan hunyta le a szemét.",en:"Péter also slowly closed his eyes."},
+      {hu:"Jó éjszakát!",en:"Good night!"},
+    ]},
+  {id:6,title:"A születésnap",titleEn:"The Birthday",level:"A2",minLessons:25,
+    glossary:[{hu:"torta",pr:"tor-to",en:"cake"},{hu:"gyertya",pr:"djer-tyo",en:"candle"}],
+    sentences:[
+      {hu:"Ma Anna születésnapja volt.",en:"Today was Anna's birthday."},
+      {hu:"Reggel énekeltünk neki.",en:"In the morning we sang to her."},
+      {hu:"Kapott egy könyvet és egy játékot.",en:"She received a book and a toy."},
+      {hu:"Délután jöttek a barátai.",en:"In the afternoon her friends came."},
+      {hu:"Játszottunk, nevettünk és ugráltunk.",en:"We played, laughed and jumped."},
+      {hu:"Aztán eljött a torta ideje.",en:"Then it was time for the cake."},
+      {hu:"A tortán öt gyertya volt.",en:"There were five candles on the cake."},
+      {hu:"Anna elfújta az összeset.",en:"Anna blew out all of them."},
+      {hu:"Mindenki tapsolt.",en:"Everyone clapped."},
+      {hu:"Boldog születésnapot, Anna!",en:"Happy birthday, Anna!"},
+    ]},
+  {id:7,title:"Hétvégi kirándulás",titleEn:"Weekend Trip",level:"B1",minLessons:30,
+    glossary:[{hu:"domb",pr:"domb",en:"hill"},{hu:"kilátó",pr:"ki-lá-tó",en:"lookout tower"}],
+    sentences:[
+      {hu:"Vasárnap kirándulni mentünk.",en:"On Sunday we went on a trip."},
+      {hu:"Autóval utaztunk egy közeli dombhoz.",en:"We travelled by car to a nearby hill."},
+      {hu:"Az út egy óráig tartott.",en:"The journey took one hour."},
+      {hu:"A gyerekek kérdezgettek egész úton.",en:"The children asked questions the whole way."},
+      {hu:"Fenn a dombon volt egy szép kilátó.",en:"At the top of the hill there was a beautiful lookout tower."},
+      {hu:"Messzire láttunk.",en:"We could see far away."},
+      {hu:"Szendvicset ettünk a füvön.",en:"We ate sandwiches on the grass."},
+      {hu:"Visszafelé lassabban mentünk.",en:"On the way back we went more slowly."},
+      {hu:"Péter elfáradt, ezért vittem a hátamon.",en:"Péter was tired, so I carried him on my back."},
+      {hu:"Otthon mindenki nagyon jól aludt.",en:"At home everyone slept very well."},
+    ]},
+  {id:8,title:"Főzés együtt",titleEn:"Cooking Together",level:"A2",minLessons:20,
+    glossary:[{hu:"tészta",pr:"tés-to",en:"pasta"},{hu:"paradicsom",pr:"po-ro-di-chom",en:"tomato"}],
+    sentences:[
+      {hu:"Szombaton ebédet főztünk együtt.",en:"On Saturday we cooked lunch together."},
+      {hu:"Tésztát csináltunk paradicsomszósszal.",en:"We made pasta with tomato sauce."},
+      {hu:"A gyerekek segítettek.",en:"The children helped."},
+      {hu:"Péter a zöldségeket mosta meg.",en:"Péter washed the vegetables."},
+      {hu:"Anna a tányérokat terítette.",en:"Anna laid the plates."},
+      {hu:"Én a mártást kavargattam.",en:"I stirred the sauce."},
+      {hu:"Kellemes illata volt a konyhának.",en:"The kitchen smelled lovely."},
+      {hu:"Az asztalhoz ültünk és ettünk.",en:"We sat down at the table and ate."},
+      {hu:"Mindenki azt mondta: finom!",en:"Everyone said: delicious!"},
+      {hu:"Utána mosogattunk.",en:"Afterwards we washed up."},
+    ]},
+  {id:9,title:"Az időjárás",titleEn:"The Weather",level:"A2",minLessons:15,
+    glossary:[{hu:"esernyő",pr:"e-sher-nyő",en:"umbrella"},{hu:"szivárvány",pr:"si-vár-vány",en:"rainbow"}],
+    sentences:[
+      {hu:"Reggel esett az eső.",en:"In the morning it was raining."},
+      {hu:"Nem akartunk kimenni.",en:"We didn't want to go out."},
+      {hu:"Esernyőt vettünk elő.",en:"We got out the umbrellas."},
+      {hu:"A gyerekek vigyáztak az esernyőjükre.",en:"The children looked after their umbrellas."},
+      {hu:"Sétáltunk a nedves utcákon.",en:"We walked on the wet streets."},
+      {hu:"Péter minden pocsolyába belelépett.",en:"Péter stepped in every puddle."},
+      {hu:"Délután kijött a nap.",en:"In the afternoon the sun came out."},
+      {hu:"Az égen gyönyörű szivárvány jelent meg.",en:"A beautiful rainbow appeared in the sky."},
+      {hu:"Anna megmutatta a bátyjának.",en:"Anna showed it to her big brother."},
+      {hu:"Ő is örült.",en:"He was happy too."},
+    ]},
+  {id:10,title:"Fürdőidő",titleEn:"Bath Time",level:"A2",minLessons:15,
+    glossary:[{hu:"kacsa",pr:"kach-o",en:"duck"},{hu:"buborék",pr:"bu-bo-rék",en:"bubble"}],
+    sentences:[
+      {hu:"Este fürödni kellett.",en:"In the evening it was time for a bath."},
+      {hu:"A gyerekek nem akartak.",en:"The children didn't want to."},
+      {hu:"De aztán mégis bementek.",en:"But then they went in anyway."},
+      {hu:"Teli volt a fürdőkád habbal.",en:"The bathtub was full of foam."},
+      {hu:"Péternek volt egy kis gumi kacsája.",en:"Péter had a small rubber duck."},
+      {hu:"Az úszott a vízen.",en:"It floated on the water."},
+      {hu:"Anna buborékokat fújt.",en:"Anna blew bubbles."},
+      {hu:"Sokat nevettünk.",en:"We laughed a lot."},
+      {hu:"Utána törölközőbe göngyöltem őket.",en:"Afterwards I wrapped them in a towel."},
+      {hu:"Tisztán, frissen feküdtek le.",en:"They went to bed clean and fresh."},
+    ]},
+];
+
 // ─── UTILITIES ─────────────────────────────────────────────────────────────
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function normalize(s){return s.replace(/[!?.,:;'"¡¿…]/g,"").toLowerCase().trim();}
@@ -1233,6 +1377,7 @@ function generateQuestions(lesson,weakPhrases,count=15){
   }
   return shuffle(qs).slice(0,count);
 }
+function getPatternPhrases(patternId){return LESSONS.filter(l=>l.patternId===patternId).flatMap(l=>l.phrases);}
 
 // ─── STYLES ────────────────────────────────────────────────────────────────
 const C={bg:"#0F1117",card:"#161822",border:"#1E2030",text:"#E8E6E1",sub:"#7A7B8A",dim:"#555668",green:"#3A8F6E",red:"#D94A4A",amber:"#E8913A"};
@@ -1561,6 +1706,98 @@ function FlashView({lesson,color}){const [dir,setDir]=useState("hu");const [card
     </div>
   </div>;}
 
+function ListenView({lesson,color}){
+  const [idx,setIdx]=useState(0);
+  const [playing,setPlaying]=useState(false);
+  const [revealed,setRevealed]=useState(false);
+  const playingRef=useRef(false);
+  const timerRef=useRef(null);
+  const genRef=useRef(0);
+  const phrases=lesson.phrases;
+  const phrase=phrases[idx];
+  useEffect(()=>{playingRef.current=playing;},[playing]);
+  useEffect(()=>()=>{clearTimeout(timerRef.current);if(window.speechSynthesis)window.speechSynthesis.cancel();},[]);
+  const startPhrase=useCallback((i)=>{
+    const gen=++genRef.current;
+    clearTimeout(timerRef.current);setRevealed(false);
+    if(!window.speechSynthesis)return;
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(phrases[i].hu);
+    u.lang="hu-HU";u.rate=0.85;
+    u.onend=()=>{
+      if(gen!==genRef.current)return;
+      timerRef.current=setTimeout(()=>{
+        if(gen!==genRef.current)return;
+        setRevealed(true);
+        timerRef.current=setTimeout(()=>{
+          if(gen!==genRef.current)return;
+          if(playingRef.current)setIdx(j=>(j+1)%phrases.length);
+        },1500);
+      },2000);
+    };
+    window.speechSynthesis.speak(u);
+  },[phrases]);
+  useEffect(()=>{
+    if(playing)startPhrase(idx);
+    else{clearTimeout(timerRef.current);if(window.speechSynthesis)window.speechSynthesis.cancel();}
+  },[playing,idx,startPhrase]);
+  const skip=()=>{clearTimeout(timerRef.current);if(window.speechSynthesis)window.speechSynthesis.cancel();setIdx(i=>(i+1)%phrases.length);setRevealed(false);};
+  return <div style={{padding:"20px 16px",display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
+    <div style={{fontSize:12,color:C.sub}}>{idx+1}/{phrases.length}</div>
+    <div style={{width:"100%",maxWidth:320,minHeight:160,borderRadius:16,padding:"26px 20px",background:C.card,border:`2px solid ${color}38`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",gap:8}}>
+      <div style={{fontSize:20,fontWeight:800,color:C.text}}>{phrase.hu}</div>
+      <div style={{fontSize:12,color:C.dim,fontStyle:"italic"}}>{phrase.pr}</div>
+      {revealed?<div style={{fontSize:14,color:C.sub,marginTop:6}}>{phrase.en}</div>:<div style={{fontSize:11,color:C.dim,marginTop:6,opacity:0.5}}>…</div>}
+    </div>
+    <div style={{display:"flex",gap:10}}>
+      <button onClick={()=>startPhrase(idx)} title="Replay" style={{padding:"10px 16px",borderRadius:11,background:`${color}14`,border:`1px solid ${color}28`,color,fontSize:18,cursor:"pointer"}}>↺</button>
+      <button onClick={()=>setPlaying(p=>!p)} style={{padding:"10px 24px",borderRadius:11,background:playing?`${color}28`:`${color}14`,border:`1.5px solid ${color}38`,color,fontSize:18,fontWeight:700,cursor:"pointer"}}>{playing?"⏸":"▶"}</button>
+      <button onClick={skip} title="Skip" style={{padding:"10px 16px",borderRadius:11,background:`${color}14`,border:`1px solid ${color}28`,color,fontSize:18,cursor:"pointer"}}>⏭</button>
+    </div>
+    <div style={{fontSize:11,color:C.dim,textAlign:"center"}}>{playing?"Tap ⏸ to pause":"Tap ▶ to start · audio plays, then English reveals"}</div>
+  </div>;
+}
+
+function StoryView({storyId,onBack}){
+  const story=STORIES.find(s=>s.id===storyId);
+  const [exp,setExp]=useState(null);
+  const [playing,setPlaying]=useState(false);
+  const activeRef=useRef(false);
+  const stopPlay=useCallback(()=>{activeRef.current=false;if(window.speechSynthesis)window.speechSynthesis.cancel();setPlaying(false);},[]);
+  useEffect(()=>()=>stopPlay(),[stopPlay]);
+  const playAll=()=>{
+    if(!window.speechSynthesis)return;
+    window.speechSynthesis.cancel();
+    activeRef.current=true;setPlaying(true);
+    let i=0;
+    const next=()=>{
+      if(!activeRef.current||i>=story.sentences.length){if(activeRef.current)setPlaying(false);return;}
+      const u=new SpeechSynthesisUtterance(story.sentences[i].hu);
+      u.lang="hu-HU";u.rate=0.85;
+      u.onend=()=>{i++;setTimeout(next,600);};
+      window.speechSynthesis.speak(u);
+    };
+    next();
+  };
+  return <div>
+    <Header title={story.title} sub={story.titleEn} onBack={onBack} right={
+      <button onClick={playing?stopPlay:playAll} title={playing?"Stop":"Read aloud"} style={{background:"none",border:"none",cursor:"pointer",fontSize:22,color:"#4A90D9",padding:"4px 6px",lineHeight:1}}>{playing?"⏹":"🔊"}</button>
+    }/>
+    <div style={{padding:"12px 16px 80px"}}>
+      {story.sentences.map((s,i)=><div key={i} style={{background:C.card,borderRadius:11,padding:"11px 13px",marginBottom:5,border:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setExp(exp===i?null:i)}>
+        <div style={{fontSize:16,fontWeight:700,color:C.text}}>{s.hu}</div>
+        {exp===i?<div style={{fontSize:13,color:C.sub,marginTop:4}}>{s.en}</div>:<div style={{fontSize:10,color:C.dim,marginTop:1}}>tap to reveal</div>}
+      </div>)}
+      {story.glossary.length>0&&<div style={{background:"#1A1428",border:"1px solid #2D2548",borderRadius:12,padding:"10px 12px",marginTop:8}}>
+        <div style={{fontSize:11,fontWeight:800,color:"#A78BFA",marginBottom:6}}>New words</div>
+        {story.glossary.map((g,i)=><div key={i} style={{fontSize:12,color:"#B8A8D8",marginBottom:2}}>
+          <span style={{fontWeight:700}}>{g.hu}</span>{" "}<span style={{color:C.dim,fontStyle:"italic"}}>({g.pr})</span>{" = "}{g.en}
+        </div>)}
+      </div>}
+    </div>
+  </div>;
+}
+
 // ─── REVIEW DUE QUIZ ─────────────────────────────────────────────────────
 function ReviewDueQuiz({onBack,statsApi}){
   const [duePhrases]=useState(()=>getDuePhrases(statsApi.stats).slice(0,15));
@@ -1579,21 +1816,34 @@ function ReviewDueQuiz({onBack,statsApi}){
 }
 
 // ─── LESSON VIEW ──────────────────────────────────────────────────────────
-function LessonView({lessonId,onBack,statsApi}){const lesson=LESSONS.find(l=>l.id===lessonId);const phase=PHASES.find(p=>p.id===lesson.phase);const [mode,setMode]=useState("phrases");const color=phase.color;const sc=statsApi.stats.lessonScores[lessonId];
-  return <div><Header title={lesson.title} sub={lesson.sub} onBack={onBack} right={sc&&<div style={{fontSize:12,fontWeight:700,color:sc.best>=80?C.green:sc.best>=50?C.amber:C.red}}>{sc.best}%</div>}/>
-    <div style={{display:"flex",gap:5,padding:"10px 16px",position:"sticky",top:0,background:C.bg,zIndex:10,borderBottom:`1px solid ${C.border}`}}>
-      {["phrases","flashcards","quiz"].map(m=><button key={m} onClick={()=>setMode(m)} style={{flex:1,padding:"9px 0",borderRadius:10,border:mode===m?`2px solid ${color}`:`2px solid ${C.border}`,background:mode===m?`${color}10`:"transparent",color:mode===m?color:C.sub,fontSize:12,fontWeight:700,cursor:"pointer"}}>{m[0].toUpperCase()+m.slice(1)}</button>)}
+function LessonView({lessonId,onBack,statsApi}){
+  const lesson=LESSONS.find(l=>l.id===lessonId);
+  const phase=PHASES.find(p=>p.id===lesson.phase);
+  const [mode,setMode]=useState("phrases");
+  const color=phase.color;
+  const sc=statsApi.stats.lessonScores[lessonId];
+  const tabs=useMemo(()=>{const t=["phrases","flashcards","quiz","listen"];if(lesson.patternId)t.push("drill");return t;},[lesson.patternId]);
+  const drillLesson=useMemo(()=>lesson.patternId?{id:`drill-${lesson.patternId}`,phrases:getPatternPhrases(lesson.patternId)}:null,[lesson.patternId]);
+  const tabLabel=m=>({flashcards:"Cards",listen:"Listen",drill:"Drill"}[m]||(m[0].toUpperCase()+m.slice(1)));
+  return <div>
+    <Header title={lesson.title} sub={lesson.sub} onBack={onBack} right={sc&&<div style={{fontSize:12,fontWeight:700,color:sc.best>=80?C.green:sc.best>=50?C.amber:C.red}}>{sc.best}%</div>}/>
+    <div style={{display:"flex",gap:4,padding:"10px 16px",position:"sticky",top:0,background:C.bg,zIndex:10,borderBottom:`1px solid ${C.border}`}}>
+      {tabs.map(m=><button key={m} onClick={()=>setMode(m)} style={{flex:1,minWidth:0,padding:"9px 2px",borderRadius:10,border:mode===m?`2px solid ${color}`:`2px solid ${C.border}`,background:mode===m?`${color}10`:"transparent",color:mode===m?color:C.sub,fontSize:11,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>{tabLabel(m)}</button>)}
     </div>
     {mode==="phrases"&&<PhraseView lesson={lesson} color={color}/>}
     {mode==="flashcards"&&<FlashView lesson={lesson} color={color}/>}
     {mode==="quiz"&&<QuizEngine lesson={lesson} color={color} onFinish={()=>setMode("phrases")} statsApi={statsApi}/>}
-  </div>;}
+    {mode==="listen"&&<ListenView lesson={lesson} color={color}/>}
+    {mode==="drill"&&drillLesson&&<QuizEngine lesson={drillLesson} color={color} onFinish={()=>setMode("phrases")} statsApi={statsApi}/>}
+  </div>;
+}
 
 // ─── APP ──────────────────────────────────────────────────────────────────
 export default function App(){
   const [screen,setScreen]=useState("home");
   const [phaseId,setPhaseId]=useState(null);
   const [lessonId,setLessonId]=useState(null);
+  const [storyId,setStoryId]=useState(null);
   const [showGoalSettings,setShowGoalSettings]=useState(false);
   const [showFeedback,setShowFeedback]=useState(false);
   const statsApi=useStats();
@@ -1635,6 +1885,18 @@ export default function App(){
         <button onClick={()=>{if(focus.length)goToLesson(focus[0].lesson.id);}} style={{flex:1,background:`${C.green}18`,border:`1px solid ${C.green}30`,borderRadius:12,padding:"10px",color:C.green,fontSize:12,fontWeight:700,cursor:"pointer"}}>▶ Start Focus</button>
       </div>
 
+      {/* Stories — gated on ≥20 lessons attempted */}
+      {Object.keys(statsApi.stats.lessonScores).length>=20&&<div style={{padding:"0 16px",marginBottom:8}}>
+        <div style={{fontSize:13,color:C.sub,fontWeight:600,marginBottom:8}}>Stories 📖</div>
+        {STORIES.filter(s=>s.minLessons<=Object.keys(statsApi.stats.lessonScores).length).map(s=><div key={s.id} style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:"12px 14px",marginBottom:6,cursor:"pointer",display:"flex",alignItems:"center",gap:10}} onClick={()=>{setStoryId(s.id);setScreen("story");}}>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:700,color:C.text}}>{s.title}</div>
+            <div style={{fontSize:11,color:C.sub}}>{s.titleEn} · {s.level}</div>
+          </div>
+          <span style={{color:C.dim,fontSize:15}}>›</span>
+        </div>)}
+      </div>}
+
       {/* Phase list */}
       <div style={{padding:"0 16px 80px"}}>
         <div style={{fontSize:13,color:C.sub,fontWeight:600,marginBottom:8}}>All phases</div>
@@ -1669,6 +1931,7 @@ export default function App(){
     </div>}
 
     {screen==="lesson"&&<LessonView lessonId={lessonId} onBack={()=>setScreen("phase")} statsApi={statsApi}/>}
+    {screen==="story"&&<StoryView storyId={storyId} onBack={()=>setScreen("home")}/>}
     {screen==="review-due"&&<ReviewDueQuiz onBack={()=>setScreen("home")} statsApi={statsApi}/>}
   </div>;
 }

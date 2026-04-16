@@ -1,7 +1,7 @@
 # Spec: Engine Depth — Story Cards, Listening, Shadowing & Quiz Enhancements
 
-> **Status:** Draft
-> **Branch:** `claude/review-hungarian-curriculum-inyIG`
+> **Status:** Approved
+> **Branch:** `claude/engine-depth-spec-oepEI`
 
 ## Goal
 
@@ -180,21 +180,21 @@ No persistence. Recording is discarded when navigating away.
 ## Implementation tasks
 
 ### Story Cards
-- [ ] Define `STORIES[]` data structure in `App.jsx`
-- [ ] Write 10 initial stories (8–15 sentences each, with glossary)
-- [ ] Build `StoryView` component: tap-to-translate, play-all TTS
-- [ ] Add "Stories" section to home screen (gated on ≥20 lessons attempted)
-- [ ] Run `hungarian-teacher` skill on all story content
+- [x] Define `STORIES[]` data structure in `App.jsx`
+- [x] Write 10 initial stories (8–15 sentences each, with glossary)
+- [x] Build `StoryView` component: tap-to-translate, play-all TTS
+- [x] Add "Stories" section to home screen (gated on ≥20 lessons attempted)
+- [x] Run `hungarian-teacher` skill on all story content
 
 ### Listening Mode
-- [ ] Add "Listen" tab to `PhraseView`
-- [ ] Implement auto-advance logic with play/pause/replay controls
+- [x] Add "Listen" tab to `PhraseView`
+- [x] Implement auto-advance logic with play/pause/replay controls
 - [ ] Test with `speechSynthesis` `hu-HU` voice availability
 
 ### Grammar-Pattern Quiz
-- [ ] Implement `getPatternPhrases(patternId)` utility
-- [ ] Add "Drill this pattern" button to lesson view when `patternId` exists
-- [ ] Generate cross-lesson quiz using existing `generateQuestions`
+- [x] Implement `getPatternPhrases(patternId)` utility
+- [x] Add "Drill this pattern" button to lesson view when `patternId` exists
+- [x] Generate cross-lesson quiz using existing `generateQuestions`
 
 ### Reconstruct Quiz (nice-to-have)
 - [ ] Add `reconstruct` question type to `generateQuestions`
@@ -212,9 +212,9 @@ No persistence. Recording is discarded when navigating away.
 - [ ] Link to "Drill Pattern" quiz
 
 ### General
-- [ ] Verify `npm run build` succeeds
-- [ ] Update `docs/architecture.md` with new components and data structures
-- [ ] Add decision record if App.jsx exceeds ~1,500 lines (evaluate splitting)
+- [x] Verify `npm run build` succeeds
+- [x] Update `docs/architecture.md` with new components and data structures
+- [ ] Add decision record if App.jsx exceeds ~1,500 lines (evaluate splitting) — **App.jsx is now 1,937 lines; decision needed**
 
 ## Open questions
 
