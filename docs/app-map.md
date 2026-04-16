@@ -34,13 +34,14 @@ Grep the exact banner text to jump to any region of App.jsx.
 | Banner (grep for this exact string)      | What lives here                                             |
 |------------------------------------------|-------------------------------------------------------------|
 | `// ─── LESSON DATA`                     | `PHASES[]`, `TIME_TAGS`, boost arrays, `LESSONS[]`          |
-| `// ─── UTILITIES`                       | `shuffle()`, `normalize()`                                  |
+| `// ─── STORIES DATA`                    | `STORIES[]` — comprehensible input stories with sentences and glossary |
+| `// ─── UTILITIES`                       | `shuffle()`, `normalize()`, `getWeeklyPattern()`            |
 | `// ─── DAILY FOCUS ENGINE`              | `getDailyFocus(stats)` — lesson scoring & ranking           |
 | `// ─── STATS HOOK`                      | `STORAGE_KEY`, `loadStats()`, `saveStats()`, `useStats()`   |
 | `// ─── SRS UTILITIES`                   | `SRS_MAX_INTERVAL`, `schedulePhraseReview()`, `getDuePhrases()` |
 | `// ─── QUESTION GENERATORS`             | All `gen*` functions, `generateQuestions()`                 |
 | `// ─── STYLES`                          | `C` colour constants object                                 |
-| `// ─── SPEECH UTILITY`                  | `speakHu()`, `SpeakBtn` component                          |
+| `// ─── SPEECH UTILITY`                  | `speakHu()`, `SpeakBtn`, `useHuVoiceAvailable()` hook       |
 | `// ─── FEEDBACK MODAL`                  | `FEEDBACK_CATEGORIES`, `FeedbackModal` component            |
 | `// ─── SMALL COMPONENTS`               | `Header`, `ProgressBar`, `Badge`                            |
 | `// ─── GOAL RING`                       | `GoalRing` component                                        |
@@ -49,7 +50,7 @@ Grep the exact banner text to jump to any region of App.jsx.
 | `// ─── GOAL SETTINGS MODAL`            | `GoalSettings` component                                    |
 | `// ─── STATS DASHBOARD`                | `StatsView` component                                       |
 | `// ─── QUIZ ENGINE`                    | `QuizEngine` component — question display, answer, feedback |
-| `// ─── PHRASE & FLASH VIEWS`           | `PhraseView()`, `FlashView()` study modes                   |
+| `// ─── PHRASE & FLASH VIEWS`           | `ShadowBtn`, `PhraseView()`, `FlashView()`, `ListenView()`, `StoryView()` |
 | `// ─── REVIEW DUE QUIZ`               | `ReviewDueQuiz` component — cross-lesson SRS review         |
 | `// ─── LESSON VIEW`                    | `LessonView` component — phrases / flash / quiz tabs        |
 | `// ─── APP`                            | `App()` — navigation state, screen routing, home screen     |
@@ -203,6 +204,7 @@ All generators live in the `// ─── QUESTION GENERATORS` section.
 | `genTF`        | `(p, all)` | `"tf"`       | `prompt` (hu), `promptPr`, `shown` (en string), `answer` (bool) |
 | `genFill`      | `(p)`      | `"fill"`     | `prompt` (en), `display` (hu with blank), `answer` (word), `fullHu`, `pr` |
 | `genMatch`     | `(phrases)`| `"match"`    | `pairs: [{hu, en}]` (4 pairs) |
+| `genReconstruct` | `(p)`    | `"reconstruct"` | `en` (English prompt), `tiles[]` (shuffled), `correctTiles[]`, skips phrases < 3 or > 7 words |
 
 All generators also return `phrase` — the source phrase object.
 
