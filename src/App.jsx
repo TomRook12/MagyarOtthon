@@ -10,21 +10,18 @@ const PHASES = [
   { id: 6, emoji: "🛁", title: "Bath & Bed", color: "#5B7FC1" },
   { id: 7, emoji: "💬", title: "End of Day", color: "#C17B3A" },
   { id: 8, emoji: "🧰", title: "Toolkit", color: "#8B8B8B" },
-  { id: 9, emoji: "💡", title: "Reasoning", color: "#D4A843" },
-  { id: 10, emoji: "📝", title: "Stories", color: "#8B5E3C" },
-  { id: 11, emoji: "🔮", title: "Plans & What-ifs", color: "#7B4FA0" },
 ];
 
 // Time-of-day relevance tags for the focus engine
 const TIME_TAGS = {
-  morning: [1,2,3,4,5,6,40,49,51,55,75], // Morning routines + rooms + plans + shoe hunt + room movement + breakfast detail
-  midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42,48,53,54,76,77,78,83,84], // Going out + food + bikes + politeness + transport + coming home + directions + doctor + travel + restaurant + shopping
-  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44,50,52,56,79,80,81,82], // Playing + reading + imperatives + sharing + comparison + nature + sports + tastes + cooking
-  evening: [30,31,32,33,34,35,45,46,63,64,65,66,67,68,69,70,71,72,73,74,86,87,88], // Bath, bed, end of day + storytime + narrative/stories + plans & what-ifs + nuanced emotions + relationship + apologies
+  morning: [1,2,3,4,5,6,40,49,51,55,75],
+  midday: [7,8,9,10,11,12,13,14,21,22,23,24,25,42,48,53,54,76,77,78,83,84],
+  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44,50,52,56,79,80,81,82],
+  evening: [30,31,32,33,34,35,45,46,86,87,88],
 };
 // Weekend = more playing, outings, reading; Weekday = school run, routines
-const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44,69,73,78,79,80,83]; // playground, library, playing, reading, bikes, drawing, tomorrow plans, decision-making + travel + nature + sports + restaurant
-const WEEKDAY_BOOST = [1,2,3,4,5,7,8,11,13,23,75,77]; // morning routine, school, car, mealtimes + breakfast + doctor
+const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44,78,79,80,83];
+const WEEKDAY_BOOST = [1,2,3,4,5,7,8,11,13,23,75,77];
 
 const LESSONS = [
   { id:1, phase:1, title:"Waking Up", sub:"Good morning · Breakfast", aud:"kids",
@@ -599,204 +596,6 @@ const LESSONS = [
       {hu:"Melyik a jobb?",pr:"Me-yik o yobb",en:"Which is better?"},
       {hu:"Ez a legjobb!",pr:"Ez o leg-yobb",en:"This is the best!"},
     ], tip:"Add -bb to almost any adjective for comparative, then add leg- prefix for superlative.", pat:"Comparative: adjective + -bb\nnagyobb · kisebb · szebb · jobb\n\nSuperlative: leg- + comparative\nlegnagyobb · legkisebb · legjobb\n\n'Than': mint + nominative\nEz nagyobb, mint az."},
-  { id:57, phase:9, title:"Because & So", sub:"mert · ezért · azért, mert · tehát", aud:"both", patternId:"connectors-cause",
-    phrases:[
-      {hu:"Nem mehetünk ki, mert esik.",pr:"Nem me-he-tünk ki, mert e-shik",en:"We can't go out because it's raining."},
-      {hu:"Fáradt vagyok, ezért lefekszem.",pr:"Fá-rott vo-dyok, e-zért le-fek-sem",en:"I'm tired, so I'm lying down."},
-      {hu:"Azért sietek, mert késő van.",pr:"O-zért shi-e-tek, mert ké-ső von",en:"I'm hurrying because it's late."},
-      {hu:"Tehát holnap megyünk.",pr:"Te-hát hol-nop me-dyünk",en:"So we'll go tomorrow."},
-      {hu:"Azért kérdezem, mert nem tudom.",pr:"O-zért kér-de-zem, mert nem tu-dom",en:"I'm asking because I don't know."},
-      {hu:"Nem eheti, mert allergiás.",pr:"Nem e-he-ti, mert ol-ler-gi-ásh",en:"She can't eat it because she's allergic."},
-      {hu:"Szereti, ezért csinálja.",pr:"Se-re-ti, e-zért chi-nál-yo",en:"She likes it, so she does it."},
-      {hu:"Jó volt, azért megettük.",pr:"Yó volt, o-zért meg-et-tük",en:"It was good, so we ate it all up."},
-    ], tip:"Start with 'mert' (because) — it's the most versatile connector. Use it to answer every 'Miért?' (Why?).", pat:"mert = because (mid-sentence)\nezért = so / therefore\nazért… mert = the reason is… because\ntehát = thus / so (more formal)"},
-  { id:58, phase:9, title:"I Think", sub:"szerintem · azt hiszem · úgy gondolom · úgy érzem", aud:"both", patternId:"connectors-opinion",
-    phrases:[
-      {hu:"Szerintem jó lesz.",pr:"Se-rin-tem yó lesz",en:"I think it'll be fine."},
-      {hu:"Azt hiszem, otthon van.",pr:"Ozt hi-sem, ott-hon von",en:"I think she's at home."},
-      {hu:"Úgy gondolom, holnap indulunk.",pr:"Údy gon-do-lom, hol-nop in-du-lunk",en:"I think we'll set off tomorrow."},
-      {hu:"Úgy érzem, valami nincs rendben.",pr:"Údy ér-zem, vo-lo-mi ninch rend-ben",en:"I feel something isn't right."},
-      {hu:"Szerintem ez a jobb megoldás.",pr:"Se-rin-tem ez o yobb meg-ol-dásh",en:"I think this is the better solution."},
-      {hu:"Azt hiszem, már elindult.",pr:"Ozt hi-sem, már el-in-dult",en:"I think she's already left."},
-      {hu:"Úgy gondolom, pihenned kell.",pr:"Údy gon-do-lom, pi-hen-ned kell",en:"I think you need to rest."},
-      {hu:"Szerinted mi a legjobb?",pr:"Se-rin-ted mi o leg-yobb",en:"What do you think is best?"},
-    ], tip:"Szerintem (in my opinion) works for everything from dinner choices to world views — start there.", pat:"szerintem = in my opinion\nazt hiszem = I think / I believe\núgy gondolom = I think (considered)\núgy érzem = I feel\nszerinted = in your opinion"},
-  { id:59, phase:9, title:"If… Then", sub:"ha · akkor · ha… akkor", aud:"both", patternId:"conditional-real",
-    phrases:[
-      {hu:"Ha esik, akkor bent maradunk.",pr:"Ho e-shik, ok-kor bent mo-ro-dunk",en:"If it rains, then we stay inside."},
-      {hu:"Ha készen vagy, mehetünk.",pr:"Ho ké-sen vody, me-he-tünk",en:"If you're ready, we can go."},
-      {hu:"Ha éhes vagy, egyél valamit!",pr:"Ho é-hesh vody, e-dyél vo-lo-mit",en:"If you're hungry, eat something!"},
-      {hu:"Ha megteszed, meglepünk.",pr:"Ho meg-te-sed, meg-le-pünk",en:"If you do it, we'll surprise you."},
-      {hu:"Ha nem alszol, fáradt leszel.",pr:"Ho nem ol-sol, fá-rott le-sel",en:"If you don't sleep, you'll be tired."},
-      {hu:"Ha időnk van, elmegyünk.",pr:"Ho i-dőnk von, el-me-dyünk",en:"If we have time, we'll go."},
-      {hu:"Ha segítesz, hamarabb kész lesz.",pr:"Ho she-gí-tes, ho-mo-robb kés lesz",en:"If you help, it'll be done sooner."},
-      {hu:"Ha akarod, próbáld meg!",pr:"Ho o-ko-rod, pró-báld meg",en:"If you want to, try it!"},
-    ], tip:"Use 'ha… akkor' for real everyday conditions. Leave 'akkor' out once you're comfortable — Hungarians often do.", pat:"ha + present → akkor + present/future\nHa esik, akkor bent maradunk.\nHa kész vagy, mehetünk. (akkor optional)\n\nNegative: ha nem + verb\nHa nem alszol, fáradt leszel."},
-  { id:60, phase:9, title:"Agreeing & Disagreeing", sub:"egyetértek · nem értek egyet · igazad van · nem biztos", aud:"both", patternId:"connectors-agree",
-    phrases:[
-      {hu:"Egyetértek veled.",pr:"E-dye-tér-tek ve-led",en:"I agree with you."},
-      {hu:"Nem értek egyet ezzel.",pr:"Nem ér-tek e-dyet ez-zel",en:"I don't agree with this."},
-      {hu:"Igazad van, elnézést.",pr:"I-go-zod von, el-né-zésht",en:"You're right, sorry."},
-      {hu:"Nem biztos, hogy így van.",pr:"Nem biz-tosh, hogy ídy von",en:"I'm not sure it's like that."},
-      {hu:"Teljesen igazad van!",pr:"Tel-ye-shen i-go-zod von",en:"You are absolutely right!"},
-      {hu:"Abban nem értek egyet.",pr:"Ob-bon nem ér-tek e-dyet",en:"I don't agree with that."},
-      {hu:"Szerintem is igazad van.",pr:"Se-rin-tem ish i-go-zod von",en:"I think you're right too."},
-      {hu:"Nem tudom biztosan.",pr:"Nem tu-dom biz-to-shon",en:"I don't know for sure."},
-    ], tip:"Igazad van (you're right) is the kindest phrase you can say in an argument — use it freely.", pat:"egyetértek = I agree\nnem értek egyet = I disagree\nigazad van = you're right\nteljesen = completely / absolutely\nnem biztos = not sure / uncertain"},
-  { id:61, phase:9, title:"Comparing Things", sub:"jobb, mint · ugyanolyan · inkább · kevésbé", aud:"both", patternId:"comparative-use",
-    phrases:[
-      {hu:"Ez jobb, mint a másik.",pr:"Ez yobb, mint o má-shik",en:"This is better than the other one."},
-      {hu:"Ugyanolyan szép, mint a tied.",pr:"U-dyon-o-lyon sép, mint o ti-ed",en:"It's just as beautiful as yours."},
-      {hu:"Inkább a pirosat kérem.",pr:"In-kább o pi-ro-shot ké-rem",en:"I'd rather have the red one."},
-      {hu:"Kevésbé édes, mint a múltkor.",pr:"Ke-vésh-bé é-desh, mint o múlt-kor",en:"It's less sweet than last time."},
-      {hu:"A tied szebb, mint az enyém.",pr:"O ti-ed sebb, mint oz e-nyém",en:"Yours is nicer than mine."},
-      {hu:"Melyiket szereted inkább?",pr:"Me-yi-ket se-re-ted in-kább",en:"Which one do you like better?"},
-      {hu:"Ez ugyanolyan nehéz.",pr:"Ez u-dyon-o-lyon ne-héz",en:"This is just as difficult."},
-      {hu:"A régi jobb volt.",pr:"O ré-gi yobb volt",en:"The old one was better."},
-    ], tip:"Build comparatives by adding -bb: nagy → nagyobb, jó → jobb. Then add leg- for superlative. This lesson puts them to use in real arguments.", pat:"X -bb mint Y = X is more … than Y\nugyanolyan + adj = just as …\ninkább = rather / more\nkevésbé = less\nlegjobb · legszebb · legtöbb"},
-  { id:62, phase:9, title:"Explaining a Problem", sub:"az a baj, hogy · a probléma az, hogy · nem működik", aud:"both", patternId:"connectors-problem",
-    phrases:[
-      {hu:"Az a baj, hogy elfelejtette.",pr:"Oz o boy, hogy el-fe-ley-tet-te",en:"The problem is that she forgot."},
-      {hu:"A probléma az, hogy nincs idő.",pr:"O prob-lé-mo oz, hogy ninch i-dő",en:"The issue is that there's no time."},
-      {hu:"Nem működik a telefon.",pr:"Nem mű-kö-dik o te-le-fon",en:"The phone isn't working."},
-      {hu:"Az a gond, hogy nem akar.",pr:"Oz o gond, hogy nem o-kor",en:"The trouble is that she doesn't want to."},
-      {hu:"Elromlott a bicikli.",pr:"El-rom-lott o bi-tsik-li",en:"The bike has broken."},
-      {hu:"Valami baj van?",pr:"Vo-lo-mi boy von",en:"Is something wrong?"},
-      {hu:"A baj az, hogy nem értjük egymást.",pr:"O boy oz, hogy nem ért-yük edy-másht",en:"The problem is we don't understand each other."},
-      {hu:"Nem tudom megcsinálni.",pr:"Nem tu-dom meg-chi-nál-ni",en:"I can't fix it."},
-    ], tip:"Az a baj, hogy… (the problem is that…) is the go-to phrase for explaining any difficulty to the family.", pat:"az a baj, hogy = the problem is that\na probléma az, hogy = the issue is that\naz a gond, hogy = the trouble is that\nnem működik = it doesn't work\nelromlott = it broke"},
-  { id:63, phase:10, title:"What We Did Today", sub:"ma · aztán · végül", aud:"both", patternId:"narrative-past",
-    phrases:[
-      {hu:"Ma sokat játszottunk.",pr:"Mo sho-kot yát-sot-tunk",en:"Today we played a lot."},
-      {hu:"Aztán mentünk a parkba.",pr:"Oz-tán men-tünk o pork-bo",en:"Then we went to the park."},
-      {hu:"Végül hazajöttünk.",pr:"Vé-gül ho-zo-yöt-tünk",en:"In the end we came home."},
-      {hu:"Ma jó napunk volt.",pr:"Mo yó no-punk volt",en:"Today we had a good day."},
-      {hu:"Először olvastunk, aztán ettünk.",pr:"E-lő-ször ol-vosh-tunk, oz-tán et-tünk",en:"First we read, then we ate."},
-      {hu:"Végül mindenki álmos lett.",pr:"Vé-gül min-den-ki ál-mosh lett",en:"In the end everyone got sleepy."},
-      {hu:"Mit csináltál ma?",pr:"Mit chi-nál-tál mo",en:"What did you do today?"},
-      {hu:"Ma láttuk a nagymamát.",pr:"Mo lát-tuk o nody-mo-mát",en:"Today we saw grandma."},
-    ], tip:"Build a daily narrative with just three words: ma (today), aztán (then), végül (finally).", pat:"ma = today\naztán = then / after that\nvégül = finally / in the end\n\nPast tense recap:\n-tunk/-tünk = we did\n-tál/-tél = you did\n-tt = she/he did"},
-  { id:64, phase:10, title:"First, Then, After That", sub:"először · aztán · utána · végül", aud:"kids", patternId:"narrative-sequence",
-    phrases:[
-      {hu:"Először megmosakszol.",pr:"E-lő-ször meg-mo-shok-sol",en:"First you wash up."},
-      {hu:"Aztán fogat mosol.",pr:"Oz-tán fo-got mo-shol",en:"Then you brush your teeth."},
-      {hu:"Utána felöltözöl.",pr:"U-tá-no fel-öl-tö-zöl",en:"After that you get dressed."},
-      {hu:"Végül reggelizel.",pr:"Vé-gül reg-ge-li-zel",en:"Finally you have breakfast."},
-      {hu:"Először kérd meg szépen!",pr:"E-lő-ször kérd meg sé-pen",en:"First ask nicely!"},
-      {hu:"Aztán lefekszel, utána jön a mese.",pr:"Oz-tán le-fek-sel, u-tá-no yön o me-she",en:"Then you lie down, after that comes the story."},
-      {hu:"Végül mindenki boldog volt.",pr:"Vé-gül min-den-ki bol-dog volt",en:"In the end everyone was happy."},
-      {hu:"Mi volt az első?",pr:"Mi volt oz el-ső",en:"What was the first thing?"},
-    ], tip:"Először, aztán, utána, végül — these four connectors turn any bedtime routine into a story.", pat:"először = first\naztán = then\nutána = after that\nvégül = finally\n\nAll followed by present or past tense"},
-  { id:65, phase:10, title:"What She Said", sub:"azt mondta, hogy · megkérdezte, hogy", aud:"both", patternId:"reported-speech",
-    phrases:[
-      {hu:"Azt mondta, hogy holnap jön.",pr:"Ozt mond-to, hogy hol-nop yön",en:"She said that she's coming tomorrow."},
-      {hu:"Megkérdezte, hogy éhes vagy-e.",pr:"Meg-kér-dez-te, hogy é-hesh vody-e",en:"She asked whether you're hungry."},
-      {hu:"Azt mondta, hogy szeret.",pr:"Ozt mond-to, hogy se-ret",en:"She said that she loves you."},
-      {hu:"Apukád azt kérdezte, hogy készen vagy.",pr:"O-pu-kád ozt kér-dez-te, hogy ké-sen vody",en:"Your dad asked whether you're ready."},
-      {hu:"Azt mondta, hogy nem tud jönni.",pr:"Ozt mond-to, hogy nem tud yön-ni",en:"She said that she can't come."},
-      {hu:"Megkérdezte, hogy mi a kedvenced.",pr:"Meg-kér-dez-te, hogy mi o ked-ven-tsed",en:"She asked what your favourite is."},
-      {hu:"Azt mondtam, hogy szeretem.",pr:"Ozt mond-tom, hogy se-re-tem",en:"I said that I love it."},
-      {hu:"Azt mondta, hogy büszke rád.",pr:"Ozt mond-to, hogy büs-ke rád",en:"She said that she's proud of you."},
-    ], tip:"Azt mondta, hogy… (she said that…) unlocks reported speech — 'hogy' does the same job as English 'that'.", pat:"azt mondta, hogy = she/he said that\nazt mondtam, hogy = I said that\nmegkérdezte, hogy = she/he asked whether\nvagy-e = whether (yes/no question tag)"},
-  { id:66, phase:10, title:"When I Was Little", sub:"amikor · voltam · voltál", aud:"both", patternId:"narrative-when",
-    phrases:[
-      {hu:"Amikor kicsi voltam, sokat úsztam.",pr:"O-mi-kor ki-chi vol-tom, sho-kot úsh-tom",en:"When I was little, I swam a lot."},
-      {hu:"Amikor fiatal voltam, sokat kirándultam.",pr:"O-mi-kor fi-o-tol vol-tom, sho-kot ki-rán-dul-tom",en:"When I was young, I hiked a lot."},
-      {hu:"Amikor te születtél, nagyon boldog voltam.",pr:"O-mi-kor te sü-let-tél, no-dyon bol-dog vol-tom",en:"When you were born, I was very happy."},
-      {hu:"Amikor kicsi voltál, mindig énekeltünk.",pr:"O-mi-kor ki-chi vol-tál, min-dig é-ne-kel-tünk",en:"When you were little, we always sang."},
-      {hu:"Nekem is volt ilyen játékom.",pr:"Ne-kem ish volt i-yen yá-té-kom",en:"I had a toy like this too."},
-      {hu:"Én is imádtam a meséket.",pr:"Én ish i-mád-tom o me-shé-ket",en:"I loved fairy tales too."},
-      {hu:"Amikor esős volt, bent játszottunk.",pr:"O-mi-kor e-shősh volt, bent yát-sot-tunk",en:"When it was rainy, we played inside."},
-      {hu:"Olyan voltam, mint te most.",pr:"O-lyon vol-tom, mint te mosht",en:"I was just like you are now."},
-    ], tip:"Amikor… voltam frames your own childhood stories. Sharing them with 'Én is…' (me too) shows your child they're not alone.", pat:"amikor + past tense = when I/you…\nvoltam = I was\nvoltál = you were\nnekem is = I also / me too\nén is = I too"},
-  { id:67, phase:10, title:"Bedtime Story Retelling", sub:"ki · mit csinált · hol · miért · hogyan", aud:"kids", patternId:"narrative-retell",
-    phrases:[
-      {hu:"Ki volt a főszereplő?",pr:"Ki volt o fő-se-rep-lő",en:"Who was the main character?"},
-      {hu:"Mi történt a végén?",pr:"Mi tör-tént o vé-gén",en:"What happened at the end?"},
-      {hu:"Mit csinált a nyuszi?",pr:"Mit chi-nált o nyus-zi",en:"What did the bunny do?"},
-      {hu:"Hol játszódott a mese?",pr:"Hol yát-só-dott o me-she",en:"Where did the story take place?"},
-      {hu:"Miért sírt a kislány?",pr:"Mi-ért shírt o kish-lány",en:"Why was the little girl crying?"},
-      {hu:"Hogyan ért véget?",pr:"Ho-dyon ért vé-get",en:"How did it end?"},
-      {hu:"Mi volt a legszebb rész?",pr:"Mi volt o leg-sebb rés",en:"What was the most beautiful part?"},
-      {hu:"Ki a kedvenc szereplőd?",pr:"Ki o ked-vents se-rep-lőd",en:"Who is your favourite character?"},
-    ], tip:"Turn any story into a conversation: Ki? Mit? Hol? Miért? Hogyan? (Who? What? Where? Why? How?)", pat:"Ki? = Who?\nMit csinált? = What did she/he do?\nHol? = Where?\nMiért? = Why?\nHogyan? = How?\nMi volt a kedvenc részed? = What was your favourite part?"},
-  { id:68, phase:10, title:"The Funny Thing That Happened", sub:"képzeld · tudod mit · és akkor", aud:"wife", patternId:"narrative-anecdote",
-    phrases:[
-      {hu:"Képzeld, mit mondott!",pr:"Kép-zeld, mit mon-dott",en:"Imagine what she said!"},
-      {hu:"Tudod mit, meglepett.",pr:"Tu-dod mit, meg-le-pett",en:"You know what, she surprised me."},
-      {hu:"És akkor egyszerre mindenki nevetett.",pr:"Ésh ok-kor edy-ser-re min-den-ki ne-ve-tett",en:"And then everyone laughed at once."},
-      {hu:"Képzeld, ott volt az egész család!",pr:"Kép-zeld, ott volt oz e-gés cho-lád",en:"Imagine, the whole family was there!"},
-      {hu:"Tudod, mi volt a vicces?",pr:"Tu-dod, mi volt o vit-sesh",en:"You know what was funny?"},
-      {hu:"És akkor esett az eső, de mi csak nevettünk.",pr:"Ésh ok-kor e-shett oz e-shő, de mi chok ne-vet-tünk",en:"And then it started raining, but we just laughed."},
-      {hu:"Képzeld, elfelejtette a cipőjét!",pr:"Kép-zeld, el-fe-ley-tet-te o tsi-pő-yét",en:"Imagine, she forgot her shoe!"},
-      {hu:"Aztán kiderült, hogy nálam volt.",pr:"Oz-tán ki-de-rült, hogy ná-lom volt",en:"Then it turned out I had it."},
-    ], tip:"Képzeld! (Imagine!) is your go-to opener for any funny story — it signals 'you won't believe this'.", pat:"képzeld! = imagine! / you won't believe it!\ntudod mit? = you know what?\nés akkor = and then\negyszerre = all at once / suddenly\nkiderült, hogy = it turned out that"},
-  { id:69, phase:11, title:"Tomorrow We Will…", sub:"fog + infinitive · holnap · a hétvégén", aud:"both", patternId:"future-plans",
-    phrases:[
-      {hu:"Mit fogunk csinálni holnap?",pr:"Mit fo-gunk chi-nál-ni hol-nop",en:"What are we going to do tomorrow?"},
-      {hu:"Holnap elmegyünk a parkba.",pr:"Hol-nop el-me-dyünk o pork-bo",en:"Tomorrow we're going to the park."},
-      {hu:"A hétvégén meglátogatjuk a nagymamát.",pr:"O hét-vé-gén meg-lá-to-got-yuk o nody-mo-mát",en:"At the weekend we'll visit grandma."},
-      {hu:"Jövő héten el fogunk menni kirándulni.",pr:"Yö-vő hé-ten el fo-gunk men-ni ki-rán-dul-ni",en:"Next week we'll go on a trip."},
-      {hu:"Este fogunk vacsorázni.",pr:"Esh-te fo-gunk vo-cho-ráz-ni",en:"We'll have dinner this evening."},
-      {hu:"Holnap korán fogunk kelni.",pr:"Hol-nop ko-rán fo-gunk kel-ni",en:"Tomorrow we'll get up early."},
-      {hu:"Nyáron Magyarországra fogunk menni.",pr:"Nyá-ron Mo-dyor-or-ság-ro fo-gunk men-ni",en:"In summer we'll go to Hungary."},
-      {hu:"Tervezzük meg a hétvégét!",pr:"Ter-vez-zük meg o hét-vé-gét",en:"Let's plan the weekend!"},
-    ], tip:"Weekend mornings are perfect for this lesson — plan the day together in Hungarian. See lesson 49 for the full fog paradigm table.", pat:"fog + infinitive = will / going to\nholnap = tomorrow\na hétvégén = at the weekend\njövő héten = next week\nnyáron = in summer\nhamarosan = soon"},
-  { id:70, phase:11, title:"I Would Like To…", sub:"szeretnék · szeretnénk · + infinitive", aud:"both", patternId:"conditional-wishes",
-    phrases:[
-      {hu:"Szeretnék kávét inni.",pr:"Se-ret-nék ká-vét in-ni",en:"I'd like to have a coffee."},
-      {hu:"Szeretnénk ma sétálni menni.",pr:"Se-ret-nénk mo shé-tál-ni men-ni",en:"We'd like to go for a walk today."},
-      {hu:"Szeretnél jönni velünk?",pr:"Se-ret-nél yön-ni ve-lünk",en:"Would you like to come with us?"},
-      {hu:"Szeretném megmutatni neked a kedvenc helyemet.",pr:"Se-ret-ném meg-mu-tot-ni ne-ked o ked-vents he-ye-met",en:"I'd like to show you my favourite place."},
-      {hu:"Szeretnénk egy szép nyarat tölteni.",pr:"Se-ret-nénk edy sép nyá-rot töl-te-ni",en:"We'd like to spend a lovely summer."},
-      {hu:"Szeretnék megtanulni úszni.",pr:"Se-ret-nék meg-to-nul-ni ús-ni",en:"I'd like to learn to swim."},
-      {hu:"Szeretnénk együtt moziba menni.",pr:"Se-ret-nénk e-dyütt mo-zi-bo men-ni",en:"We'd like to go to the cinema together."},
-      {hu:"Szeretném, ha boldogok lennétek.",pr:"Se-ret-ném, ho bol-do-gok len-né-tek",en:"I'd like you to be happy."},
-    ], tip:"Szeretnék is the most natural way to say 'I'd like to' — use it anywhere you'd say 'I want' in English. See lesson 48 for the full conditional paradigm.", pat:"szeretnék = I would like\nszeretnél = you would like\nszeretne = he/she would like\nszeretnénk = we would like\n+ infinitive follows"},
-  { id:71, phase:11, title:"If I Could…", sub:"ha + conditional · lenne · tudnék", aud:"both", patternId:"conditional-if",
-    phrases:[
-      {hu:"Ha tudnék, segítenék neked.",pr:"Ho tud-nék, she-gí-te-nék ne-ked",en:"If I could, I'd help you."},
-      {hu:"Ha lenne időm, sokat olvasnék.",pr:"Ho len-ne i-dőm, sho-kot ol-vosh-nék",en:"If I had time, I'd read a lot."},
-      {hu:"Ha szép idő lenne, kimennénk a parkba.",pr:"Ho sép i-dő len-ne, ki-men-nénk o pork-bo",en:"If the weather were nice, we'd go to the park."},
-      {hu:"Ha tehetnénk, elmennénk Magyarországra.",pr:"Ho te-het-nénk, el-men-nénk Mo-dyor-or-ság-ro",en:"If we could, we'd go to Hungary."},
-      {hu:"Ha tudnál repülni, hova mennél?",pr:"Ho tud-nál re-pül-ni, ho-vo men-nél",en:"If you could fly, where would you go?"},
-      {hu:"Ha gazdag lennék, sokat utaznánk.",pr:"Ho goz-dog len-nék, sho-kot u-toz-nánk",en:"If I were rich, we'd travel a lot."},
-      {hu:"Ha nem kellene dolgoznom, itthon maradnék.",pr:"Ho nem kel-le-ne dol-goz-nom, itt-hon mo-rod-nék",en:"If I didn't have to work, I'd stay home."},
-      {hu:"Ha lenne egy kívánságom, a ti boldogságotokat kérném.",pr:"Ho len-ne edy kí-ván-shá-gom, o ti bol-dog-shá-go-to-kot kér-ném",en:"If I had one wish, I'd ask for your happiness."},
-    ], tip:"Ha + conditional is your 'what if' construction. Great for dreaming out loud with the family. See lesson 48 for the conditional -nék endings.", pat:"ha = if\nha…, …nék / …nénk = if…, I / we would…\nlenne = there would be / it would be\ntudnék = I could\nmennénk = we would go\nha…akkor… = if…then…"},
-  { id:72, phase:11, title:"Maybe, Probably, Definitely", sub:"talán · valószínűleg · biztosan · lehet, hogy", aud:"both", patternId:"modal-hedging",
-    phrases:[
-      {hu:"Talán elmegyünk a parkba.",pr:"To-lán el-me-dyünk o pork-bo",en:"Maybe we'll go to the park."},
-      {hu:"Valószínűleg esni fog.",pr:"Vo-ló-sí-nű-leg esh-ni fog",en:"It will probably rain."},
-      {hu:"Biztosan ott lesz ő is.",pr:"Biz-to-shon ott les ő ish",en:"She'll definitely be there too."},
-      {hu:"Lehet, hogy késő lesz.",pr:"Le-het, hogy ké-shő les",en:"It might be late."},
-      {hu:"Talán megvesszük azt a játékot.",pr:"To-lán meg-ves-sük ozt o yá-té-kot",en:"Maybe we'll buy that toy."},
-      {hu:"Biztosan jól fogod érezni magad.",pr:"Biz-to-shon yól fo-god é-rez-ni mo-god",en:"You'll definitely enjoy yourself."},
-      {hu:"Lehet, hogy holnap találkozunk velük.",pr:"Le-het, hogy hol-nop to-lál-ko-zunk ve-lük",en:"Maybe we'll meet them tomorrow."},
-      {hu:"Valószínűleg hamarosan hazaérünk.",pr:"Vo-ló-sí-nű-leg ho-mo-ro-shon ho-zo-é-rünk",en:"We'll probably be home soon."},
-    ], tip:"Layer these hedges onto any plan to sound more natural: Talán… / Valószínűleg… / Biztosan… — they give you the full spectrum from 'maybe' to 'for sure'.", pat:"talán = maybe / perhaps\nvalószínűleg = probably\nbiztosan = definitely / certainly\nlehet, hogy = it may be that / maybe\nbiztos, hogy = it is certain that"},
-  { id:73, phase:11, title:"Making Decisions Together", sub:"mit szólsz · melyiket · inkább · megegyeztünk", aud:"both", patternId:"decision-questions",
-    phrases:[
-      {hu:"Mit szólsz, elmenjünk?",pr:"Mit sólsh, el-men-yünk",en:"What do you say, shall we go?"},
-      {hu:"Melyiket válasszuk?",pr:"Me-yi-ket vá-los-suk",en:"Which one shall we choose?"},
-      {hu:"Inkább maradjunk otthon.",pr:"In-kább mo-rod-yunk ott-hon",en:"Let's rather stay home."},
-      {hu:"Mi legyen ebédre?",pr:"Mi le-dyen e-béd-re",en:"What should we have for lunch?"},
-      {hu:"Megegyeztünk!",pr:"Meg-e-dyez-tünk",en:"We've agreed! It's settled!"},
-      {hu:"Szavazzunk!",pr:"So-voz-zunk",en:"Let's vote!"},
-      {hu:"Te mit gondolsz?",pr:"Te mit gon-dolsh",en:"What do you think?"},
-      {hu:"Ezt a tervet elfogadom.",pr:"Ezt o ter-vet el-fo-go-dom",en:"I agree to this plan."},
-    ], tip:"Mit szólsz…? is your go-to for including your partner or kids in any decision — much warmer than just announcing a plan.", pat:"mit szólsz? = what do you say? / how about…?\nmelyiket? = which one?\ninkább = rather / preferably\nmegegyeztünk = we agreed / it's settled\nszavazzunk = let's vote"},
-  { id:74, phase:11, title:"Dreams & Hopes", sub:"remélem · szeretném, ha · álom · cél", aud:"both", patternId:"hopes-subjunctive",
-    phrases:[
-      {hu:"Remélem, hogy egészségesek lesztek.",pr:"Re-mé-lem, hogy e-gés-shé-ge-shek les-tek",en:"I hope you'll be healthy."},
-      {hu:"Az álmom az, hogy egyszer visszamegyünk Magyarországra.",pr:"Oz ál-mom oz, hogy edy-ser vis-so-me-dyünk Mo-dyor-or-ság-ro",en:"My dream is that one day we'll go back to Hungary."},
-      {hu:"Szeretném, ha boldogok lennétek.",pr:"Se-ret-ném, ho bol-do-gok len-né-tek",en:"I'd like you to be happy."},
-      {hu:"Remélem, hogy teljesülnek az álmaid.",pr:"Re-mé-lem, hogy tel-ye-shül-nek oz ál-mo-id",en:"I hope your dreams come true."},
-      {hu:"Az a célom, hogy folyékonyan beszéljek magyarul.",pr:"Oz o tsé-lom, hogy fo-yé-ko-nyon be-sél-yek mo-dyo-rul",en:"My goal is to speak Hungarian fluently."},
-      {hu:"Reméljük, hogy szép emlékeink lesznek.",pr:"Re-mél-yük, hogy sép em-lé-ke-ink les-nek",en:"We hope we'll have beautiful memories."},
-      {hu:"Szeretném, ha szeretnétek a magyar kultúrát.",pr:"Se-ret-ném, ho se-ret-né-tek o mo-dyor kul-tú-rát",en:"I'd like you to love Hungarian culture."},
-      {hu:"Azt kívánom neked, hogy sok barátod legyen.",pr:"Ozt kí-vá-nom ne-ked, hogy shok bo-rá-tod le-dyen",en:"I wish for you to have many friends."},
-    ], tip:"Remélem… and Szeretném, ha… are the most-used hope and wish openers. Teach them as fixed phrases first — the grammar behind szeretném, ha + conditional is B1+, but the chunks are everyday.", pat:"remélem, hogy = I hope that\nszeretném, ha = I'd like it if / I wish that\naz álmom az, hogy = my dream is that\na célom az, hogy = my goal is that\nteljesül = comes true / is fulfilled\nkívánom = I wish (for someone)"},
   // ── Breadth Pass (IDs 75–92) ─────────────────────────────────────────────
   { id:75, phase:1, title:"Breakfast in Detail", sub:"pirítós · tojás · tej · kend meg", aud:"both",
     phrases:[
@@ -998,158 +797,21 @@ const LESSONS = [
     ], tip:"Meg- prefix marks completion: szerelek (I'm fixing) → megszerelem (I'll fix it). Apply to any household task: megjavítom (I'll repair it), megtisztítom (I'll clean it), megcsinálom (I'll do/fix it).", pat:"csavar = screw\ncsavarhúzó = screwdriver\nfúró = drill\nfesteni = to paint\nszerelni = to fix / repair\nöntözni = to water (plants)\nvillanykörte = light bulb\nkicserél = replaces\nás = digs\nkitakarít = cleans out"},
 ];
 
-// ─── STORIES DATA ─────────────────────────────────────────────────────────
-const STORIES=[
-  {id:1,title:"A parkban",titleEn:"At the park",level:"A2",minLessons:20,
-    glossary:[{hu:"hinta",pr:"hin-to",en:"swing"},{hu:"homokozó",pr:"ho-mo-ko-zó",en:"sandpit"}],
-    sentences:[
-      {hu:"Ma a parkba mentünk.",en:"Today we went to the park."},
-      {hu:"Az idő gyönyörű volt.",en:"The weather was beautiful."},
-      {hu:"A gyerekek nagyon örültek.",en:"The children were very happy."},
-      {hu:"Én sétáltam, ők játszottak.",en:"I was walking, they were playing."},
-      {hu:"Péter a hintán ült.",en:"Péter sat on the swing."},
-      {hu:"Anna a homokozóban épített várat.",en:"Anna built a castle in the sandpit."},
-      {hu:"Ebédeltünk a padon.",en:"We ate lunch on the bench."},
-      {hu:"Szendvicset ettünk és vizet ittunk.",en:"We ate sandwiches and drank water."},
-      {hu:"Délután hazamentünk.",en:"In the afternoon we went home."},
-      {hu:"A gyerekek fáradtak voltak, de örültek.",en:"The children were tired but happy."},
-    ]},
-  {id:2,title:"Reggeli",titleEn:"Breakfast",level:"A2",minLessons:15,
-    glossary:[{hu:"pirítós",pr:"pi-rí-tósh",en:"toast"},{hu:"lekvár",pr:"lek-vár",en:"jam"}],
-    sentences:[
-      {hu:"Korán felébredtünk.",en:"We woke up early."},
-      {hu:"Éhes voltam.",en:"I was hungry."},
-      {hu:"Tojást sütöttem.",en:"I fried eggs."},
-      {hu:"A gyerekek pirítóst ettek.",en:"The children ate toast."},
-      {hu:"Anya megkente a pirítóst lekvárral.",en:"Mum spread jam on the toast."},
-      {hu:"Kakaót ittunk.",en:"We drank cocoa."},
-      {hu:"Péter nem szerette a tojást.",en:"Péter didn't like the eggs."},
-      {hu:"De megevett egy egész pirítóst.",en:"But he ate a whole slice of toast."},
-      {hu:"Reggelinél mindenki sokat nevetett.",en:"Everyone laughed a lot at breakfast."},
-      {hu:"Jó reggel volt.",en:"It was a good morning."},
-    ]},
-  {id:3,title:"A bevásárlás",titleEn:"Shopping",level:"A2",minLessons:20,
-    glossary:[{hu:"bevásárlókosár",pr:"be-vá-shár-ló-ko-shár",en:"shopping basket"},{hu:"pénztár",pr:"pénz-tár",en:"checkout"}],
-    sentences:[
-      {hu:"Szombaton a boltba mentünk.",en:"On Saturday we went to the shop."},
-      {hu:"Volt egy hosszú listánk.",en:"We had a long list."},
-      {hu:"Kenyeret, tejet és gyümölcsöt vettünk.",en:"We bought bread, milk and fruit."},
-      {hu:"Anna a bevásárlókosarat tartotta.",en:"Anna held the shopping basket."},
-      {hu:"Péter almát választott.",en:"Péter chose apples."},
-      {hu:"Én sajtot és sonkát vettem.",en:"I bought cheese and ham."},
-      {hu:"Aztán a pénztárhoz mentünk.",en:"Then we went to the checkout."},
-      {hu:"Sokat kellett várni.",en:"We had to wait a long time."},
-      {hu:"A gyerekek türelmesek voltak.",en:"The children were patient."},
-      {hu:"Végül hazamentünk a sok zacskóval.",en:"Finally we went home with lots of bags."},
-    ]},
-  {id:4,title:"Az iskolában",titleEn:"At School",level:"A2",minLessons:25,
-    glossary:[{hu:"füzet",pr:"fü-zet",en:"exercise book"},{hu:"szünet",pr:"sü-net",en:"break / recess"}],
-    sentences:[
-      {hu:"Ma sok mindent tanultunk az iskolában.",en:"Today we learned a lot of things at school."},
-      {hu:"Az első óra matekból volt.",en:"The first lesson was maths."},
-      {hu:"Számokat írtam a füzetbe.",en:"I wrote numbers in my exercise book."},
-      {hu:"Aztán jött a szünet.",en:"Then came the break."},
-      {hu:"A barátaimmal fociztem.",en:"I played football with my friends."},
-      {hu:"Az ebédlőben szendvicset ettünk.",en:"We ate sandwiches in the canteen."},
-      {hu:"Délután rajzoltunk.",en:"In the afternoon we drew pictures."},
-      {hu:"A tanárnő megdicsérte a rajzomat.",en:"The teacher praised my drawing."},
-      {hu:"Boldog voltam.",en:"I was happy."},
-      {hu:"Hazafelé sokat mesélt Anna is.",en:"On the way home Anna talked a lot too."},
-    ]},
-  {id:5,title:"Esti mese",titleEn:"Bedtime Story",level:"A2",minLessons:20,
-    glossary:[{hu:"farkas",pr:"far-kosh",en:"wolf"},{hu:"erdő",pr:"er-dő",en:"forest"}],
-    sentences:[
-      {hu:"Este eljött a lefekvés ideje.",en:"Evening came and it was time for bed."},
-      {hu:"A gyerekek már pizsamában voltak.",en:"The children were already in pyjamas."},
-      {hu:"Péter egy mesét kért.",en:"Péter asked for a story."},
-      {hu:"Egy farkasról szólt a mese.",en:"The story was about a wolf."},
-      {hu:"A farkas az erdőben lakott.",en:"The wolf lived in the forest."},
-      {hu:"Volt egy jó barátja, egy nyúl.",en:"He had a good friend, a rabbit."},
-      {hu:"Minden nap együtt játszottak.",en:"Every day they played together."},
-      {hu:"Anna közben elaludt.",en:"Meanwhile Anna fell asleep."},
-      {hu:"Péter is lassan hunyta le a szemét.",en:"Péter also slowly closed his eyes."},
-      {hu:"Jó éjszakát!",en:"Good night!"},
-    ]},
-  {id:6,title:"A születésnap",titleEn:"The Birthday",level:"A2",minLessons:25,
-    glossary:[{hu:"torta",pr:"tor-to",en:"cake"},{hu:"gyertya",pr:"djer-tyo",en:"candle"}],
-    sentences:[
-      {hu:"Ma Anna születésnapja volt.",en:"Today was Anna's birthday."},
-      {hu:"Reggel énekeltünk neki.",en:"In the morning we sang to her."},
-      {hu:"Kapott egy könyvet és egy játékot.",en:"She received a book and a toy."},
-      {hu:"Délután jöttek a barátai.",en:"In the afternoon her friends came."},
-      {hu:"Játszottunk, nevettünk és ugráltunk.",en:"We played, laughed and jumped."},
-      {hu:"Aztán eljött a torta ideje.",en:"Then it was time for the cake."},
-      {hu:"A tortán öt gyertya volt.",en:"There were five candles on the cake."},
-      {hu:"Anna elfújta az összeset.",en:"Anna blew out all of them."},
-      {hu:"Mindenki tapsolt.",en:"Everyone clapped."},
-      {hu:"Boldog születésnapot, Anna!",en:"Happy birthday, Anna!"},
-    ]},
-  {id:7,title:"Hétvégi kirándulás",titleEn:"Weekend Trip",level:"B1",minLessons:30,
-    glossary:[{hu:"domb",pr:"domb",en:"hill"},{hu:"kilátó",pr:"ki-lá-tó",en:"lookout tower"}],
-    sentences:[
-      {hu:"Vasárnap kirándulni mentünk.",en:"On Sunday we went on a trip."},
-      {hu:"Autóval utaztunk egy közeli dombhoz.",en:"We travelled by car to a nearby hill."},
-      {hu:"Az út egy óráig tartott.",en:"The journey took one hour."},
-      {hu:"A gyerekek kérdezgettek egész úton.",en:"The children asked questions the whole way."},
-      {hu:"Fenn a dombon volt egy szép kilátó.",en:"At the top of the hill there was a beautiful lookout tower."},
-      {hu:"Messzire láttunk.",en:"We could see far away."},
-      {hu:"Szendvicset ettünk a füvön.",en:"We ate sandwiches on the grass."},
-      {hu:"Visszafelé lassabban mentünk.",en:"On the way back we went more slowly."},
-      {hu:"Péter elfáradt, ezért vittem a hátamon.",en:"Péter was tired, so I carried him on my back."},
-      {hu:"Otthon mindenki nagyon jól aludt.",en:"At home everyone slept very well."},
-    ]},
-  {id:8,title:"Főzés együtt",titleEn:"Cooking Together",level:"A2",minLessons:20,
-    glossary:[{hu:"tészta",pr:"tés-to",en:"pasta"},{hu:"paradicsom",pr:"po-ro-di-chom",en:"tomato"}],
-    sentences:[
-      {hu:"Szombaton ebédet főztünk együtt.",en:"On Saturday we cooked lunch together."},
-      {hu:"Tésztát csináltunk paradicsomszósszal.",en:"We made pasta with tomato sauce."},
-      {hu:"A gyerekek segítettek.",en:"The children helped."},
-      {hu:"Péter a zöldségeket mosta meg.",en:"Péter washed the vegetables."},
-      {hu:"Anna a tányérokat terítette.",en:"Anna laid the plates."},
-      {hu:"Én a mártást kavargattam.",en:"I stirred the sauce."},
-      {hu:"Kellemes illata volt a konyhának.",en:"The kitchen smelled lovely."},
-      {hu:"Az asztalhoz ültünk és ettünk.",en:"We sat down at the table and ate."},
-      {hu:"Mindenki azt mondta: finom!",en:"Everyone said: delicious!"},
-      {hu:"Utána mosogattunk.",en:"Afterwards we washed up."},
-    ]},
-  {id:9,title:"Az időjárás",titleEn:"The Weather",level:"A2",minLessons:15,
-    glossary:[{hu:"esernyő",pr:"e-sher-nyő",en:"umbrella"},{hu:"szivárvány",pr:"si-vár-vány",en:"rainbow"}],
-    sentences:[
-      {hu:"Reggel esett az eső.",en:"In the morning it was raining."},
-      {hu:"Nem akartunk kimenni.",en:"We didn't want to go out."},
-      {hu:"Esernyőt vettünk elő.",en:"We got out the umbrellas."},
-      {hu:"A gyerekek vigyáztak az esernyőjükre.",en:"The children looked after their umbrellas."},
-      {hu:"Sétáltunk a nedves utcákon.",en:"We walked on the wet streets."},
-      {hu:"Péter minden pocsolyába belelépett.",en:"Péter stepped in every puddle."},
-      {hu:"Délután kijött a nap.",en:"In the afternoon the sun came out."},
-      {hu:"Az égen gyönyörű szivárvány jelent meg.",en:"A beautiful rainbow appeared in the sky."},
-      {hu:"Anna megmutatta a bátyjának.",en:"Anna showed it to her big brother."},
-      {hu:"Ő is örült.",en:"He was happy too."},
-    ]},
-  {id:10,title:"Fürdőidő",titleEn:"Bath Time",level:"A2",minLessons:15,
-    glossary:[{hu:"kacsa",pr:"kach-o",en:"duck"},{hu:"buborék",pr:"bu-bo-rék",en:"bubble"}],
-    sentences:[
-      {hu:"Este fürödni kellett.",en:"In the evening it was time for a bath."},
-      {hu:"A gyerekek nem akartak.",en:"The children didn't want to."},
-      {hu:"De aztán mégis bementek.",en:"But then they went in anyway."},
-      {hu:"Teli volt a fürdőkád habbal.",en:"The bathtub was full of foam."},
-      {hu:"Péternek volt egy kis gumi kacsája.",en:"Péter had a small rubber duck."},
-      {hu:"Az úszott a vízen.",en:"It floated on the water."},
-      {hu:"Anna buborékokat fújt.",en:"Anna blew bubbles."},
-      {hu:"Sokat nevettünk.",en:"We laughed a lot."},
-      {hu:"Utána törölközőbe göngyöltem őket.",en:"Afterwards I wrapped them in a towel."},
-      {hu:"Tisztán, frissen feküdtek le.",en:"They went to bed clean and fresh."},
-    ]},
-];
 
 // ─── UTILITIES ─────────────────────────────────────────────────────────────
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function normalize(s){return s.replace(/[!?.,:;'"¡¿…]/g,"").toLowerCase().trim();}
-function getWeeklyPattern(){
-  const ids=[...new Set(LESSONS.filter(l=>l.patternId).map(l=>l.patternId))];
-  if(!ids.length)return null;
-  const weekNum=Math.floor(Date.now()/(7*24*60*60*1000));
-  return ids[weekNum%ids.length];
+
+// ─── UNLOCK SYSTEM ─────────────────────────────────────────────────────────
+function getLessonsInPhase(phaseId){return LESSONS.filter(l=>l.phase===phaseId).sort((a,b)=>a.id-b.id);}
+function isLessonUnlocked(lessonId,stats){
+  const lesson=LESSONS.find(l=>l.id===lessonId);
+  if(!lesson)return false;
+  const phaseLessons=getLessonsInPhase(lesson.phase);
+  const idx=phaseLessons.findIndex(l=>l.id===lessonId);
+  if(idx<=0)return true;
+  const prev=phaseLessons[idx-1];
+  return (stats.lessonScores[prev.id]?.best||0)>=80;
 }
 
 // ─── DAILY FOCUS ENGINE ───────────────────────────────────────────────────
@@ -1163,7 +825,8 @@ function getDailyFocus(stats){
 
   const scored=[];
 
-  LESSONS.forEach(lesson=>{
+  const unlockedLessons=LESSONS.filter(l=>isLessonUnlocked(l.id,stats));
+  unlockedLessons.forEach(lesson=>{
     const phase=PHASES.find(p=>p.id===lesson.phase);
     let score=0;
     let reasons=[];
@@ -1292,20 +955,6 @@ function schedulePhraseReview(entry,correct){
   const d=new Date();d.setDate(d.getDate()+interval);
   return{...entry,ease,interval,due:d.toISOString().slice(0,10),lastSeen:todayISO()};
 }
-function getDuePhrases(stats){
-  const today=todayISO();
-  const attempted=new Set(Object.keys(stats.lessonScores));
-  const due=[];
-  LESSONS.forEach(lesson=>{
-    if(!attempted.has(String(lesson.id)))return;
-    lesson.phrases.forEach(p=>{
-      const sc=stats.phraseScores[p.hu];
-      if(!sc)return;
-      if((sc.due||today)<=today)due.push(p);
-    });
-  });
-  return due;
-}
 
 function useStats(){
   const [stats,setStats]=useState(()=>loadStats());
@@ -1392,7 +1041,6 @@ function generateQuestions(lesson,weakPhrases,count=15){
   }
   return shuffle(qs).slice(0,count);
 }
-function getPatternPhrases(patternId){return LESSONS.filter(l=>l.patternId===patternId).flatMap(l=>l.phrases);}
 
 // ─── STYLES ────────────────────────────────────────────────────────────────
 const C={bg:"#0F1117",card:"#161822",border:"#1E2030",text:"#E8E6E1",sub:"#7A7B8A",dim:"#555668",green:"#3A8F6E",red:"#D94A4A",amber:"#E8913A"};
@@ -1527,22 +1175,6 @@ function DailyFocusCard({focus,onSelectLesson}){
   </div>;
 }
 
-// ─── REVIEW DUE CARD ─────────────────────────────────────────────────────
-function ReviewDueCard({dueCount,onStart}){
-  const color="#4A90D9";
-  if(dueCount===0)return null;
-  return <div style={{padding:"0 16px",marginBottom:14}}>
-    <div onClick={onStart} style={{background:`linear-gradient(135deg, ${color}18, ${color}06)`,border:`1px solid ${color}28`,borderRadius:14,padding:"12px 14px",cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
-      <div style={{width:36,height:36,borderRadius:10,background:`${color}20`,color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🔁</div>
-      <div style={{flex:1,minWidth:0}}>
-        <div style={{fontSize:14,fontWeight:700,color:C.text}}>Review Due</div>
-        <div style={{fontSize:11,color,fontWeight:600,marginTop:1}}>{dueCount} phrase{dueCount!==1?"s":""} ready to review</div>
-      </div>
-      <span style={{color:C.dim,fontSize:16}}>›</span>
-    </div>
-  </div>;
-}
-
 // ─── GOAL SETTINGS MODAL ──────────────────────────────────────────────────
 function GoalSettings({goal,onSet,onClose}){
   const options=[5,10,15,20,30];
@@ -1619,7 +1251,7 @@ function QuizEngine({lesson,color,onFinish,statsApi}){
     <div style={{fontSize:30,fontWeight:900,color:C.text,marginTop:10}}>{score}/{total}</div>
     <div style={{fontSize:15,color:C.sub,marginTop:4}}>{score>=total*0.8?"Excellent!":score>=total*0.5?"Good work!":"Keep going!"}</div>
     <div style={{display:"flex",gap:10,marginTop:20,justifyContent:"center"}}>
-      <button onClick={onFinish} style={{padding:"12px 24px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Done</button>
+      <button onClick={()=>onFinish(score,total)} style={{padding:"12px 24px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Done</button>
       <button onClick={()=>{setQi(0);setScore(0);setAns(null);setTyped("");statsApi.startTimer();}} style={{padding:"12px 24px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Retry</button>
     </div></div>;}
 
@@ -1758,171 +1390,15 @@ function ShadowBtn({phrase,color}){
   </span>;
 }
 
-function PhraseView({lesson,color}){const [exp,setExp]=useState(null);
-  return <div style={{padding:"0 16px 80px"}}>
-    {lesson.tip&&<div style={{background:`${color}10`,border:`1px solid ${color}22`,borderRadius:12,padding:"10px 12px",margin:"10px 0",fontSize:12,color:"#C8C7D0",lineHeight:1.5}}><span style={{fontWeight:800,color}}>Tip: </span>{lesson.tip}</div>}
-    {lesson.pat&&<div style={{background:"#1A1428",border:"1px solid #2D2548",borderRadius:12,padding:"10px 12px",margin:"6px 0",fontSize:12,color:"#B8A8D8",lineHeight:1.5,whiteSpace:"pre-wrap"}}><span style={{fontWeight:800,color:"#A78BFA"}}>Pattern: </span>{lesson.pat}</div>}
-    {lesson.phrases.map((p,i)=><div key={i} style={{background:C.card,borderRadius:11,padding:"11px 13px",marginBottom:5,border:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setExp(exp===i?null:i)}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div style={{fontSize:16,fontWeight:700,color:C.text}}>{p.hu}</div><span style={{display:"flex",gap:4,alignItems:"center"}}><SpeakBtn text={p.hu} color={color}/><ShadowBtn phrase={p} color={color}/></span></div>
-      {exp===i?<><div style={{fontSize:12,color:C.dim,marginTop:2,fontStyle:"italic"}}>{p.pr}</div><div style={{fontSize:13,color:C.sub,marginTop:3}}>{p.en}</div></>
-      :<div style={{fontSize:10,color:C.dim,marginTop:1}}>tap to reveal</div>}
-    </div>)}
-  </div>;}
-
-function FlashView({lesson,color}){const [dir,setDir]=useState("hu");const [cards,setCards]=useState(()=>shuffle(lesson.phrases));const [idx,setIdx]=useState(0);const [flip,setFlip]=useState(false);
-  const reset=()=>{setCards(shuffle(lesson.phrases));setIdx(0);setFlip(false);};const card=cards[idx];
-  useEffect(()=>{ if(dir==="hu") speakHu(card.hu); },[idx,dir]);
-  const handleFlip=()=>{ const nf=!flip;setFlip(nf);if(dir==="en"&&nf)speakHu(card.hu); };
-  return <div style={{padding:"20px 16px",display:"flex",flexDirection:"column",alignItems:"center",minHeight:"50vh"}}>
-    <div style={{display:"flex",gap:6,marginBottom:14}}>
-      {["hu","en"].map(d=><button key={d} onClick={()=>{setDir(d);reset();}} style={{padding:"6px 13px",borderRadius:20,border:dir===d?`2px solid ${color}`:`2px solid ${C.border}`,background:dir===d?`${color}10`:"transparent",color:dir===d?color:C.sub,fontSize:11,fontWeight:700,cursor:"pointer"}}>{d==="hu"?"HU → EN":"EN → HU"}</button>)}
-    </div>
-    <div style={{fontSize:12,color:C.sub}}>{idx+1}/{cards.length}</div>
-    <div onClick={handleFlip} style={{width:"100%",maxWidth:320,minHeight:190,borderRadius:16,padding:"26px 20px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",background:flip?C.card:`linear-gradient(145deg, ${color}20, ${color}06)`,border:`2px solid ${flip?"#2A2C3E":color+"38"}`,textAlign:"center",marginTop:10,userSelect:"none",position:"relative"}}>
-      <div style={{position:"absolute",top:8,right:8}}><SpeakBtn text={card.hu} color={color} size={16}/></div>
-      <div style={{fontSize:22,fontWeight:800,color:C.text}}>{dir==="hu"?card.hu:card.en}</div>
-      {dir==="hu"&&!flip&&<div style={{fontSize:13,color:C.dim,marginTop:6,fontStyle:"italic"}}>{card.pr}</div>}
-      {flip&&<div style={{fontSize:16,color:C.sub,marginTop:12}}>{dir==="hu"?card.en:card.hu}</div>}
-      {flip&&dir==="en"&&<div style={{fontSize:12,color:C.dim,marginTop:4,fontStyle:"italic"}}>{card.pr}</div>}
-      {!flip&&<div style={{fontSize:11,color:C.dim,marginTop:14}}>tap to flip</div>}
-    </div>
-    <div style={{display:"flex",gap:8,marginTop:16,width:"100%",maxWidth:320}}>
-      <button onClick={()=>{setFlip(false);setIdx(Math.max(0,idx-1));}} style={{flex:1,padding:"11px",borderRadius:11,background:`${color}14`,border:`1px solid ${color}28`,color,fontSize:13,fontWeight:700,cursor:"pointer"}}>←</button>
-      <button onClick={()=>{if(idx<cards.length-1){setFlip(false);setIdx(idx+1);}else reset();}} style={{flex:1,padding:"11px",borderRadius:11,background:`${color}14`,border:`1px solid ${color}28`,color,fontSize:13,fontWeight:700,cursor:"pointer"}}>{idx<cards.length-1?"→":"↻"}</button>
-    </div>
-  </div>;}
-
-function ListenView({lesson,color}){
-  const huVoice=useHuVoiceAvailable();
-  const [idx,setIdx]=useState(0);
-  const [playing,setPlaying]=useState(false);
-  const [revealed,setRevealed]=useState(false);
-  const playingRef=useRef(false);
-  const timerRef=useRef(null);
-  const genRef=useRef(0);
-  const phrases=lesson.phrases;
-  const phrase=phrases[idx];
-  useEffect(()=>{playingRef.current=playing;},[playing]);
-  useEffect(()=>()=>{clearTimeout(timerRef.current);if(window.speechSynthesis)window.speechSynthesis.cancel();},[]);
-  const startPhrase=useCallback((i)=>{
-    const gen=++genRef.current;
-    clearTimeout(timerRef.current);setRevealed(false);
-    if(!window.speechSynthesis)return;
-    window.speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(phrases[i].hu);
-    u.lang="hu-HU";u.rate=0.85;
-    u.onend=()=>{
-      if(gen!==genRef.current)return;
-      timerRef.current=setTimeout(()=>{
-        if(gen!==genRef.current)return;
-        setRevealed(true);
-        timerRef.current=setTimeout(()=>{
-          if(gen!==genRef.current)return;
-          if(playingRef.current)setIdx(j=>(j+1)%phrases.length);
-        },1500);
-      },2000);
-    };
-    window.speechSynthesis.speak(u);
-  },[phrases]);
-  useEffect(()=>{
-    if(playing)startPhrase(idx);
-    else{clearTimeout(timerRef.current);if(window.speechSynthesis)window.speechSynthesis.cancel();}
-  },[playing,idx,startPhrase]);
-  const skip=()=>{clearTimeout(timerRef.current);if(window.speechSynthesis)window.speechSynthesis.cancel();setIdx(i=>(i+1)%phrases.length);setRevealed(false);};
-  return <div style={{padding:"20px 16px",display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
-    {huVoice===false&&<div style={{width:"100%",maxWidth:320,padding:"8px 12px",borderRadius:10,background:`${C.amber}15`,border:`1px solid ${C.amber}40`,fontSize:12,color:C.amber,textAlign:"center"}}>No Hungarian voice found — audio may sound incorrect. Install a hu-HU voice in your device settings for best results.</div>}
-    <div style={{fontSize:12,color:C.sub}}>{idx+1}/{phrases.length}</div>
-    <div style={{width:"100%",maxWidth:320,minHeight:160,borderRadius:16,padding:"26px 20px",background:C.card,border:`2px solid ${color}38`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",gap:8}}>
-      <div style={{fontSize:20,fontWeight:800,color:C.text}}>{phrase.hu}</div>
-      <div style={{fontSize:12,color:C.dim,fontStyle:"italic"}}>{phrase.pr}</div>
-      {revealed?<div style={{fontSize:14,color:C.sub,marginTop:6}}>{phrase.en}</div>:<div style={{fontSize:11,color:C.dim,marginTop:6,opacity:0.5}}>…</div>}
-    </div>
-    <div style={{display:"flex",gap:10}}>
-      <button onClick={()=>startPhrase(idx)} title="Replay" style={{padding:"10px 16px",borderRadius:11,background:`${color}14`,border:`1px solid ${color}28`,color,fontSize:18,cursor:"pointer"}}>↺</button>
-      <button onClick={()=>setPlaying(p=>!p)} style={{padding:"10px 24px",borderRadius:11,background:playing?`${color}28`:`${color}14`,border:`1.5px solid ${color}38`,color,fontSize:18,fontWeight:700,cursor:"pointer"}}>{playing?"⏸":"▶"}</button>
-      <button onClick={skip} title="Skip" style={{padding:"10px 16px",borderRadius:11,background:`${color}14`,border:`1px solid ${color}28`,color,fontSize:18,cursor:"pointer"}}>⏭</button>
-    </div>
-    <div style={{fontSize:11,color:C.dim,textAlign:"center"}}>{playing?"Tap ⏸ to pause":"Tap ▶ to start · audio plays, then English reveals"}</div>
-  </div>;
-}
-
-function StoryView({storyId,onBack}){
-  const story=STORIES.find(s=>s.id===storyId);
-  const [exp,setExp]=useState(null);
-  const [playing,setPlaying]=useState(false);
-  const activeRef=useRef(false);
-  const stopPlay=useCallback(()=>{activeRef.current=false;if(window.speechSynthesis)window.speechSynthesis.cancel();setPlaying(false);},[]);
-  useEffect(()=>()=>stopPlay(),[stopPlay]);
-  const playAll=()=>{
-    if(!window.speechSynthesis)return;
-    window.speechSynthesis.cancel();
-    activeRef.current=true;setPlaying(true);
-    let i=0;
-    const next=()=>{
-      if(!activeRef.current||i>=story.sentences.length){if(activeRef.current)setPlaying(false);return;}
-      const u=new SpeechSynthesisUtterance(story.sentences[i].hu);
-      u.lang="hu-HU";u.rate=0.85;
-      u.onend=()=>{i++;setTimeout(next,600);};
-      window.speechSynthesis.speak(u);
-    };
-    next();
-  };
-  return <div>
-    <Header title={story.title} sub={story.titleEn} onBack={onBack} right={
-      <button onClick={playing?stopPlay:playAll} title={playing?"Stop":"Read aloud"} style={{background:"none",border:"none",cursor:"pointer",fontSize:22,color:"#4A90D9",padding:"4px 6px",lineHeight:1}}>{playing?"⏹":"🔊"}</button>
-    }/>
-    <div style={{padding:"12px 16px 80px"}}>
-      {story.sentences.map((s,i)=><div key={i} style={{background:C.card,borderRadius:11,padding:"11px 13px",marginBottom:5,border:`1px solid ${C.border}`,cursor:"pointer"}} onClick={()=>setExp(exp===i?null:i)}>
-        <div style={{fontSize:16,fontWeight:700,color:C.text}}>{s.hu}</div>
-        {exp===i?<div style={{fontSize:13,color:C.sub,marginTop:4}}>{s.en}</div>:<div style={{fontSize:10,color:C.dim,marginTop:1}}>tap to reveal</div>}
-      </div>)}
-      {story.glossary.length>0&&<div style={{background:"#1A1428",border:"1px solid #2D2548",borderRadius:12,padding:"10px 12px",marginTop:8}}>
-        <div style={{fontSize:11,fontWeight:800,color:"#A78BFA",marginBottom:6}}>New words</div>
-        {story.glossary.map((g,i)=><div key={i} style={{fontSize:12,color:"#B8A8D8",marginBottom:2}}>
-          <span style={{fontWeight:700}}>{g.hu}</span>{" "}<span style={{color:C.dim,fontStyle:"italic"}}>({g.pr})</span>{" = "}{g.en}
-        </div>)}
-      </div>}
-    </div>
-  </div>;
-}
-
-// ─── REVIEW DUE QUIZ ─────────────────────────────────────────────────────
-function ReviewDueQuiz({onBack,statsApi}){
-  const [duePhrases]=useState(()=>getDuePhrases(statsApi.stats).slice(0,15));
-  const syntheticLesson=useMemo(()=>({id:"review-due",phrases:duePhrases}),[]);
-  const color="#4A90D9";
-  if(duePhrases.length===0)return <div style={{padding:"40px 20px",textAlign:"center"}}>
-    <div style={{fontSize:48}}>✓</div>
-    <div style={{fontSize:22,fontWeight:900,color:C.text,marginTop:12}}>All caught up!</div>
-    <div style={{fontSize:14,color:C.sub,marginTop:4}}>No phrases are due right now.</div>
-    <button onClick={onBack} style={{marginTop:20,padding:"12px 28px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Back</button>
-  </div>;
-  return <div>
-    <Header title="Review Due" sub={`${duePhrases.length} phrase${duePhrases.length!==1?"s":""}`} onBack={onBack}/>
-    <QuizEngine lesson={syntheticLesson} color={color} onFinish={onBack} statsApi={statsApi}/>
-  </div>;
-}
 
 // ─── LESSON VIEW ──────────────────────────────────────────────────────────
-function LessonView({lessonId,onBack,statsApi,initialMode}){
+function LessonView({lessonId,onBack,onFinish,statsApi}){
   const lesson=LESSONS.find(l=>l.id===lessonId);
   const phase=PHASES.find(p=>p.id===lesson.phase);
-  const [mode,setMode]=useState(initialMode||"phrases");
-  const color=phase.color;
   const sc=statsApi.stats.lessonScores[lessonId];
-  const tabs=useMemo(()=>{const t=["phrases","flashcards","quiz","listen"];if(lesson.patternId)t.push("drill");return t;},[lesson.patternId]);
-  const drillLesson=useMemo(()=>lesson.patternId?{id:`drill-${lesson.patternId}`,phrases:getPatternPhrases(lesson.patternId)}:null,[lesson.patternId]);
-  const tabLabel=m=>({flashcards:"Cards",listen:"Listen",drill:"Drill"}[m]||(m[0].toUpperCase()+m.slice(1)));
   return <div>
     <Header title={lesson.title} sub={lesson.sub} onBack={onBack} right={sc&&<div style={{fontSize:12,fontWeight:700,color:sc.best>=80?C.green:sc.best>=50?C.amber:C.red}}>{sc.best}%</div>}/>
-    <div style={{display:"flex",gap:4,padding:"10px 16px",position:"sticky",top:0,background:C.bg,zIndex:10,borderBottom:`1px solid ${C.border}`}}>
-      {tabs.map(m=><button key={m} onClick={()=>setMode(m)} style={{flex:1,minWidth:0,padding:"9px 2px",borderRadius:10,border:mode===m?`2px solid ${color}`:`2px solid ${C.border}`,background:mode===m?`${color}10`:"transparent",color:mode===m?color:C.sub,fontSize:11,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>{tabLabel(m)}</button>)}
-    </div>
-    {mode==="phrases"&&<PhraseView lesson={lesson} color={color}/>}
-    {mode==="flashcards"&&<FlashView lesson={lesson} color={color}/>}
-    {mode==="quiz"&&<QuizEngine lesson={lesson} color={color} onFinish={()=>setMode("phrases")} statsApi={statsApi}/>}
-    {mode==="listen"&&<ListenView lesson={lesson} color={color}/>}
-    {mode==="drill"&&drillLesson&&<QuizEngine lesson={drillLesson} color={color} onFinish={()=>setMode("phrases")} statsApi={statsApi}/>}
+    <QuizEngine lesson={lesson} color={phase.color} onFinish={onFinish} statsApi={statsApi}/>
   </div>;
 }
 
@@ -1931,15 +1407,11 @@ export default function App(){
   const [screen,setScreen]=useState("home");
   const [phaseId,setPhaseId]=useState(null);
   const [lessonId,setLessonId]=useState(null);
-  const [storyId,setStoryId]=useState(null);
-  const [lessonMode,setLessonMode]=useState("phrases");
+  const [unlockBanner,setUnlockBanner]=useState(null);
   const [showGoalSettings,setShowGoalSettings]=useState(false);
   const [showFeedback,setShowFeedback]=useState(false);
   const statsApi=useStats();
   const focus=useMemo(()=>getDailyFocus(statsApi.stats),[statsApi.stats]);
-  const duePhrases=useMemo(()=>getDuePhrases(statsApi.stats),[statsApi.stats]);
-  const weeklyPatternId=useMemo(()=>getWeeklyPattern(),[]);
-  const weeklyLesson=useMemo(()=>weeklyPatternId?LESSONS.find(l=>l.patternId===weeklyPatternId):null,[weeklyPatternId]);
 
   const feedbackContext=useMemo(()=>{
     if(screen==="lesson"&&lessonId){const l=LESSONS.find(x=>x.id===lessonId);return l?`Lesson ${lessonId}: ${l.title}`:"Lesson";}
@@ -1948,11 +1420,27 @@ export default function App(){
     return "Home screen";
   },[screen,lessonId,phaseId]);
 
-  const goToLesson=(id,mode="phrases")=>{const l=LESSONS.find(x=>x.id===id);if(l){setPhaseId(l.phase);setLessonId(id);setLessonMode(mode);setScreen("lesson");}};
+  const goToLesson=(id)=>{const l=LESSONS.find(x=>x.id===id);if(l){setPhaseId(l.phase);setLessonId(id);setScreen("lesson");}};
+
+  const handleLessonFinish=useCallback((score,total)=>{
+    const lesson=LESSONS.find(l=>l.id===lessonId);
+    const phaseLessons=lesson?getLessonsInPhase(lesson.phase):[];
+    const idx=phaseLessons.findIndex(l=>l.id===lessonId);
+    const pct=total>0?Math.round(score/total*100):0;
+    if(pct>=80&&idx>=0&&idx<phaseLessons.length-1){
+      const next=phaseLessons[idx+1];
+      const ph=PHASES.find(p=>p.id===next.phase);
+      setUnlockBanner({title:next.title,color:ph?.color||C.green});
+      setTimeout(()=>{setUnlockBanner(null);setScreen("phase");},2500);
+    }else{
+      setScreen("phase");
+    }
+  },[lessonId]);
 
   return <div style={{fontFamily:"'Nunito',sans-serif",background:C.bg,color:C.text,minHeight:"100vh",maxWidth:480,margin:"0 auto",position:"relative"}}>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 
+    {unlockBanner&&<div style={{position:"fixed",top:20,left:"50%",transform:"translateX(-50%)",background:unlockBanner.color,color:"#fff",padding:"10px 20px",borderRadius:14,fontSize:14,fontWeight:800,zIndex:2000,boxShadow:"0 4px 20px rgba(0,0,0,0.4)",whiteSpace:"nowrap"}}>🔓 Unlocked: {unlockBanner.title}</div>}
     {showGoalSettings&&<GoalSettings goal={statsApi.stats.dailyGoal} onSet={statsApi.setDailyGoal} onClose={()=>setShowGoalSettings(false)}/>}
     {showFeedback&&<FeedbackModal onClose={()=>setShowFeedback(false)} context={feedbackContext}/>}
     <button onClick={()=>setShowFeedback(true)} title="Send feedback" style={{position:"fixed",bottom:24,right:16,width:48,height:48,borderRadius:24,background:"#4A90D9",border:"none",color:"#fff",fontSize:20,cursor:"pointer",boxShadow:"0 4px 16px rgba(74,144,217,0.4)",zIndex:999,display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
@@ -1960,43 +1448,18 @@ export default function App(){
     {screen==="home"&&<div>
       {/* Header with goal ring */}
       <div style={{padding:"16px 16px 12px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <div><div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div><div style={{fontSize:11,color:C.sub}}>Family Hungarian · 55 lessons</div></div>
+        <div><div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div><div style={{fontSize:11,color:C.sub}}>Family Hungarian · {LESSONS.length} lessons</div></div>
         <GoalRing todayMins={statsApi.todayMins} goal={statsApi.stats.dailyGoal} onTap={()=>setShowGoalSettings(true)}/>
       </div>
 
       {/* Daily Focus */}
       <DailyFocusCard focus={focus} onSelectLesson={goToLesson}/>
 
-      {/* Review Due */}
-      <ReviewDueCard dueCount={duePhrases.length} onStart={()=>setScreen("review-due")}/>
-
-      {/* Weekly Pattern */}
-      {weeklyLesson&&<div style={{margin:"0 16px 10px",padding:"10px 14px",borderRadius:12,background:`${C.amber}10`,border:`1px solid ${C.amber}30`,display:"flex",alignItems:"center",gap:10}}>
-        <div style={{flex:1}}>
-          <div style={{fontSize:10,fontWeight:700,color:C.amber,textTransform:"uppercase",letterSpacing:0.5}}>This week's pattern</div>
-          <div style={{fontSize:13,fontWeight:700,color:C.text,marginTop:1}}>{weeklyLesson.title}</div>
-          <div style={{fontSize:11,color:C.sub}}>{weeklyPatternId}</div>
-        </div>
-        <button onClick={()=>goToLesson(weeklyLesson.id,"drill")} style={{padding:"7px 13px",borderRadius:10,background:`${C.amber}20`,border:`1px solid ${C.amber}40`,color:C.amber,fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>Drill →</button>
-      </div>}
-
       {/* Quick actions */}
       <div style={{padding:"0 16px",marginBottom:12,display:"flex",gap:8}}>
         <button onClick={()=>setScreen("stats")} style={{flex:1,background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:"10px",color:C.text,fontSize:12,fontWeight:700,cursor:"pointer"}}>📊 Progress</button>
         <button onClick={()=>{if(focus.length)goToLesson(focus[0].lesson.id);}} style={{flex:1,background:`${C.green}18`,border:`1px solid ${C.green}30`,borderRadius:12,padding:"10px",color:C.green,fontSize:12,fontWeight:700,cursor:"pointer"}}>▶ Start Focus</button>
       </div>
-
-      {/* Stories — gated on ≥20 lessons attempted */}
-      {Object.keys(statsApi.stats.lessonScores).length>=20&&<div style={{padding:"0 16px",marginBottom:8}}>
-        <div style={{fontSize:13,color:C.sub,fontWeight:600,marginBottom:8}}>Stories 📖</div>
-        {STORIES.filter(s=>s.minLessons<=Object.keys(statsApi.stats.lessonScores).length).map(s=><div key={s.id} style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:"12px 14px",marginBottom:6,cursor:"pointer",display:"flex",alignItems:"center",gap:10}} onClick={()=>{setStoryId(s.id);setScreen("story");}}>
-          <div style={{flex:1}}>
-            <div style={{fontSize:13,fontWeight:700,color:C.text}}>{s.title}</div>
-            <div style={{fontSize:11,color:C.sub}}>{s.titleEn} · {s.level}</div>
-          </div>
-          <span style={{color:C.dim,fontSize:15}}>›</span>
-        </div>)}
-      </div>}
 
       {/* Phase list */}
       <div style={{padding:"0 16px 80px"}}>
@@ -2020,19 +1483,32 @@ export default function App(){
 
     {screen==="phase"&&<div>
       <Header title={PHASES.find(p=>p.id===phaseId)?.title} sub={`${LESSONS.filter(l=>l.phase===phaseId).length} lessons`} onBack={()=>setScreen("home")}/>
-      {LESSONS.filter(l=>l.phase===phaseId).map(lesson=>{const ph=PHASES.find(p=>p.id===lesson.phase);const sc=statsApi.stats.lessonScores[lesson.id];
-        return <div key={lesson.id} style={{display:"flex",alignItems:"center",padding:"11px 16px",borderBottom:`1px solid ${C.border}`,cursor:"pointer",gap:10}} onClick={()=>{setLessonId(lesson.id);setScreen("lesson");}}>
-          <div style={{width:28,height:28,borderRadius:8,background:`${ph.color}20`,color:ph.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,flexShrink:0}}>{lesson.id}</div>
-          <div style={{flex:1}}><div style={{display:"flex",alignItems:"center"}}><span style={{fontSize:13,fontWeight:700,color:C.text}}>{lesson.title}</span>
-            {lesson.aud==="wife"&&<Badge text="Wife" bg="#C17B3A"/>}{lesson.aud==="both"&&<Badge text="All" bg="#7B61C1"/>}</div>
-            <div style={{fontSize:11,color:C.sub}}>{lesson.sub}</div></div>
-          {sc&&<span style={{fontSize:11,fontWeight:700,color:sc.best>=80?C.green:sc.best>=50?C.amber:C.red}}>{sc.best}%</span>}
-          <span style={{color:C.dim,fontSize:15}}>›</span>
-        </div>;})}
+      {LESSONS.filter(l=>l.phase===phaseId).sort((a,b)=>a.id-b.id).map(lesson=>{
+        const ph=PHASES.find(p=>p.id===lesson.phase);
+        const sc=statsApi.stats.lessonScores[lesson.id];
+        const unlocked=isLessonUnlocked(lesson.id,statsApi.stats);
+        return <div key={lesson.id}
+          style={{display:"flex",alignItems:"center",padding:"11px 16px",borderBottom:`1px solid ${C.border}`,cursor:unlocked?"pointer":"default",gap:10,opacity:unlocked?1:0.45}}
+          onClick={()=>{if(unlocked){setLessonId(lesson.id);setScreen("lesson");}}}>
+          <div style={{width:28,height:28,borderRadius:8,background:`${ph.color}20`,color:ph.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,flexShrink:0}}>
+            {unlocked?lesson.id:"🔒"}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{display:"flex",alignItems:"center"}}>
+              <span style={{fontSize:13,fontWeight:700,color:C.text}}>{lesson.title}</span>
+              {lesson.aud==="wife"&&<Badge text="Wife" bg="#C17B3A"/>}
+              {lesson.aud==="both"&&<Badge text="All" bg="#7B61C1"/>}
+            </div>
+            <div style={{fontSize:11,color:C.sub}}>{lesson.sub}</div>
+          </div>
+          {sc&&unlocked&&<span style={{fontSize:11,fontWeight:700,color:sc.best>=80?C.green:sc.best>=50?C.amber:C.red}}>{sc.best}%</span>}
+          {unlocked
+            ?<span style={{color:C.dim,fontSize:15}}>›</span>
+            :<span style={{fontSize:10,color:C.dim}}>Complete previous first</span>}
+        </div>;
+      })}
     </div>}
 
-    {screen==="lesson"&&<LessonView lessonId={lessonId} onBack={()=>setScreen("phase")} statsApi={statsApi} initialMode={lessonMode}/>}
-    {screen==="story"&&<StoryView storyId={storyId} onBack={()=>setScreen("home")}/>}
-    {screen==="review-due"&&<ReviewDueQuiz onBack={()=>setScreen("home")} statsApi={statsApi}/>}
+    {screen==="lesson"&&<LessonView lessonId={lessonId} onBack={()=>setScreen("phase")} onFinish={handleLessonFinish} statsApi={statsApi}/>}
   </div>;
 }
