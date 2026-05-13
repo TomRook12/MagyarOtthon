@@ -53,3 +53,17 @@ Specialised read-only sub-agents live in `.claude/agents/`. Launch them via the 
 | `quiz-engine-explorer` | Explaining or debugging `getDailyFocus`, `generateQuestions`, `TIME_TAGS`, and the six quiz types with file:line citations |
 
 All four are read-only. Translation review stays with the `hungarian-teacher` skill; spec-index rewrites stay with the `spec-tracker` skill; issue triage stays with the `issue-manager` skill.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues (`github.com/TomRook12/MagyarOtthon`). See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default label vocabulary — `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context — `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
