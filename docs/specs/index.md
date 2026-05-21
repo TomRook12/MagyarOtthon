@@ -1,6 +1,6 @@
 # Spec Index
 
-_Updated: 2026-04-16_
+_Updated: 2026-05-21_
 
 | Spec | Status | Impl tasks | Description | Next action |
 |------|--------|-----------|-------------|-------------|
@@ -10,6 +10,7 @@ _Updated: 2026-04-16_
 | [grammar-spine](grammar-spine.md) | Done | 9/9 | B1 grammar lessons (ids 45–56) distributed across phases 1–8 | — |
 | [plans-hypotheticals](plans-hypotheticals.md) | Done | 8/8 | Phase 11: future plans, conditionals, hopes (ids 69–74) | — |
 | [reasoning-narrative](reasoning-narrative.md) | Done | 7/7 | Phases 9–10: reasoning connectors + narrative/storytelling (ids 57–68) | — |
+| [rewrite-foundation](rewrite-foundation.md) | Done | 28/28 | New Track/Band/Lesson data model, simplified stats, updated quiz engine, Bath Time A1 content, legacy code removed | — |
 | [srs-upgrade](srs-upgrade.md) | Done | 11/11 | SM-2 spaced repetition scheduler with Review Due mode and Daily Focus integration | — |
 
 ## Status meanings

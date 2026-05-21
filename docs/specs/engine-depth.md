@@ -1,6 +1,6 @@
 # Spec: Engine Depth — Story Cards, Listening, Shadowing & Quiz Enhancements
 
-> **Status:** Complete
+> **Status:** Done
 > **Branch:** `claude/complete-engine-depth-spec-sKJyg`
 
 ## Goal

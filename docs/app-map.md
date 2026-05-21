@@ -15,15 +15,12 @@ Update this file when any of the following changes:
 - A new field is added to the **lesson schema** or **phrase schema**
 - A new **`gen*` question-generator function** is added or renamed
 - A new method is added to **`useStats`**
-- **`TIME_TAGS`, `WEEKEND_BOOST`, or `WEEKDAY_BOOST`** values change
 - A key is added to or renamed in the **`C` colour object**
 - A new **top-level section banner** is added to App.jsx
-- **`STORAGE_KEY`** or **`SRS_MAX_INTERVAL`** constants change
+- **`STORAGE_KEY`** changes
 
 **Do NOT update** for: new lessons appended, lesson count changes, or phrase text edits.
 `lesson-scout` tracks IDs and phrase content dynamically.
-
-The `convention-reviewer` agent flags structural changes at commit time as a reminder.
 
 ---
 
@@ -33,26 +30,14 @@ Grep the exact banner text to jump to any region of App.jsx.
 
 | Banner (grep for this exact string)      | What lives here                                             |
 |------------------------------------------|-------------------------------------------------------------|
-| `// ─── LESSON DATA`                     | `PHASES[]`, `TIME_TAGS`, boost arrays, `LESSONS[]`          |
-| `// ─── STORIES DATA`                    | `STORIES[]` — comprehensible input stories with sentences and glossary |
-| `// ─── UTILITIES`                       | `shuffle()`, `normalize()`, `getWeeklyPattern()`            |
-| `// ─── DAILY FOCUS ENGINE`              | `getDailyFocus(stats)` — lesson scoring & ranking           |
+| `// ─── LESSON DATA`                     | `TRACKS[]`, `LESSONS[]`                                     |
+| `// ─── UTILITIES`                       | `shuffle()`, `normalize()`, `getPrevLesson()`, `isUnlocked()` |
 | `// ─── STATS HOOK`                      | `STORAGE_KEY`, `loadStats()`, `saveStats()`, `useStats()`   |
-| `// ─── SRS UTILITIES`                   | `SRS_MAX_INTERVAL`, `schedulePhraseReview()`, `getDuePhrases()` |
 | `// ─── QUESTION GENERATORS`             | All `gen*` functions, `generateQuestions()`                 |
 | `// ─── STYLES`                          | `C` colour constants object                                 |
 | `// ─── SPEECH UTILITY`                  | `speakHu()`, `SpeakBtn`, `useHuVoiceAvailable()` hook       |
-| `// ─── FEEDBACK MODAL`                  | `FEEDBACK_CATEGORIES`, `FeedbackModal` component            |
-| `// ─── SMALL COMPONENTS`               | `Header`, `ProgressBar`, `Badge`                            |
-| `// ─── GOAL RING`                       | `GoalRing` component                                        |
-| `// ─── DAILY FOCUS CARD`               | `DailyFocusCard` component                                  |
-| `// ─── REVIEW DUE CARD`                | `ReviewDueCard` component                                   |
-| `// ─── GOAL SETTINGS MODAL`            | `GoalSettings` component                                    |
-| `// ─── STATS DASHBOARD`                | `StatsView` component                                       |
+| `// ─── SMALL COMPONENTS`               | `Header`, `ProgressBar`                                     |
 | `// ─── QUIZ ENGINE`                    | `QuizEngine` component — question display, answer, feedback |
-| `// ─── PHRASE & FLASH VIEWS`           | `ShadowBtn`, `PhraseView()`, `FlashView()`, `ListenView()`, `StoryView()` |
-| `// ─── REVIEW DUE QUIZ`               | `ReviewDueQuiz` component — cross-lesson SRS review         |
-| `// ─── LESSON VIEW`                    | `LessonView` component — phrases / flash / quiz tabs        |
 | `// ─── APP`                            | `App()` — navigation state, screen routing, home screen     |
 
 ---
@@ -63,20 +48,20 @@ Fields marked **required** are checked by the `convention-reviewer` agent.
 
 ```js
 {
-  id: 75,                    // integer — stable forever, never reuse; ask lesson-scout for next ID
-  phase: 1,                  // 1–11 matching PHASES[] ids
-  title: "Example Lesson",   // short display title
-  sub: "Topic · Detail",     // subtitle, topics separated by ·
-  aud: "kids",               // "kids" | "wife" | "both"
+  id:      number,    // stable integer, never reused; keyed in lessonScores
+  trackId: string,    // matches a TRACKS[].id  e.g. "bath-time"
+  band:    string,    // "A1" | "A2" | "B1" | "B2" | "C1"
+  seq:     number,    // 1-based position within the band
+  title:   string,    // short display title
+  sub:     string,    // subtitle for navigation context (optional)
+  types:   string[],  // allowed question type names (see Section G)
   phrases: [
-    { hu: "Jó reggelt!", pr: "Yó reg-gelt", en: "Good morning!" },
-    //  hu = Hungarian text   pr = pronunciation guide   en = English
-    //  All three fields required on every phrase object.
+    { hu: "kád", pr: "kád", en: "bath" },
+    // hu = Hungarian text   pr = pronunciation guide   en = English
+    // All three fields required on every phrase object.
   ],
-  tip: "Teaching note for the parent — 1–2 sentences.",
-  // --- optional ---
-  pat: "-tál = past tense 'you did'",  // grammar note; use \n for multi-line tables
-  patternId: "past-indef",             // grammar paradigm tag (e.g. "dative", "past-indef")
+  tip:     string,    // optional teaching note for the parent
+  grammar: string,    // optional grammar card text — B1+ only
 }
 ```
 
@@ -87,55 +72,44 @@ before that banner closes the `LESSONS` array. Insert the new lesson object befo
 
 ---
 
-## C. Time-of-Day & Scheduling Data
-
-These arrays live at the top of the `// ─── LESSON DATA` section. They drive which lessons
-the Daily Focus Engine recommends. When adding lessons, decide which slots they belong in
-and add their IDs here — then update this section of the doc.
+## C. TRACKS Registry
 
 ```js
-const TIME_TAGS = {
-  morning:   [1,2,3,4,5,6,40,49,51,55],
-  midday:    [7,8,9,10,11,12,13,14,21,22,23,24,25,42,48,53,54],
-  afternoon: [15,16,17,18,19,20,26,27,28,29,41,42,43,44,50,52,56],
-  evening:   [30,31,32,33,34,35,45,46,63,64,65,66,67,68,69,70,71,72,73,74],
-};
-const WEEKEND_BOOST = [9,10,12,15,16,17,19,20,26,27,28,42,43,44,69,73];
-const WEEKDAY_BOOST = [1,2,3,4,5,7,8,11,13,23];
+const TRACKS = [
+  { id:"bath-time",     title:"Bath Time",              emoji:"🛁", color:"#4A9ECC" },
+  { id:"bed-time",      title:"Bed Time",               emoji:"🌙", color:"#7B61C1" },
+  { id:"getting-ready", title:"Getting Ready",          emoji:"🌅", color:"#E8913A" },
+  { id:"mealtimes",     title:"Mealtimes",              emoji:"🍽️", color:"#3A8F6E" },
+  { id:"school-run",    title:"School Run",             emoji:"🎒", color:"#C1513A" },
+  { id:"park",          title:"Going to the Park",      emoji:"🌳", color:"#5C9E4A" },
+  { id:"homework",      title:"Homework & School Prep", emoji:"📚", color:"#8F6E3A" },
+  { id:"playing",       title:"Playing",                emoji:"🧩", color:"#C13A8F" },
+];
 ```
 
-For deeper explanation of how these interact with scoring weights, use the
-`quiz-engine-explorer` agent.
+Only `"bath-time"` has lesson content in v1. All others appear as locked placeholders.
 
 ---
 
 ## D. Stats / localStorage Schema
 
-**Storage key:** `"magyar-otthon-stats-v1"` (constant `STORAGE_KEY`)
+**Storage key:** `"magyar-otthon-stats-v2"` (constant `STORAGE_KEY`)
 
 ```js
 {
-  totalTime: 0,              // cumulative seconds across all sessions
-  todayTime: 0,              // seconds today — resets when todayDate changes
-  todayDate: "Mon Apr 14…",  // new Date().toDateString() — day-change detection
-  sessionsCompleted: 0,      // total quiz sessions finished
-  streakDays: [],            // array of toDateString() values, one per day practiced
-  lastActive: null,          // toDateString() of last completed session
-  dailyGoal: 15,             // daily target in minutes (default 15)
+  lastActiveLessonId: null,   // number | null — drives Recommended Next
 
   lessonScores: {
-    "42": { best: 87, attempts: 3 },  // keyed by String(lesson.id)
+    "1": { best: 55, attempts: 2, passed: false, grammarSeen: false },
+    // best      = highest raw score from any main-lesson attempt
+    // passed    = true once lesson OR its Remedial scored ≥ 80%
+    // grammarSeen = true once grammar card dismissed (skip on retry)
   },
 
   phraseScores: {
-    "Jó reggelt!": {         // keyed by phrase.hu
-      right: 5,              // total correct answers
-      wrong: 1,              // total wrong answers
-      ease: 2.5,             // SM-2 ease factor, range 1.3–3.0
-      interval: 7,           // days until next review (max: SRS_MAX_INTERVAL = 60)
-      due: "2026-04-20",     // ISO date string (YYYY-MM-DD)
-      lastSeen: "2026-04-13",
-    },
+    "kád": { right: 3, wrong: 1, lastSeen: "2026-05-20", lastCorrect: "2026-05-20" },
+    // keyed by phrase.hu
+    // SRS: wrong >= 2 → flag; daysSince(lastSeen) >= 7 → queue
   },
 }
 ```
@@ -148,14 +122,12 @@ Call `useStats()` inside a component. Returns:
 
 ```js
 const {
-  stats,          // full stats object (see Section D)
-  startTimer,     // () => void         — call when lesson begins
-  stopTimer,      // () => number       — call when lesson ends; returns elapsed seconds
-  recordPhrase,   // (phraseHu: string, correct: boolean) => void
-  recordSession,  // (lessonId: number, score: number, total: number) => void
-  getWeakPhrases, // (lessonPhrases: phrase[]) => phrase[]  — wrong >= right
-  setDailyGoal,   // (mins: number) => void
-  todayMins,      // number (derived)   — minutes practiced today; 0 if different day
+  stats,               // full stats object (see Section D)
+  recordPhrase,        // (hu: string, correct: boolean) => void
+  recordLesson,        // (id: number, score: number, total: number) => void
+  markGrammarSeen,     // (id: number) => void
+  setLastActiveLesson, // (id: number) => void
+  getWeakItems,        // (phrases: phrase[]) => phrase[]  — wrong >= right
 } = useStats();
 ```
 
@@ -183,13 +155,6 @@ const C = {
 
 Always reference as `C.key` in style props. Raw hex anywhere else is a convention violation.
 
-### Other constants
-
-```js
-const STORAGE_KEY     = "magyar-otthon-stats-v1";
-const SRS_MAX_INTERVAL = 60;   // days — maximum SRS review interval
-```
-
 ---
 
 ## G. Question Generator Interface
@@ -198,23 +163,24 @@ All generators live in the `// ─── QUESTION GENERATORS` section.
 
 | Function | Signature | `type` field | Key return fields |
 |----------|-----------|--------------|-------------------|
-| `genMC_EnToHu` | `(p, all)` | `"mc_en_hu"` | `prompt` (en), `answer` (hu), `options[]`, `pr` |
-| `genMC_HuToEn` | `(p, all)` | `"mc_hu_en"` | `prompt` (hu), `promptPr`, `answer` (en), `options[]` |
-| `genType`      | `(p)`      | `"type"`     | `prompt` (en), `answer` (hu), `pr` |
-| `genTF`        | `(p, all)` | `"tf"`       | `prompt` (hu), `promptPr`, `shown` (en string), `answer` (bool) |
-| `genFill`      | `(p)`      | `"fill"`     | `prompt` (en), `display` (hu with blank), `answer` (word), `fullHu`, `pr` |
-| `genMatch`     | `(phrases)`| `"match"`    | `pairs: [{hu, en}]` (4 pairs) |
-| `genReconstruct` | `(p)`    | `"reconstruct"` | `en` (English prompt), `tiles[]` (shuffled), `correctTiles[]`, skips phrases < 3 or > 7 words |
+| `genTF` | `(p, all)` | `"true_false"` | `prompt` (hu), `promptPr`, `shown` (en string), `answer` (bool) |
+| `genFill` | `(p, all)` | `"fill_pool"` | `prompt` (en), `display` (hu with blank), `answer` (word), `options[]`, `fullHu`, `pr` |
+| `genMatch` | `(phrases)` | `"match"` | `pairs: [{hu, en}]` (4 pairs) |
+| `genReconstruct` | `(p)` | `"sentence_builder"` | `en` (English prompt), `tiles[]` (shuffled), `correctTiles[]` |
+| `genPhraseList` | `(p, all)` | `"phrase_list"` | `prompt` (hu, played as audio), `promptPr`, `answer` (hu), `options[]` (4 hu strings) |
+| `genTyped` | `(p)` | `"fill_typed"` | `prompt` (en), `answer` (hu), `pr` |
 
 All generators also return `phrase` — the source phrase object.
 
 **Entry point** (the only function components should call):
 
 ```js
-generateQuestions(lesson, weakPhrases, count = 15)
+generateQuestions(lesson, weakItems, huVoiceAvail, count = 15)
 // → question[] — shuffled, length = count
-// weakPhrases are triple-weighted in the selection pool
-// match is only generated when lesson.phrases.length >= 4
+// weakItems are triple-weighted in the selection pool
+// match is only generated when lesson.phrases.length >= 4; generated at most once per session
+// true_false is removed and phrase_list added if huVoiceAvail === false
+// fill_typed is replaced with fill_pool if lesson.band is A1 or A2
 ```
 
 **Never** call `gen*` functions directly from components. All quiz question creation goes
@@ -222,24 +188,34 @@ through `generateQuestions`.
 
 ---
 
-## H. Workflow Cheat-Sheet
+## H. Unlock Logic
+
+```js
+getPrevLesson(lesson)  // → lesson | null — finds the immediately preceding lesson in track
+isUnlocked(lesson, lessonScores)  // → boolean — true if prev is null OR prev.passed
+```
+
+Band order for crossing band boundaries: `A1 → A2 → B1 → B2 → C1`.
+The first lesson of A1 in any track is always unlocked.
+
+---
+
+## I. Workflow Cheat-Sheet
 
 ### Add a lesson
 
 1. Run **lesson-scout** agent → confirms next available ID, flags any duplicate phrases
 2. Grep `// ─── UTILITIES` → the `];` immediately before that banner closes `LESSONS[]`
 3. `Edit` App.jsx — insert the new lesson object before that `];`
-4. Decide which time slots apply → add lesson ID to `TIME_TAGS` and/or boost arrays
-5. Update **Section C** of this doc if TIME_TAGS / boost arrays changed
+4. Update **Section C** of this doc if a new track is added
 
 ### Add a quiz type
 
 1. Grep `// ─── QUESTION GENERATORS`
-2. Add a new `gen*` function following existing patterns (must return `{type, phrase, ...}`)
-3. Add the new type string to the `types` array inside `generateQuestions`
-4. Add a dispatch branch in the `for` loop and the fill-up `while` loop
-5. Handle the new `type` in the `QuizEngine` component (`// ─── QUIZ ENGINE`)
-6. Update **Section G** of this doc
+2. Add a new `gen*` function (must return `{type, phrase, ...}`)
+3. Add the new type to the `gen()` dispatch inside `generateQuestions`
+4. Handle the new `type` in the `QuizEngine` component (`// ─── QUIZ ENGINE`)
+5. Update **Section G** of this doc
 
 ### Add a stat field
 
@@ -247,9 +223,3 @@ through `generateQuestions`.
 2. Add the field to the default object in `loadStats()`
 3. Add or update a method in `useStats()`; expose it in the return object if callers need it
 4. Update **Sections D and E** of this doc
-
-### Streaming-error mitigation
-
-> Use `Edit` for all targeted insertions and replacements.  
-> Break large LESSONS additions into ≤ 40-line edits — never rewrite a whole array block.  
-> Never use `Write` to overwrite the full App.jsx (1,475+ lines causes streaming failures).
