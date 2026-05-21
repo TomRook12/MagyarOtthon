@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
 // ─── LESSON DATA ──────────────────────────────────────────────────────────
+const BAND_LABELS={"A1":"A1 — Foundation","A2":"A2 — Developing","B1":"B1 — Building","B2":"B2 — Expanding","C1":"C1 — Mastery"};
 const TRACKS = [
   { id:"bath-time",     title:"Bath Time",              emoji:"🛁", color:"#4A9ECC" },
   { id:"bed-time",      title:"Bed Time",               emoji:"🌙", color:"#7B61C1" },
@@ -284,6 +285,14 @@ const LESSONS = [
 ];
 
 // ─── UTILITIES ─────────────────────────────────────────────────────────────
+function getRecommendedNext(stats){
+  const {lastActiveLessonId,lessonScores}=stats;
+  const ref=lastActiveLessonId?LESSONS.find(l=>l.id===lastActiveLessonId):LESSONS[0];
+  if(!ref)return null;
+  const bands=["A1","A2","B1","B2","C1"];
+  const trackLessons=LESSONS.filter(l=>l.trackId===ref.trackId).sort((a,b)=>bands.indexOf(a.band)-bands.indexOf(b.band)||a.seq-b.seq);
+  return trackLessons.find(l=>!lessonScores[String(l.id)]?.passed&&isUnlocked(l,lessonScores))||null;
+}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function normalize(s,accentSensitive=false){
   const clean=s.replace(/[!?.,:;'"¡¿…]/g,"").toLowerCase().trim();
@@ -643,58 +652,151 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
   </div>;
 }
 
+// ─── SCREENS ──────────────────────────────────────────────────────────────
+function HomeScreen({statsApi,onOpenTrack,onOpenLesson}){
+  const {stats}=statsApi;
+  const rec=getRecommendedNext(stats);
+  const recTrack=rec?TRACKS.find(t=>t.id===rec.trackId):null;
+  const trackHasContent=t=>LESSONS.some(l=>l.trackId===t.id);
+  const trackPassed=t=>LESSONS.filter(l=>l.trackId===t.id).filter(l=>stats.lessonScores[String(l.id)]?.passed).length;
+  const trackTotal=t=>LESSONS.filter(l=>l.trackId===t.id).length;
+
+  return <div>
+    <div style={{padding:"18px 16px 14px",borderBottom:`1px solid ${C.border}`}}>
+      <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div>
+      <div style={{fontSize:12,color:C.sub,marginTop:2}}>Tanulj minden nap</div>
+    </div>
+    <div style={{padding:"12px 16px 80px"}}>
+      {rec&&recTrack&&<div style={{marginBottom:16}}>
+        <div style={{fontSize:11,fontWeight:800,color:C.sub,letterSpacing:0.5,textTransform:"uppercase",marginBottom:6}}>Recommended Next</div>
+        <div onClick={()=>onOpenLesson(rec)} style={{background:`${recTrack.color}12`,border:`1px solid ${recTrack.color}40`,borderRadius:12,padding:"14px 16px",cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
+          <div style={{fontSize:28,lineHeight:1}}>{recTrack.emoji}</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:800,color:recTrack.color}}>{recTrack.title}</div>
+            <div style={{fontSize:15,fontWeight:700,color:C.text,marginTop:1}}>{rec.title}</div>
+            <div style={{fontSize:11,color:C.sub,marginTop:1}}>{rec.band} · {rec.sub}</div>
+          </div>
+          <span style={{color:recTrack.color,fontSize:18}}>›</span>
+        </div>
+      </div>}
+      {!rec&&stats.lastActiveLessonId&&<div style={{marginBottom:16}}>
+        <div style={{fontSize:11,fontWeight:800,color:C.sub,letterSpacing:0.5,textTransform:"uppercase",marginBottom:6}}>Recommended Next</div>
+        <div style={{background:`${C.green}12`,border:`1px solid ${C.green}40`,borderRadius:12,padding:"14px 16px",display:"flex",alignItems:"center",gap:12}}>
+          <div style={{fontSize:28,lineHeight:1}}>🎉</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:15,fontWeight:700,color:C.green}}>Track Complete!</div>
+            <div style={{fontSize:11,color:C.sub,marginTop:1}}>All lessons passed</div>
+          </div>
+        </div>
+      </div>}
+      <div style={{fontSize:11,fontWeight:800,color:C.sub,letterSpacing:0.5,textTransform:"uppercase",marginBottom:8}}>Tracks</div>
+      {TRACKS.map(t=>{
+        const hasContent=trackHasContent(t);
+        const passed=hasContent?trackPassed(t):0;
+        const total=hasContent?trackTotal(t):0;
+        const allDone=hasContent&&passed===total&&total>0;
+        return <div key={t.id} onClick={()=>{if(hasContent)onOpenTrack(t);}}
+          style={{background:C.card,border:`1px solid ${allDone?C.green:C.border}`,borderRadius:12,padding:"14px 16px",marginBottom:8,cursor:hasContent?"pointer":"default",display:"flex",alignItems:"center",gap:14,opacity:hasContent?1:0.45}}>
+          <div style={{fontSize:26,lineHeight:1,width:36,textAlign:"center",flexShrink:0}}>{t.emoji}</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:15,fontWeight:700,color:hasContent?C.text:C.sub}}>{t.title}</div>
+            {hasContent&&<div style={{marginTop:5}}>
+              <div style={{height:4,borderRadius:2,background:C.border,overflow:"hidden"}}>
+                <div style={{height:"100%",width:`${total>0?passed/total*100:0}%`,background:allDone?C.green:t.color,borderRadius:2,transition:"width 0.3s"}}/>
+              </div>
+              <div style={{fontSize:10,color:C.sub,marginTop:3}}>{passed}/{total} passed</div>
+            </div>}
+            {!hasContent&&<div style={{fontSize:11,color:C.dim,marginTop:2}}>Coming soon</div>}
+          </div>
+          <span style={{fontSize:15,color:C.dim}}>{hasContent?(allDone?"✓":"›"):"🔒"}</span>
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
+function TrackDetail({track,statsApi,onOpenLesson,onBack}){
+  const {stats}=statsApi;
+  const bands=["A1","A2","B1","B2","C1"];
+  const lessons=LESSONS.filter(l=>l.trackId===track.id).sort((a,b)=>bands.indexOf(a.band)-bands.indexOf(b.band)||a.seq-b.seq);
+  const passed=lessons.filter(l=>stats.lessonScores[String(l.id)]?.passed).length;
+  const total=lessons.length;
+  const presentBands=[...new Set(lessons.map(l=>l.band))];
+
+  return <div>
+    <div style={{padding:"14px 16px 12px",borderBottom:`1px solid ${C.border}`}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+        <button onClick={onBack} style={{background:"none",border:"none",color:C.sub,fontSize:20,cursor:"pointer",padding:"4px 6px"}}>←</button>
+        <div style={{fontSize:20}}>{track.emoji}</div>
+        <div style={{flex:1,fontSize:17,fontWeight:800,color:C.text}}>{track.title}</div>
+        <span style={{fontSize:12,color:track.color,fontWeight:700}}>{passed}/{total}</span>
+      </div>
+      <div style={{height:5,borderRadius:3,background:C.border,overflow:"hidden",marginLeft:46}}>
+        <div style={{height:"100%",width:`${total>0?passed/total*100:0}%`,background:track.color,borderRadius:3,transition:"width 0.3s"}}/>
+      </div>
+    </div>
+    <div style={{padding:"8px 16px 80px"}}>
+      {presentBands.map(band=>{
+        const bandLessons=lessons.filter(l=>l.band===band);
+        return <div key={band} style={{marginBottom:4}}>
+          <div style={{fontSize:11,fontWeight:800,color:C.sub,letterSpacing:0.5,textTransform:"uppercase",padding:"12px 0 6px"}}>{BAND_LABELS[band]}</div>
+          {bandLessons.map(l=>{
+            const sc=stats.lessonScores[String(l.id)];
+            const unlocked=isUnlocked(l,stats.lessonScores);
+            return <div key={l.id} onClick={()=>{if(unlocked)onOpenLesson(l);}}
+              style={{background:C.card,border:`1px solid ${sc?.passed?`${track.color}40`:C.border}`,borderRadius:10,padding:"11px 14px",marginBottom:6,cursor:unlocked?"pointer":"default",display:"flex",alignItems:"center",gap:10,opacity:unlocked?1:0.45}}>
+              <div style={{width:36,height:36,borderRadius:8,background:`${track.color}18`,color:track.color,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,flexShrink:0,lineHeight:1.2}}>
+                <span>{l.band}</span><span>{l.seq}</span>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:700,color:C.text}}>{l.title}</div>
+                {l.sub&&<div style={{fontSize:11,color:C.sub,marginTop:1}}>{l.sub}</div>}
+              </div>
+              {sc&&<span style={{fontSize:11,fontWeight:700,color:sc.passed?C.green:sc.best>=60?C.amber:C.red}}>{sc.best}%</span>}
+              <span style={{fontSize:15,color:C.dim}}>{unlocked?"›":"🔒"}</span>
+            </div>;
+          })}
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
 // ─── APP ──────────────────────────────────────────────────────────────────
 export default function App(){
   const [screen,setScreen]=useState("home");
+  const [trackId,setTrackId]=useState(null);
   const [lessonId,setLessonId]=useState(null);
   const statsApi=useStats();
   const huVoiceAvail=useHuVoiceAvailable();
 
   const lesson=lessonId?LESSONS.find(l=>l.id===lessonId):null;
-  const track=lesson?TRACKS.find(t=>t.id===lesson.trackId):null;
+  const activeTrack=trackId?TRACKS.find(t=>t.id===trackId):null;
+  const quizTrack=lesson?TRACKS.find(t=>t.id===lesson.trackId):null;
+
+  function openTrack(t){setTrackId(t.id);setScreen("track");}
+  function openLesson(l){setLessonId(l.id);setScreen("quiz");}
+  function backToTrack(){setScreen("track");}
+  function backToHome(){setScreen("home");}
 
   return <div style={{fontFamily:"'Nunito',sans-serif",background:C.bg,color:C.text,minHeight:"100vh",maxWidth:480,margin:"0 auto"}}>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 
-    {screen==="home"&&<div>
-      <div style={{padding:"18px 16px 12px",borderBottom:`1px solid ${C.border}`}}>
-        <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div>
-        <div style={{fontSize:12,color:C.sub,marginTop:2}}>Bath Time · A1</div>
-      </div>
-      <div style={{padding:"12px 16px 80px"}}>
-        {LESSONS.map(l=>{
-          const t=TRACKS.find(t=>t.id===l.trackId);
-          const sc=statsApi.stats.lessonScores[String(l.id)];
-          const unlocked=isUnlocked(l,statsApi.stats.lessonScores);
-          return <div key={l.id} onClick={()=>{if(unlocked){setLessonId(l.id);setScreen("quiz");}}}
-            style={{background:C.card,border:`1px solid ${unlocked?C.border:C.border}`,borderRadius:12,padding:"12px 14px",marginBottom:8,cursor:unlocked?"pointer":"default",display:"flex",alignItems:"center",gap:10,opacity:unlocked?1:0.45}}>
-            <div style={{width:40,height:40,borderRadius:10,background:`${t.color}20`,color:t.color,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,flexShrink:0,lineHeight:1.2}}>
-              <span>{l.band}</span><span>{l.seq}</span>
-            </div>
-            <div style={{flex:1}}>
-              <div style={{fontSize:14,fontWeight:700,color:C.text}}>{l.title}</div>
-              <div style={{fontSize:11,color:C.sub,marginTop:1}}>{l.sub}</div>
-            </div>
-            {sc&&<span style={{fontSize:11,fontWeight:700,color:sc.passed?C.green:sc.best>=60?C.amber:C.red}}>{sc.best}%</span>}
-            <span style={{color:C.dim,fontSize:15}}>{unlocked?"›":"🔒"}</span>
-          </div>;
-        })}
-      </div>
-    </div>}
-
-    {screen==="quiz"&&lesson&&track&&<div>
+    {screen==="home"&&<HomeScreen statsApi={statsApi} onOpenTrack={openTrack} onOpenLesson={openLesson}/>}
+    {screen==="track"&&activeTrack&&<TrackDetail track={activeTrack} statsApi={statsApi} onOpenLesson={openLesson} onBack={backToHome}/>}
+    {screen==="quiz"&&lesson&&quizTrack&&<div>
       <div style={{padding:"14px 16px 10px",display:"flex",alignItems:"center",gap:10,borderBottom:`1px solid ${C.border}`}}>
-        <button onClick={()=>setScreen("home")} style={{background:"none",border:"none",color:C.sub,fontSize:20,cursor:"pointer",padding:"4px 6px"}}>←</button>
+        <button onClick={backToTrack} style={{background:"none",border:"none",color:C.sub,fontSize:20,cursor:"pointer",padding:"4px 6px"}}>←</button>
         <div style={{flex:1}}>
           <div style={{fontSize:16,fontWeight:700,color:C.text}}>{lesson.title}</div>
-          <div style={{fontSize:12,color:C.sub}}>{track.emoji} {track.title} · {lesson.band}</div>
+          <div style={{fontSize:12,color:C.sub}}>{quizTrack.emoji} {quizTrack.title} · {lesson.band}</div>
         </div>
-        <span style={{fontSize:12,color:track.color,fontWeight:700,background:`${track.color}18`,padding:"3px 9px",borderRadius:8}}>{lesson.band} {lesson.seq}</span>
+        <span style={{fontSize:12,color:quizTrack.color,fontWeight:700,background:`${quizTrack.color}18`,padding:"3px 9px",borderRadius:8}}>{lesson.band} {lesson.seq}</span>
       </div>
-      {lesson.tip&&<div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${track.color}10`,border:`1px solid ${track.color}22`,fontSize:12,color:"#C8C7D0",lineHeight:1.5}}>
-        <span style={{fontWeight:800,color:track.color}}>Tip: </span>{lesson.tip}
+      {lesson.tip&&<div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${quizTrack.color}10`,border:`1px solid ${quizTrack.color}22`,fontSize:12,color:C.text,lineHeight:1.5}}>
+        <span style={{fontWeight:800,color:quizTrack.color}}>Tip: </span>{lesson.tip}
       </div>}
-      <QuizEngine lesson={lesson} track={track} onFinish={()=>setScreen("home")} statsApi={statsApi} huVoiceAvail={huVoiceAvail}/>
+      <QuizEngine lesson={lesson} track={quizTrack} onFinish={backToTrack} statsApi={statsApi} huVoiceAvail={huVoiceAvail}/>
     </div>}
   </div>;
 }

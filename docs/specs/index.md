@@ -5,6 +5,7 @@ _Updated: 2026-05-21_
 | Spec | Status | Impl tasks | Description | Next action |
 |------|--------|-----------|-------------|-------------|
 | [bath-time-a2-c1](bath-time-a2-c1.md) | Done | 9/9 | Author Bath Time A2–C1 lessons (ids 5–21); complete the track end-to-end | — |
+| [home-screen-track-detail](home-screen-track-detail.md) | Done | 7/7 | Track-card home screen, Track Detail with band sections, Recommended Next card | — |
 | [rewrite-foundation](rewrite-foundation.md) | Done | 28/28 | New Track/Band/Lesson data model, simplified stats, updated quiz engine, Bath Time A1 content, legacy code removed | — |
 | [batch-issues-34-37](batch-issues-34-37.md) | Done ¹ | 7/7 | New Drawing & Counting lessons (43, 44), expanded Bath Time (30), PWA icon | — |
 | [breadth-pass](breadth-pass.md) | Done ¹ | 7/7 | 18 new vocabulary lessons across phases 1–8 (ids 75–94); push to ~2,500 words | — |

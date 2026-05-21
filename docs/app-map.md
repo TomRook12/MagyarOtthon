@@ -30,15 +30,16 @@ Grep the exact banner text to jump to any region of App.jsx.
 
 | Banner (grep for this exact string)      | What lives here                                             |
 |------------------------------------------|-------------------------------------------------------------|
-| `// ─── LESSON DATA`                     | `TRACKS[]`, `LESSONS[]`                                     |
-| `// ─── UTILITIES`                       | `shuffle()`, `normalize()`, `getPrevLesson()`, `isUnlocked()` |
+| `// ─── LESSON DATA`                     | `BAND_LABELS`, `TRACKS[]`, `LESSONS[]`                      |
+| `// ─── UTILITIES`                       | `getRecommendedNext()`, `shuffle()`, `normalize()`, `getPrevLesson()`, `isUnlocked()` |
 | `// ─── STATS HOOK`                      | `STORAGE_KEY`, `loadStats()`, `saveStats()`, `useStats()`   |
 | `// ─── QUESTION GENERATORS`             | All `gen*` functions, `generateQuestions()`                 |
 | `// ─── STYLES`                          | `C` colour constants object                                 |
 | `// ─── SPEECH UTILITY`                  | `speakHu()`, `SpeakBtn`, `useHuVoiceAvailable()` hook       |
 | `// ─── SMALL COMPONENTS`               | `Header`, `ProgressBar`                                     |
 | `// ─── QUIZ ENGINE`                    | `QuizEngine` component — question display, answer, feedback |
-| `// ─── APP`                            | `App()` — navigation state, screen routing, home screen     |
+| `// ─── SCREENS`                        | `HomeScreen`, `TrackDetail` — full-page screen components   |
+| `// ─── APP`                            | `App()` — navigation state (`screen`, `trackId`, `lessonId`), screen routing |
 
 ---
 
