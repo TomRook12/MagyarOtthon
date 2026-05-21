@@ -498,6 +498,7 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
   const [typed,setTyped]=useState("");
   const [ms,setMs]=useState({sel:null,matched:[],wrong:null});
   const [placed,setPlaced]=useState([]);
+  const [missed,setMissed]=useState([]);
 
   const q=qs[qi];
   const total=qs.length;
@@ -515,7 +516,7 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
     return[...shuffle(q.pairs.map(p=>({text:p.hu,lang:"hu",key:p.hu}))),...shuffle(q.pairs.map(p=>({text:p.en,lang:"en",key:p.hu})))];
   },[qi]);
 
-  const advance=(correct)=>{if(q.phrase)statsApi.recordPhrase(q.phrase.hu,correct);if(correct)setScore(s=>s+1);};
+  const advance=(correct)=>{if(q.phrase)statsApi.recordPhrase(q.phrase.hu,correct);if(correct)setScore(s=>s+1);else if(q.phrase)setMissed(m=>m.some(p=>p.hu===q.phrase.hu)?m:[...m,q.phrase]);};
   const goNext=()=>{
     if(qi<total-1){setQi(i=>i+1);setAns(null);setTyped("");setMs({sel:null,matched:[],wrong:null});setPlaced([]);}
     else{statsApi.recordLesson(lesson.id,score+(ans==="match_done"||ans==="sb_correct"?0:0),total);setAns("done");}
@@ -524,15 +525,27 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
   if(ans==="done"){
     const pct=Math.round(score/total*100);
     const passed=pct>=80;
-    return <div style={{padding:"40px 20px",textAlign:"center"}}>
-      <div style={{fontSize:52}}>{passed?"🎉":pct>=60?"👏":"💪"}</div>
-      <div style={{fontSize:30,fontWeight:900,color:C.text,marginTop:10}}>{score}/{total}</div>
-      <div style={{fontSize:22,fontWeight:800,color:passed?C.green:pct>=60?C.amber:C.red,marginTop:4}}>{pct}%</div>
-      <div style={{fontSize:15,color:C.sub,marginTop:4}}>{passed?"Passed — next lesson unlocked!":pct>=60?"Almost there!":"Keep going!"}</div>
-      <div style={{display:"flex",gap:10,marginTop:20,justifyContent:"center"}}>
-        <button onClick={onFinish} style={{padding:"12px 24px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Back to lessons</button>
-        <button onClick={()=>{setQi(0);setScore(0);setAns(null);setTyped("");setPlaced([]);setMs({sel:null,matched:[],wrong:null});}}
-          style={{padding:"12px 24px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Retry</button>
+    return <div style={{padding:"40px 20px 80px"}}>
+      <div style={{textAlign:"center"}}>
+        <div style={{fontSize:52}}>{passed?"🎉":pct>=60?"👏":"💪"}</div>
+        <div style={{fontSize:30,fontWeight:900,color:C.text,marginTop:10}}>{score}/{total}</div>
+        <div style={{fontSize:22,fontWeight:800,color:passed?C.green:pct>=60?C.amber:C.red,marginTop:4}}>{pct}%</div>
+        <div style={{fontSize:15,color:C.sub,marginTop:4}}>{passed?"Passed — next lesson unlocked!":pct>=60?"Almost there!":"Keep going!"}</div>
+      </div>
+      {missed.length>0&&<div style={{marginTop:28}}>
+        <div style={{fontSize:11,fontWeight:800,color:C.sub,letterSpacing:0.5,textTransform:"uppercase",marginBottom:10}}>Missed</div>
+        {missed.map(p=><div key={p.hu} style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:10,padding:"10px 14px",marginBottom:6,display:"flex",alignItems:"center",gap:12}}>
+          <div style={{flex:1}}>
+            <div style={{fontSize:15,fontWeight:700,color:C.text}}>{p.hu}</div>
+            <div style={{fontSize:11,color:C.dim,fontStyle:"italic"}}>{p.pr}</div>
+          </div>
+          <div style={{fontSize:13,color:C.sub}}>{p.en}</div>
+        </div>)}
+      </div>}
+      <div style={{display:"flex",gap:10,marginTop:24}}>
+        <button onClick={onFinish} style={{flex:1,padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Back to lessons</button>
+        <button onClick={()=>{setQi(0);setScore(0);setAns(null);setTyped("");setPlaced([]);setMs({sel:null,matched:[],wrong:null});setMissed([]);}}
+          style={{flex:1,padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Retry</button>
       </div>
     </div>;
   }
@@ -653,6 +666,20 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
 }
 
 // ─── SCREENS ──────────────────────────────────────────────────────────────
+function GrammarCard({lesson,track,onDismiss,onBack}){
+  return <div style={{padding:"16px 16px 80px"}}>
+    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20,paddingBottom:12,borderBottom:`1px solid ${C.border}`}}>
+      <button onClick={onBack} style={{background:"none",border:"none",color:C.sub,fontSize:20,cursor:"pointer",padding:"4px 6px"}}>←</button>
+      <div style={{flex:1,fontSize:16,fontWeight:700,color:C.text}}>Grammar Note</div>
+      <span style={{fontSize:12,color:track.color,fontWeight:700,background:`${track.color}18`,padding:"3px 9px",borderRadius:8}}>{lesson.band}</span>
+    </div>
+    <div style={{background:C.card,border:`1px solid ${track.color}30`,borderRadius:14,padding:"18px 16px",marginBottom:24}}>
+      <div style={{fontSize:15,color:C.text,lineHeight:1.65}}>{lesson.grammar}</div>
+    </div>
+    <button onClick={onDismiss} style={{width:"100%",padding:"14px",borderRadius:14,background:track.color,border:"none",color:"#fff",fontSize:15,fontWeight:800,cursor:"pointer"}}>Got it →</button>
+  </div>;
+}
+
 function HomeScreen({statsApi,onOpenTrack,onOpenLesson}){
   const {stats}=statsApi;
   const rec=getRecommendedNext(stats);
@@ -773,6 +800,7 @@ export default function App(){
   const lesson=lessonId?LESSONS.find(l=>l.id===lessonId):null;
   const activeTrack=trackId?TRACKS.find(t=>t.id===trackId):null;
   const quizTrack=lesson?TRACKS.find(t=>t.id===lesson.trackId):null;
+  const needsGrammarCard=!!(lesson?.grammar&&!statsApi.stats.lessonScores[String(lesson.id)]?.grammarSeen);
 
   function openTrack(t){setTrackId(t.id);setScreen("track");}
   function openLesson(l){setLessonId(l.id);setScreen("quiz");}
@@ -784,19 +812,22 @@ export default function App(){
 
     {screen==="home"&&<HomeScreen statsApi={statsApi} onOpenTrack={openTrack} onOpenLesson={openLesson}/>}
     {screen==="track"&&activeTrack&&<TrackDetail track={activeTrack} statsApi={statsApi} onOpenLesson={openLesson} onBack={backToHome}/>}
-    {screen==="quiz"&&lesson&&quizTrack&&<div>
-      <div style={{padding:"14px 16px 10px",display:"flex",alignItems:"center",gap:10,borderBottom:`1px solid ${C.border}`}}>
-        <button onClick={backToTrack} style={{background:"none",border:"none",color:C.sub,fontSize:20,cursor:"pointer",padding:"4px 6px"}}>←</button>
-        <div style={{flex:1}}>
-          <div style={{fontSize:16,fontWeight:700,color:C.text}}>{lesson.title}</div>
-          <div style={{fontSize:12,color:C.sub}}>{quizTrack.emoji} {quizTrack.title} · {lesson.band}</div>
+    {screen==="quiz"&&lesson&&quizTrack&&(needsGrammarCard
+      ?<GrammarCard lesson={lesson} track={quizTrack} onDismiss={()=>statsApi.markGrammarSeen(lesson.id)} onBack={backToTrack}/>
+      :<div>
+        <div style={{padding:"14px 16px 10px",display:"flex",alignItems:"center",gap:10,borderBottom:`1px solid ${C.border}`}}>
+          <button onClick={backToTrack} style={{background:"none",border:"none",color:C.sub,fontSize:20,cursor:"pointer",padding:"4px 6px"}}>←</button>
+          <div style={{flex:1}}>
+            <div style={{fontSize:16,fontWeight:700,color:C.text}}>{lesson.title}</div>
+            <div style={{fontSize:12,color:C.sub}}>{quizTrack.emoji} {quizTrack.title} · {lesson.band}</div>
+          </div>
+          <span style={{fontSize:12,color:quizTrack.color,fontWeight:700,background:`${quizTrack.color}18`,padding:"3px 9px",borderRadius:8}}>{lesson.band} {lesson.seq}</span>
         </div>
-        <span style={{fontSize:12,color:quizTrack.color,fontWeight:700,background:`${quizTrack.color}18`,padding:"3px 9px",borderRadius:8}}>{lesson.band} {lesson.seq}</span>
+        {lesson.tip&&<div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${quizTrack.color}10`,border:`1px solid ${quizTrack.color}22`,fontSize:12,color:C.text,lineHeight:1.5}}>
+          <span style={{fontWeight:800,color:quizTrack.color}}>Tip: </span>{lesson.tip}
+        </div>}
+        <QuizEngine lesson={lesson} track={quizTrack} onFinish={backToTrack} statsApi={statsApi} huVoiceAvail={huVoiceAvail}/>
       </div>
-      {lesson.tip&&<div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${quizTrack.color}10`,border:`1px solid ${quizTrack.color}22`,fontSize:12,color:C.text,lineHeight:1.5}}>
-        <span style={{fontWeight:800,color:quizTrack.color}}>Tip: </span>{lesson.tip}
-      </div>}
-      <QuizEngine lesson={lesson} track={quizTrack} onFinish={backToTrack} statsApi={statsApi} huVoiceAvail={huVoiceAvail}/>
-    </div>}
+    )}
   </div>;
 }

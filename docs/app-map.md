@@ -38,7 +38,7 @@ Grep the exact banner text to jump to any region of App.jsx.
 | `// ─── SPEECH UTILITY`                  | `speakHu()`, `SpeakBtn`, `useHuVoiceAvailable()` hook       |
 | `// ─── SMALL COMPONENTS`               | `Header`, `ProgressBar`                                     |
 | `// ─── QUIZ ENGINE`                    | `QuizEngine` component — question display, answer, feedback |
-| `// ─── SCREENS`                        | `HomeScreen`, `TrackDetail` — full-page screen components   |
+| `// ─── SCREENS`                        | `GrammarCard`, `HomeScreen`, `TrackDetail` — full-page screen components   |
 | `// ─── APP`                            | `App()` — navigation state (`screen`, `trackId`, `lessonId`), screen routing |
 
 ---
