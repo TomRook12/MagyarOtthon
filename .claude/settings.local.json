@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx vite *)",
+      "Bash(npm install *)",
+      "Skill(spec-tracker)",
+      "Bash(mktemp *)",
+      "PowerShell($path = [System.IO.Path]::GetTempFileName\\(\\) -replace '\\\\.tmp$', '.md'; $path)",
+      "Skill(hungarian-teacher)"
+    ]
+  }
+}
