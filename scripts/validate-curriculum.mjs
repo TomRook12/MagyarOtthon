@@ -95,7 +95,7 @@ function validateTrack(trackId, lessons, spine) {
     const carry = lexemes.length ? known.length / lexemes.length : 1;
 
     if (rungOK && carry < R.minCarryOver)
-      note(l.id, "R4", `carry-over ${Math.round(carry * 100)}% below rung ${rung} minimum ${Math.round(R.minCarryOver * 100)}%` +
+      note(l.id, "R4", `carry-over ${Math.round(carry * 100)}% below rung ${rung} floor ${Math.round(R.minCarryOver * 100)}% — teach these earlier, do NOT pad this lesson` +
         ` — new: ${fresh.join(", ")}`);
     if (rungOK && fresh.length > R.newLexemeBudget)
       note(l.id, "R5", `${fresh.length} new lexemes, budget ${R.newLexemeBudget} — ${fresh.join(", ")}`);
@@ -141,8 +141,8 @@ const RULES = {
   R1: "lesson has a valid `rung`",
   R2: "rung climbs by at most 1, never falls back",
   R3: "phrase length matches its rung",
-  R4: "carry-over meets the rung minimum",
-  R5: "new lexemes within budget",
+  R4: "carry-over clears the rung floor (backstop; R5 is the real guarantee)",
+  R5: "new lexemes within budget — the foundation guarantee",
   R6: "every spine lexeme recurs across lessons",
   R7: "every spine lexeme reaches a sentence",
   R8: "rung sits inside its band's range",

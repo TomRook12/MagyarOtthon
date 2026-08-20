@@ -12,44 +12,45 @@
       "name": "Marked word",
       "minTokens": 1,
       "maxTokens": 2,
-      "minCarryOver": 0.6,
+      "minCarryOver": 0.5,
       "newLexemeBudget": 4
     },
     "3": {
       "name": "Two-part phrase",
       "minTokens": 2,
       "maxTokens": 3,
-      "minCarryOver": 0.7,
+      "minCarryOver": 0.55,
       "newLexemeBudget": 4
     },
     "4": {
       "name": "Simple sentence",
       "minTokens": 3,
       "maxTokens": 5,
-      "minCarryOver": 0.75,
+      "minCarryOver": 0.55,
       "newLexemeBudget": 4
     },
     "5": {
       "name": "Full sentence",
       "minTokens": 4,
       "maxTokens": 7,
-      "minCarryOver": 0.75,
+      "minCarryOver": 0.55,
       "newLexemeBudget": 5
     },
     "6": {
       "name": "Linked sentence",
       "minTokens": 6,
       "maxTokens": 10,
-      "minCarryOver": 0.8,
+      "minCarryOver": 0.6,
       "newLexemeBudget": 5
     },
     "7": {
       "name": "Extended speech",
       "minTokens": 8,
       "maxTokens": 14,
-      "minCarryOver": 0.8,
+      "minCarryOver": 0.6,
       "newLexemeBudget": 5
-    }
+    },
+    "_comment": "minCarryOver is a FLOOR, not a target. It exists only to catch a lesson that is almost entirely new vocabulary. The real foundation guarantee is newLexemeBudget, which can only be met by having taught the words in an earlier lesson. Never add filler phrases to raise carry-over — if a lesson cannot be built from the foundation, plant the missing words in an earlier lesson instead."
   },
   "bandRungs": {
     "A1": [

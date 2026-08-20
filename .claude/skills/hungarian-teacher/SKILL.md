@@ -139,6 +139,13 @@ consistently with how the same sound is written elsewhere in the file?
 - Required lesson fields present; no retired fields.
 - `sub` accurately describes the content.
 - No duplicate phrases within a lesson, and no phrase that is a trivial restatement of another.
+- **Filler phrases.** Lessons must meet a vocabulary carry-over floor, which creates pressure
+  to pad a lesson with phrases built only from already-taught words. The tell is two unrelated
+  remarks joined by a bare comma — `A törölköző tiszta, ügyes vagy!` ("The towel's clean,
+  you're clever!"). Flag any phrase whose halves have no logical, causal, or conversational
+  link. Note that many comma-joined phrases are perfectly natural (`Ülj le, ne állj!`,
+  `Nem hideg, forró!`) — the defect is unrelatedness, not the comma. This is a judgement no
+  validator can make, so it is specifically your job.
 - Typos in any field, in any of the three languages.
 
 ## Scope

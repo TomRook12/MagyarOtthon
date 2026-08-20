@@ -121,8 +121,8 @@ All enforced by `npm run validate:curriculum`:
 | R1 | lesson has a valid `rung` (1–7) |
 | R2 | rung climbs by at most 1 per lesson and never falls back |
 | R3 | every phrase's token count matches its rung's range |
-| R4 | carry-over meets the rung's minimum |
-| R5 | new lexemes within the rung's budget |
+| R4 | carry-over clears the rung's floor (backstop — see below) |
+| R5 | new lexemes within the rung's budget — **the foundation guarantee** |
 | R6 | every spine lexeme appears in ≥ 3 lessons |
 | R7 | every spine lexeme reaches a lesson at rung ≥ 4 |
 | R8 | rung sits inside its band's allowed range |
@@ -233,23 +233,45 @@ Work in this order. Do not start authoring content before task 3 passes.
 
 ### The authoring loop
 
-For each lesson, mechanically:
+**Author foundation-first. The sentence you want to teach comes first; the foundation is
+built to support it.** Never the reverse.
+
+For each lesson:
 
 1. Read its row in the Lesson Map — rung, title, what it does.
-2. Look up the rung's token range, carry-over minimum, and new-lexeme budget.
-3. Write 5–8 phrases. **Start from words already taught**, then spend your new-lexeme
-   budget deliberately on the one or two words the lesson is actually about.
-4. Set `types` to a subset of the rung's allowed types.
-5. Run `npm run validate:curriculum -- --track bath-time --verbose`.
-6. If R4 fails, you introduced too much at once — replace a new word with a known one.
-   If R3 fails, your phrase is the wrong length for the rung.
-7. Repeat until clean.
+2. **Write the phrases you actually want to teach.** Real, natural things a parent would say
+   during this part of the routine, at this rung's complexity. Do not look at the carry-over
+   number yet.
+3. List the lexemes those phrases use.
+4. For each lexeme not yet taught: either spend it from this lesson's new-lexeme budget
+   (R5) if it is genuinely what this lesson is about — **or go back and plant it in an
+   earlier lesson where it topically belongs**. Planting it earlier is usually the right
+   answer. That is what "a strong foundation to move from" means in practice.
+5. Set `types` to a subset of the rung's allowed types.
+6. Run `npm run validate:curriculum -- --track bath-time --verbose`.
+7. Fix failures per the table below. Repeat until clean.
 
-**Rule of thumb for R4:** at rung 3 and above, aim for at least five previously-taught
-lexemes per lesson and at most two new ones. That comfortably clears every threshold.
+| Failure | The fix | **Never** |
+|---|---|---|
+| R5 — too many new lexemes | Move one or more of them into an earlier lesson | — |
+| R4 — carry-over below the floor | Same: the lesson is standing on too little. Teach its words earlier | **Never add a phrase just to raise the ratio** |
+| R3 — phrase wrong length | Rewrite the phrase to the rung's shape | Pad the phrase with filler words |
 
-Do not weaken a threshold in `curriculum.config.json` to make a lesson pass. The thresholds
-are the spec. If one is genuinely unachievable, stop and say so rather than lowering it.
+**On R4 specifically.** R5, the absolute new-lexeme cap, is the real foundation guarantee:
+the only way to satisfy it is to have taught the words earlier. R4 is a ratio, and a ratio
+can also be satisfied by adding known-word filler — which is exactly how this track first
+acquired phrases like `A törölköző tiszta, ügyes vagy!` ("The towel's clean, you're
+clever!"), two unrelated remarks stitched together to lift a percentage. R4 is therefore a
+**backstop only**, set low enough that it should never bind on a well-founded lesson. If it
+does bind, that is a signal to teach words earlier, never to pad.
+
+**Every phrase must earn its place.** It teaches new material, bridges a form the learner
+already knows, or is a genuine recombination worth saying. A phrase that exists to move a
+number is a defect, and the validator cannot catch it — that judgement is yours, and the
+`hungarian-teacher` review's.
+
+Do not weaken a threshold in `curriculum.config.json` to make a lesson pass. If one is
+genuinely unachievable, stop and say so rather than lowering it.
 
 ## Open questions
 
