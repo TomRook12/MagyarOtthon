@@ -1,7 +1,8 @@
 # Spec: Progression Ladder — Bath Time
 
-> **Status:** Draft
-> **Branch:** `claude/progression-ladder`
+> **Status:** Approved
+> **Branch:** `claude/project-progress-review-vz07qg`
+> **Approved:** 2026-08-20 — `STORAGE_KEY` v3 bump confirmed; cross-track carry-over deferred per ADR 0005
 > **Intended executor:** Sonnet 5, medium/low effort. Every rule in this spec is
 > machine-checkable via `npm run validate:curriculum`. When in doubt, run the validator
 > and believe it over your own judgement.
@@ -227,7 +228,8 @@ Work in this order. Do not start authoring content before task 3 passes.
 - [ ] 11. `npm run validate:curriculum` → 0 failures; `npm run build` → clean
 - [ ] 12. Update `docs/app-map.md`: `rung` in the lesson schema, the rung→types table, the validator
 - [ ] 13. Add a **Rung** entry to the `CONTEXT.md` domain glossary
-- [ ] 14. Add `docs/decisions/` ADR for the `STORAGE_KEY` bump
+- [ ] 14. Add an ADR for the `STORAGE_KEY` bump as `docs/adr/0006-storage-key-v3.md`
+      (follow the format of `docs/adr/0004-v1-scope-cuts.md`)
 
 ### The authoring loop
 
@@ -254,10 +256,10 @@ are the spec. If one is genuinely unachievable, stop and say so rather than lowe
 - **Spine size.** 28 lexemes for a 30-lesson track means each recurs roughly three times,
   which is the R6 minimum. If authoring feels cramped, the fix is a larger spine, not a
   lower `minLessonsPerLexeme`.
-- **Do other tracks share a spine?** Cross-track words (`víz`, `kéz`, `meleg`) will recur in
-  Mealtimes and Getting Ready. Whether carry-over should count words learned in *another*
-  track is a real question, deferred until a second track exists. For now carry-over is
-  strictly within-track, which is the conservative choice.
+- ~~**Do other tracks share a spine?**~~ **Resolved** — see `docs/adr/0005-cross-track-carry-over.md`.
+  Cross-track carry-over is agreed in principle and revisited when the second track is
+  authored. For this spec, carry-over stays strictly within-track. Do not add a `shared`
+  lexeme set or change rule R4 as part of this work.
 
 ## Acceptance criteria
 

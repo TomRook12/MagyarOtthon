@@ -32,7 +32,7 @@ exactly as `CONTEXT.md` describes).
 
 | Spec | Status | Impl tasks | Description | Next action |
 |------|--------|-----------|-------------|-------------|
-| [progression-ladder](progression-ladder.md) | Draft | 0/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | Approve, then execute |
+| [progression-ladder](progression-ladder.md) | Approved | 0/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | Handed to Sonnet 5 for execution |
 
 ## Next up
 
