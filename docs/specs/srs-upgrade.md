@@ -1,6 +1,6 @@
 # Spec: SRS Upgrade — Spaced Repetition Scheduler
 
-> **Status:** Done
+> **Status:** Superseded (pre-rewrite — code removed in `41436ab`)
 > **Branch:** `claude/complete-srs-upgrade-spec-HwQOi`
 
 ## Goal

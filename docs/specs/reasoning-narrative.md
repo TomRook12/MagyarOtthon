@@ -1,6 +1,6 @@
 # Spec: Reasoning & Narrative — Phases 10 + 11
 
-> **Status:** Done
+> **Status:** Superseded (pre-rewrite — code removed in `41436ab`)
 > **Branch:** `claude/complete-specs-SZCay`
 
 ## Goal

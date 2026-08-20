@@ -1,6 +1,6 @@
 # Spec: Breadth Pass — Expanding Existing Phases Toward B2
 
-> **Status:** Done
+> **Status:** Superseded (pre-rewrite — code removed in `41436ab`)
 > **Branch:** `claude/execute-breadth-pass-spec-ibjCV`
 
 ## Goal
