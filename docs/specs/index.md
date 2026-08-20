@@ -8,25 +8,32 @@ Specs written against the post-rewrite model. These describe the app as it exist
 
 | Spec | Status | Impl tasks | Description | Next action |
 |------|--------|-----------|-------------|-------------|
+| [bath-time-loop-completion](bath-time-loop-completion.md) | Done | 14/15 | Remedial, Band Review, and the Settings audio toggle — closes the lesson loop | — |
 | [bath-time-a2-c1](bath-time-a2-c1.md) | Done | 9/9 | Author Bath Time A2–C1 lessons (ids 5–21); complete the track end-to-end | — |
 | [grammar-card-results-screen](grammar-card-results-screen.md) | Done | 5/5 | Grammar card before B1+ quizzes; full results screen with missed-phrase review | — |
 | [home-screen-track-detail](home-screen-track-detail.md) | Done | 7/7 | Track-card home screen, Track Detail with band sections, Recommended Next card | — |
 | [rewrite-foundation](rewrite-foundation.md) | Done | 28/28 | New Track/Band/Lesson data model, simplified stats, updated quiz engine, Bath Time A1 content, legacy code removed | — |
 
-All requirements and acceptance criteria on these four specs were verified against
+All requirements and acceptance criteria on these specs were verified against
 `src/App.jsx` on 2026-08-20 and ticked. `npm run build` passes clean.
 
-## Defined but not yet specced
+**Bath Time is now a complete vertical slice.** Every behaviour `CONTEXT.md` defines is
+built: the full lesson loop (grammar card → quiz → results → remedial), Band Review,
+Settings, and A1–C1 content. Adding another track is content-only work — no engine
+changes should be needed. If one is, that is a signal the new track has found a genuine
+gap worth a spec of its own.
 
-Behaviour that `CONTEXT.md` specifies in full but which has no spec file and no
-implementation in `src/App.jsx`. These are the remaining gaps in the Bath Time
-prototype — the track is content-complete but the lesson loop is not.
+Two nice-to-haves were specced and deliberately not built, both in
+`bath-time-loop-completion`: a "now correct" indicator on the Remedial results screen,
+and a decision record for the Band Review trigger point (unnecessary — it was built
+exactly as `CONTEXT.md` describes).
 
-| Gap | Defined in | Why it matters |
-|-----|-----------|----------------|
-| Remedial | `CONTEXT.md` § Remedial | A failed lesson currently just ends; `passed` can only be set by re-running the full lesson |
-| Band Review | `CONTEXT.md` § Band Review | Bath Time has five completed bands with no transition marker between them |
-| Settings screen | `CONTEXT.md` § Screen Inventory | Audio auto-play toggle; listed in the screen inventory, no component exists |
+## Next up
+
+The seven remaining tracks, as content. `CONTEXT.md` § TRACKS Registry lists them:
+Bed Time, Getting Ready, Mealtimes, School Run, Park, Homework, Playing. Each needs a
+spec reserving its lesson id range before authoring — see `bath-time-a2-c1.md` for the
+shape a content spec takes.
 
 ## Pre-rewrite (historical record)
 
