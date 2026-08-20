@@ -112,7 +112,7 @@ phonetic precision — a guide that contradicts its neighbours is a defect even 
 - **Short `a` → `o`**: `a kád` → `o kád`, kacsa → `KO-cho`, aztán → `OZ-tán`
 - **Long `á` stays `á`** — it is *not* rewritten: kád → `kád`, láb → `láb`
 - **All other accented vowels stay literal**: `é í ó ö ő ú ü ű` are written as themselves.
-  kéz → `kéz`, víz → `víz`, fül → `fül`, törölköző → `tö-röl-kö-ző`
+  kéz → `kéz`, víz → `víz`, fül → `fül`, törölköző → `TÖ-röl-kö-ző`
 - Short `e`, `i`, `o`, `u`, `ö`, `ü` stay as themselves.
 
 **Stress and syllables**
@@ -121,7 +121,7 @@ phonetic precision — a guide that contradicts its neighbours is a defect even 
   directly before its verb they form one stress unit and the preverb is the first syllable:
   `megmostad` → `MEG-mosh-tod`, not `meg-MOSH-tod`.
 - Multi-syllable words: syllables separated by hyphens, **first syllable in CAPITALS** —
-  `TÖ-röld`, `PIS-kosh`, `BU-bo-rék`, `meg-MOSH-tod`.
+  `TÖ-röld`, `PIS-kosh`, `BU-bo-rék`, `MEG-mosh-tod`.
 - Single-syllable words: lowercase, no hyphen — `kád`, `kéz`, `chop`, `hosh`.
 - In multi-word phrases each lexical word follows the rule; unstressed function words
   (`o`, `oz`, `meg`, `ne`, `hol`) stay lowercase — `TÖ-röld meg o KE-zed`.
