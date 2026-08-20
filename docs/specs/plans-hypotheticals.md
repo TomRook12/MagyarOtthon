@@ -1,6 +1,6 @@
 # Spec: Plans & Hypotheticals — Phase 11
 
-> **Status:** Done
+> **Status:** Superseded (pre-rewrite — code removed in `41436ab`)
 > **Branch:** `claude/spec-plans-hypotheticals-iw2bl`
 
 ## Goal

@@ -17,16 +17,16 @@ Both features were explicitly deferred in earlier specs:
 ## Requirements
 
 ### Must have
-- [ ] Grammar card shown before the quiz when `lesson.grammar` is set AND `!grammarSeen` for that lesson
-- [ ] Grammar card displays `lesson.grammar` text with band badge, "Got it" dismiss button, and a back arrow
-- [ ] Dismissing calls `markGrammarSeen(lesson.id)`; `grammarSeen` persists — card not shown again on retry
-- [ ] Results screen replaces the inline "done" view in QuizEngine
-- [ ] Results screen shows: emoji, score fraction, percentage, pass/fail label
-- [ ] Results screen shows a "Missed" section listing unique phrases the learner got wrong (hu + pronunciation + en)
-- [ ] "Back to lessons" and "Retry" buttons on results screen
+- [x] Grammar card shown before the quiz when `lesson.grammar` is set AND `!grammarSeen` for that lesson
+- [x] Grammar card displays `lesson.grammar` text with band badge, "Got it" dismiss button, and a back arrow
+- [x] Dismissing calls `markGrammarSeen(lesson.id)`; `grammarSeen` persists — card not shown again on retry
+- [x] Results screen replaces the inline "done" view in QuizEngine
+- [x] Results screen shows: emoji, score fraction, percentage, pass/fail label
+- [x] Results screen shows a "Missed" section listing unique phrases the learner got wrong (hu + pronunciation + en)
+- [x] "Back to lessons" and "Retry" buttons on results screen
 
 ### Nice to have
-- [ ] Missed phrases section hidden if score is 100%
+- [x] Missed phrases section hidden if score is 100%
 
 ### Out of scope
 - Remedial quiz (separate spec)
@@ -116,10 +116,10 @@ None — `markGrammarSeen` and `grammarSeen` are already implemented.
 
 ## Acceptance criteria
 
-- [ ] Opening a B1 lesson for the first time shows the grammar card before any questions appear
-- [ ] Tapping "Got it" moves to the quiz; tapping back returns to track detail
-- [ ] Re-entering the same lesson skips the grammar card
-- [ ] After finishing a quiz, the results screen shows the correct score and percentage
-- [ ] Phrases answered incorrectly appear in the "Missed" section (deduplicated)
-- [ ] A 100% score shows no "Missed" section
-- [ ] "Retry" resets the quiz; "Back to lessons" returns to track detail
+- [x] Opening a B1 lesson for the first time shows the grammar card before any questions appear
+- [x] Tapping "Got it" moves to the quiz; tapping back returns to track detail
+- [x] Re-entering the same lesson skips the grammar card
+- [x] After finishing a quiz, the results screen shows the correct score and percentage
+- [x] Phrases answered incorrectly appear in the "Missed" section (deduplicated)
+- [x] A 100% score shows no "Missed" section
+- [x] "Retry" resets the quiz; "Back to lessons" returns to track detail

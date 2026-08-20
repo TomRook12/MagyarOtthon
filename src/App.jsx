@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
 // ─── LESSON DATA ──────────────────────────────────────────────────────────
+const BANDS=["A1","A2","B1","B2","C1"];
 const BAND_LABELS={"A1":"A1 — Foundation","A2":"A2 — Developing","B1":"B1 — Building","B2":"B2 — Expanding","C1":"C1 — Mastery"};
 const TRACKS = [
   { id:"bath-time",     title:"Bath Time",              emoji:"🛁", color:"#4A9ECC" },
@@ -289,8 +290,7 @@ function getRecommendedNext(stats){
   const {lastActiveLessonId,lessonScores}=stats;
   const ref=lastActiveLessonId?LESSONS.find(l=>l.id===lastActiveLessonId):LESSONS[0];
   if(!ref)return null;
-  const bands=["A1","A2","B1","B2","C1"];
-  const trackLessons=LESSONS.filter(l=>l.trackId===ref.trackId).sort((a,b)=>bands.indexOf(a.band)-bands.indexOf(b.band)||a.seq-b.seq);
+  const trackLessons=LESSONS.filter(l=>l.trackId===ref.trackId).sort((a,b)=>BANDS.indexOf(a.band)-BANDS.indexOf(b.band)||a.seq-b.seq);
   return trackLessons.find(l=>!lessonScores[String(l.id)]?.passed&&isUnlocked(l,lessonScores))||null;
 }
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
@@ -302,22 +302,54 @@ function normalize(s,accentSensitive=false){
 function getPrevLesson(lesson){
   const sameBand=LESSONS.filter(l=>l.trackId===lesson.trackId&&l.band===lesson.band);
   if(lesson.seq>1)return sameBand.find(l=>l.seq===lesson.seq-1)||null;
-  const bands=["A1","A2","B1","B2","C1"];
-  const bi=bands.indexOf(lesson.band);
+  const bi=BANDS.indexOf(lesson.band);
   if(bi<=0)return null;
-  const prevBandLessons=LESSONS.filter(l=>l.trackId===lesson.trackId&&l.band===bands[bi-1]);
+  const prevBandLessons=LESSONS.filter(l=>l.trackId===lesson.trackId&&l.band===BANDS[bi-1]);
   return prevBandLessons.sort((a,b)=>b.seq-a.seq)[0]||null;
 }
 function isUnlocked(lesson,lessonScores){
   const prev=getPrevLesson(lesson);
   return prev===null||!!lessonScores[String(prev.id)]?.passed;
 }
+function getBandLessons(trackId,band){
+  return LESSONS.filter(l=>l.trackId===trackId&&l.band===band).sort((a,b)=>a.seq-b.seq);
+}
+function isLastLessonOfBand(lesson){
+  const bl=getBandLessons(lesson.trackId,lesson.band);
+  return bl.length>0&&bl[bl.length-1].id===lesson.id;
+}
+function getNextBand(lesson){
+  for(let i=BANDS.indexOf(lesson.band)+1;i<BANDS.length;i++){
+    if(getBandLessons(lesson.trackId,BANDS[i]).length>0)return BANDS[i];
+  }
+  return null;
+}
+// Band Review pool: the band's phrases, hardest (most `wrong`) first.
+function getBandReviewItems(trackId,band,phraseScores,count=5){
+  const seen=new Set(),uniq=[];
+  for(const p of getBandLessons(trackId,band).flatMap(l=>l.phrases)){
+    if(!seen.has(p.hu)){seen.add(p.hu);uniq.push(p);}
+  }
+  return uniq.sort((a,b)=>(phraseScores[b.hu]?.wrong||0)-(phraseScores[a.hu]?.wrong||0)).slice(0,count);
+}
+function getBandTypes(trackId,band){
+  const s=new Set();
+  getBandLessons(trackId,band).forEach(l=>l.types.forEach(t=>s.add(t)));
+  return [...s];
+}
 
 // ─── STATS HOOK ───────────────────────────────────────────────────────────
 const STORAGE_KEY="magyar-otthon-stats-v2";
+const DEFAULT_SETTINGS={autoPlayAudio:true};
+function defaultStats(){return{lastActiveLessonId:null,lessonScores:{},phraseScores:{},settings:{...DEFAULT_SETTINGS}};}
 function loadStats(){
-  try{const raw=localStorage.getItem(STORAGE_KEY);if(raw)return JSON.parse(raw);}catch(e){}
-  return{lastActiveLessonId:null,lessonScores:{},phraseScores:{}};
+  const base=defaultStats();
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    // Merge over defaults so objects saved before `settings` existed still load.
+    if(raw){const p=JSON.parse(raw);return{...base,...p,settings:{...DEFAULT_SETTINGS,...(p.settings||{})}};}
+  }catch(e){}
+  return base;
 }
 function saveStats(s){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}catch(e){}}
 
@@ -353,19 +385,31 @@ function useStats(){
     });
   },[]);
 
+  // Remedial pass — flips `passed` without touching `best` or `attempts`.
+  const markLessonPassed=useCallback((id)=>{
+    setStats(s=>{
+      const prev=s.lessonScores[String(id)]||{best:0,attempts:0,passed:false,grammarSeen:false};
+      return{...s,lessonScores:{...s.lessonScores,[String(id)]:{...prev,passed:true}}};
+    });
+  },[]);
+
   const setLastActiveLesson=useCallback((id)=>{setStats(s=>({...s,lastActiveLessonId:id}));},[]);
+
+  const setSetting=useCallback((key,value)=>{setStats(s=>({...s,settings:{...s.settings,[key]:value}}));},[]);
 
   const getWeakItems=useCallback((phrases)=>{
     return phrases.filter(p=>{const sc=stats.phraseScores[p.hu];return sc&&sc.wrong>0&&sc.wrong>=sc.right;});
   },[stats]);
 
-  return{stats,recordPhrase,recordLesson,markGrammarSeen,setLastActiveLesson,getWeakItems};
+  return{stats,recordPhrase,recordLesson,markGrammarSeen,markLessonPassed,setLastActiveLesson,setSetting,getWeakItems};
 }
 
 // ─── QUESTION GENERATORS ──────────────────────────────────────────────────
 function genTF(p,all){
-  const t=Math.random()>0.5;
-  const shown=t?p.en:shuffle(all.filter(x=>x.en!==p.en))[0]?.en||p.en;
+  const others=all.filter(x=>x.en!==p.en);
+  // No alternative translation to show → the only honest question is a true one.
+  const t=others.length===0||Math.random()>0.5;
+  const shown=t?p.en:shuffle(others)[0].en;
   return{type:"true_false",prompt:p.hu,promptPr:p.pr,shown,answer:t,phrase:p};
 }
 function genFill(p,all){
@@ -397,8 +441,11 @@ function genTyped(p){
   return{type:"fill_typed",prompt:p.en,answer:p.hu,pr:p.pr,phrase:p};
 }
 
-function generateQuestions(lesson,weakItems,huVoiceAvail,count=15){
+function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool=null){
   const all=lesson.phrases;
+  // Questions come from `all`; wrong-answer options come from `dis`, which stays wide
+  // even when `all` is a narrow Remedial or Band Review pool.
+  const dis=distractorPool&&distractorPool.length>=4?distractorPool:all;
   let types=[...lesson.types];
   const earlyBand=lesson.band==="A1"||lesson.band==="A2";
 
@@ -416,11 +463,11 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15){
   let matchUsed=false;
   const gen=(type,p)=>{
     if(type==="match"){if(matchUsed||all.length<4)return null;matchUsed=true;return genMatch(all);}
-    if(type==="phrase_list")return genPhraseList(p,all);
-    if(type==="fill_pool")return genFill(p,all);
+    if(type==="phrase_list")return genPhraseList(p,dis);
+    if(type==="fill_pool")return genFill(p,dis);
     if(type==="fill_typed")return genTyped(p);
     if(type==="sentence_builder")return genReconstruct(p);
-    if(type==="true_false")return genTF(p,all);
+    if(type==="true_false")return genTF(p,dis);
     return null;
   };
 
@@ -438,6 +485,12 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15){
     const p=pool[Math.floor(Math.random()*pool.length)];
     const q=gen(type,p);
     if(q)qs.push(q);
+  }
+  // Safety net: genPhraseList and genTyped never decline, so a lesson can always
+  // produce questions even if every one of its declared types refused this pool.
+  if(qs.length===0){
+    const fallback=earlyBand?(x)=>genPhraseList(x,dis):genTyped;
+    for(const x of pool.slice(0,count))qs.push(fallback(x));
   }
   return shuffle(qs).slice(0,count);
 }
@@ -489,9 +542,13 @@ function ProgressBar({pct,color}){
 }
 
 // ─── QUIZ ENGINE ──────────────────────────────────────────────────────────
-function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
-  const weakItems=statsApi.getWeakItems(lesson.phrases);
-  const [qs]=useState(()=>generateQuestions(lesson,weakItems,huVoiceAvail,15));
+// mode: "lesson" (15q, scored) | "remedial" (8q, pass flips parent lesson) | "review" (5q, advisory)
+function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",pool=null,onRemedial,onBandReview}){
+  const count=mode==="remedial"?8:mode==="review"?5:15;
+  const srcLesson=pool?{...lesson,phrases:pool}:lesson;
+  // Remedial and Review pools are already weak by construction — no extra boosting.
+  const weakItems=mode==="lesson"?statsApi.getWeakItems(lesson.phrases):[];
+  const [qs]=useState(()=>generateQuestions(srcLesson,weakItems,huVoiceAvail,count,lesson.phrases));
   const [qi,setQi]=useState(0);
   const [score,setScore]=useState(0);
   const [ans,setAns]=useState(null);
@@ -505,11 +562,13 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
   const color=track.color;
   const accentSensitive=!["A1","A2"].includes(lesson.band);
 
-  useEffect(()=>{statsApi.setLastActiveLesson(lesson.id);},[]);
+  const autoPlay=statsApi.stats.settings.autoPlayAudio;
+
+  useEffect(()=>{if(mode!=="review")statsApi.setLastActiveLesson(lesson.id);},[]);
   useEffect(()=>{
-    if(q.type==="true_false"||q.type==="phrase_list")speakHu(q.prompt,lesson.band);
+    if(autoPlay&&(q.type==="true_false"||q.type==="phrase_list"))speakHu(q.prompt,lesson.band);
   },[qi]);
-  useEffect(()=>{if(ans!==null&&q.type==="fill_typed")speakHu(q.answer,lesson.band);},[ans]);
+  useEffect(()=>{if(autoPlay&&ans!==null&&q.type==="fill_typed")speakHu(q.answer,lesson.band);},[ans]);
 
   const matchItems=useMemo(()=>{
     if(q.type!=="match")return[];
@@ -519,18 +578,29 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
   const advance=(correct)=>{if(q.phrase)statsApi.recordPhrase(q.phrase.hu,correct);if(correct)setScore(s=>s+1);else if(q.phrase)setMissed(m=>m.some(p=>p.hu===q.phrase.hu)?m:[...m,q.phrase]);};
   const goNext=()=>{
     if(qi<total-1){setQi(i=>i+1);setAns(null);setTyped("");setMs({sel:null,matched:[],wrong:null});setPlaced([]);}
-    else{statsApi.recordLesson(lesson.id,score+(ans==="match_done"||ans==="sb_correct"?0:0),total);setAns("done");}
+    else{
+      if(mode==="lesson")statsApi.recordLesson(lesson.id,score,total);
+      else if(mode==="remedial"&&Math.round(score/total*100)>=80)statsApi.markLessonPassed(lesson.id);
+      setAns("done");
+    }
   };
 
   if(ans==="done"){
     const pct=Math.round(score/total*100);
     const passed=pct>=80;
+    const review=mode==="review";
+    const offerBandReview=mode==="lesson"&&passed&&isLastLessonOfBand(lesson)&&getNextBand(lesson);
+    const offerRemedial=(mode==="lesson"||mode==="remedial")&&!passed&&missed.length>0;
+    const headline=review
+      ?"Review complete"
+      :passed?(mode==="remedial"?"Remedial passed — lesson unlocked!":"Passed — next lesson unlocked!")
+      :pct>=60?"Almost there!":"Keep going!";
     return <div style={{padding:"40px 20px 80px"}}>
       <div style={{textAlign:"center"}}>
-        <div style={{fontSize:52}}>{passed?"🎉":pct>=60?"👏":"💪"}</div>
+        <div style={{fontSize:52}}>{review?"🔁":passed?"🎉":pct>=60?"👏":"💪"}</div>
         <div style={{fontSize:30,fontWeight:900,color:C.text,marginTop:10}}>{score}/{total}</div>
-        <div style={{fontSize:22,fontWeight:800,color:passed?C.green:pct>=60?C.amber:C.red,marginTop:4}}>{pct}%</div>
-        <div style={{fontSize:15,color:C.sub,marginTop:4}}>{passed?"Passed — next lesson unlocked!":pct>=60?"Almost there!":"Keep going!"}</div>
+        <div style={{fontSize:22,fontWeight:800,color:review?C.sub:passed?C.green:pct>=60?C.amber:C.red,marginTop:4}}>{pct}%</div>
+        <div style={{fontSize:15,color:C.sub,marginTop:4}}>{headline}</div>
       </div>
       {missed.length>0&&<div style={{marginTop:28}}>
         <div style={{fontSize:11,fontWeight:800,color:C.sub,letterSpacing:0.5,textTransform:"uppercase",marginBottom:10}}>Missed</div>
@@ -542,10 +612,18 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail}){
           <div style={{fontSize:13,color:C.sub}}>{p.en}</div>
         </div>)}
       </div>}
-      <div style={{display:"flex",gap:10,marginTop:24}}>
+      {offerRemedial&&<button onClick={()=>onRemedial&&onRemedial(missed)}
+        style={{width:"100%",padding:"14px",borderRadius:14,background:color,border:"none",color:C.text,fontSize:15,fontWeight:800,cursor:"pointer",marginTop:24}}>
+        {mode==="remedial"?"Try the Remedial again":"Try the Remedial"} · 8 questions
+      </button>}
+      {offerBandReview&&<button onClick={()=>onBandReview&&onBandReview(lesson)}
+        style={{width:"100%",padding:"14px",borderRadius:14,background:color,border:"none",color:C.text,fontSize:15,fontWeight:800,cursor:"pointer",marginTop:24}}>
+        Review {lesson.band} before moving on →
+      </button>}
+      <div style={{display:"flex",gap:10,marginTop:offerRemedial||offerBandReview?10:24}}>
         <button onClick={onFinish} style={{flex:1,padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Back to lessons</button>
-        <button onClick={()=>{setQi(0);setScore(0);setAns(null);setTyped("");setPlaced([]);setMs({sel:null,matched:[],wrong:null});setMissed([]);}}
-          style={{flex:1,padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Retry</button>
+        {mode==="lesson"&&<button onClick={()=>{setQi(0);setScore(0);setAns(null);setTyped("");setPlaced([]);setMs({sel:null,matched:[],wrong:null});setMissed([]);}}
+          style={{flex:1,padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Retry</button>}
       </div>
     </div>;
   }
@@ -680,7 +758,63 @@ function GrammarCard({lesson,track,onDismiss,onBack}){
   </div>;
 }
 
-function HomeScreen({statsApi,onOpenTrack,onOpenLesson}){
+function BandReview({trackId,band,statsApi,huVoiceAvail,onDone}){
+  const track=TRACKS.find(t=>t.id===trackId);
+  // Frozen at mount — the pool must not reshuffle as answers update phraseScores.
+  const items=useMemo(()=>getBandReviewItems(trackId,band,statsApi.stats.phraseScores,5),[]);
+  const types=useMemo(()=>getBandTypes(trackId,band),[]);
+  const passedCount=getBandLessons(trackId,band).filter(l=>statsApi.stats.lessonScores[String(l.id)]?.passed).length;
+
+  if(!track)return null;
+  if(items.length===0)return <div style={{padding:"40px 20px"}}>
+    <div style={{fontSize:15,color:C.sub,textAlign:"center",marginBottom:20}}>Nothing to review in {band} yet.</div>
+    <button onClick={onDone} style={{width:"100%",padding:"13px",borderRadius:12,background:C.card,border:`1px solid ${C.border}`,color:C.text,fontSize:14,fontWeight:700,cursor:"pointer"}}>Back to lessons</button>
+  </div>;
+  const synthetic={id:null,trackId,band,seq:0,title:`${band} Review`,types,phrases:items};
+
+  return <div>
+    <div style={{padding:"14px 16px 12px",display:"flex",alignItems:"center",gap:10,borderBottom:`1px solid ${C.border}`}}>
+      <div style={{fontSize:20}}>{track.emoji}</div>
+      <div style={{flex:1}}>
+        <div style={{fontSize:16,fontWeight:700,color:C.text}}>{band} Review</div>
+        <div style={{fontSize:12,color:C.sub}}>{BAND_LABELS[band]} · {passedCount} lessons passed</div>
+      </div>
+      <button onClick={onDone} style={{background:"none",border:"none",color:C.sub,fontSize:13,fontWeight:700,cursor:"pointer",padding:"4px 6px"}}>Skip for now</button>
+    </div>
+    <div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${track.color}10`,border:`1px solid ${track.color}22`,fontSize:12,color:C.text,lineHeight:1.5}}>
+      Five quick questions on the trickiest phrases from {band}. Just practice — your score here doesn't affect anything.
+    </div>
+    <QuizEngine lesson={synthetic} track={track} onFinish={onDone} statsApi={statsApi} huVoiceAvail={huVoiceAvail} mode="review"/>
+  </div>;
+}
+
+function SettingsScreen({statsApi,huVoiceAvail,onBack}){
+  const {stats,setSetting}=statsApi;
+  const on=stats.settings.autoPlayAudio;
+  return <div>
+    <Header title="Settings" onBack={onBack}/>
+    <div style={{padding:"14px 16px 80px"}}>
+      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:"14px 16px",display:"flex",alignItems:"center",gap:14}}>
+        <div style={{flex:1}}>
+          <div style={{fontSize:15,fontWeight:700,color:C.text}}>Auto-play audio</div>
+          <div style={{fontSize:12,color:C.sub,marginTop:2,lineHeight:1.45}}>Speak Hungarian automatically when a question appears. The 🔊 button always works either way.</div>
+        </div>
+        <button onClick={()=>setSetting("autoPlayAudio",!on)} role="switch" aria-checked={on} aria-label="Auto-play audio"
+          style={{width:48,height:28,borderRadius:14,border:"none",background:on?C.green:C.border,cursor:"pointer",padding:2,flexShrink:0,transition:"background 0.2s"}}>
+          <div style={{width:24,height:24,borderRadius:12,background:C.text,transform:`translateX(${on?20:0}px)`,transition:"transform 0.2s"}}/>
+        </button>
+      </div>
+      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:"14px 16px",marginTop:8}}>
+        <div style={{fontSize:15,fontWeight:700,color:C.text}}>Hungarian voice</div>
+        <div style={{fontSize:12,color:huVoiceAvail===false?C.amber:C.sub,marginTop:2,lineHeight:1.45}}>
+          {huVoiceAvail===null?"Checking…":huVoiceAvail?"Available on this device.":"Not available on this device — listening questions are replaced with written ones."}
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+function HomeScreen({statsApi,onOpenTrack,onOpenLesson,onOpenSettings}){
   const {stats}=statsApi;
   const rec=getRecommendedNext(stats);
   const recTrack=rec?TRACKS.find(t=>t.id===rec.trackId):null;
@@ -689,9 +823,13 @@ function HomeScreen({statsApi,onOpenTrack,onOpenLesson}){
   const trackTotal=t=>LESSONS.filter(l=>l.trackId===t.id).length;
 
   return <div>
-    <div style={{padding:"18px 16px 14px",borderBottom:`1px solid ${C.border}`}}>
-      <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div>
-      <div style={{fontSize:12,color:C.sub,marginTop:2}}>Tanulj minden nap</div>
+    <div style={{padding:"18px 16px 14px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:10}}>
+      <div style={{flex:1}}>
+        <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5}}>Magyar Otthon</div>
+        <div style={{fontSize:12,color:C.sub,marginTop:2}}>Tanulj minden nap</div>
+      </div>
+      <button onClick={onOpenSettings} title="Settings" aria-label="Settings"
+        style={{background:"none",border:"none",color:C.sub,fontSize:20,cursor:"pointer",padding:"4px 6px",flexShrink:0}}>⚙️</button>
     </div>
     <div style={{padding:"12px 16px 80px"}}>
       {rec&&recTrack&&<div style={{marginBottom:16}}>
@@ -794,6 +932,11 @@ export default function App(){
   const [screen,setScreen]=useState("home");
   const [trackId,setTrackId]=useState(null);
   const [lessonId,setLessonId]=useState(null);
+  // Remedial state is deliberately ephemeral — never persisted, so a reload
+  // returns to the parent lesson rather than resuming a half-finished Remedial.
+  const [remedialPhrases,setRemedialPhrases]=useState(null);
+  const [reviewBand,setReviewBand]=useState(null);
+  const [runId,setRunId]=useState(0);   // remounts QuizEngine so questions regenerate
   const statsApi=useStats();
   const huVoiceAvail=useHuVoiceAvailable();
 
@@ -803,15 +946,22 @@ export default function App(){
   const needsGrammarCard=!!(lesson?.grammar&&!statsApi.stats.lessonScores[String(lesson.id)]?.grammarSeen);
 
   function openTrack(t){setTrackId(t.id);setScreen("track");}
-  function openLesson(l){setLessonId(l.id);setScreen("quiz");}
-  function backToTrack(){setScreen("track");}
+  function openLesson(l){
+    setLessonId(l.id);setTrackId(l.trackId);setRemedialPhrases(null);
+    setRunId(r=>r+1);setScreen("quiz");
+  }
+  function startRemedial(missed){setRemedialPhrases(missed);setRunId(r=>r+1);}
+  function startBandReview(l){setReviewBand({trackId:l.trackId,band:l.band});setScreen("bandreview");}
+  function backToTrack(){setRemedialPhrases(null);setReviewBand(null);setScreen("track");}
   function backToHome(){setScreen("home");}
 
   return <div style={{fontFamily:"'Nunito',sans-serif",background:C.bg,color:C.text,minHeight:"100vh",maxWidth:480,margin:"0 auto"}}>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 
-    {screen==="home"&&<HomeScreen statsApi={statsApi} onOpenTrack={openTrack} onOpenLesson={openLesson}/>}
+    {screen==="home"&&<HomeScreen statsApi={statsApi} onOpenTrack={openTrack} onOpenLesson={openLesson} onOpenSettings={()=>setScreen("settings")}/>}
+    {screen==="settings"&&<SettingsScreen statsApi={statsApi} huVoiceAvail={huVoiceAvail} onBack={backToHome}/>}
     {screen==="track"&&activeTrack&&<TrackDetail track={activeTrack} statsApi={statsApi} onOpenLesson={openLesson} onBack={backToHome}/>}
+    {screen==="bandreview"&&reviewBand&&<BandReview trackId={reviewBand.trackId} band={reviewBand.band} statsApi={statsApi} huVoiceAvail={huVoiceAvail} onDone={backToTrack}/>}
     {screen==="quiz"&&lesson&&quizTrack&&(needsGrammarCard
       ?<GrammarCard lesson={lesson} track={quizTrack} onDismiss={()=>statsApi.markGrammarSeen(lesson.id)} onBack={backToTrack}/>
       :<div>
@@ -821,12 +971,20 @@ export default function App(){
             <div style={{fontSize:16,fontWeight:700,color:C.text}}>{lesson.title}</div>
             <div style={{fontSize:12,color:C.sub}}>{quizTrack.emoji} {quizTrack.title} · {lesson.band}</div>
           </div>
-          <span style={{fontSize:12,color:quizTrack.color,fontWeight:700,background:`${quizTrack.color}18`,padding:"3px 9px",borderRadius:8}}>{lesson.band} {lesson.seq}</span>
+          <span style={{fontSize:12,color:quizTrack.color,fontWeight:700,background:`${quizTrack.color}18`,padding:"3px 9px",borderRadius:8}}>{remedialPhrases?"Remedial":`${lesson.band} ${lesson.seq}`}</span>
         </div>
-        {lesson.tip&&<div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${quizTrack.color}10`,border:`1px solid ${quizTrack.color}22`,fontSize:12,color:C.text,lineHeight:1.5}}>
-          <span style={{fontWeight:800,color:quizTrack.color}}>Tip: </span>{lesson.tip}
-        </div>}
-        <QuizEngine lesson={lesson} track={quizTrack} onFinish={backToTrack} statsApi={statsApi} huVoiceAvail={huVoiceAvail}/>
+        {remedialPhrases
+          ?<div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${quizTrack.color}10`,border:`1px solid ${quizTrack.color}22`,fontSize:12,color:C.text,lineHeight:1.5}}>
+            <span style={{fontWeight:800,color:quizTrack.color}}>Remedial: </span>
+            just the {remedialPhrases.length} {remedialPhrases.length===1?"phrase":"phrases"} you missed. Score 80% to unlock the next lesson.
+          </div>
+          :lesson.tip&&<div style={{margin:"10px 16px 0",padding:"10px 12px",borderRadius:10,background:`${quizTrack.color}10`,border:`1px solid ${quizTrack.color}22`,fontSize:12,color:C.text,lineHeight:1.5}}>
+            <span style={{fontWeight:800,color:quizTrack.color}}>Tip: </span>{lesson.tip}
+          </div>}
+        <QuizEngine key={runId} lesson={lesson} track={quizTrack} onFinish={backToTrack}
+          statsApi={statsApi} huVoiceAvail={huVoiceAvail}
+          mode={remedialPhrases?"remedial":"lesson"} pool={remedialPhrases}
+          onRemedial={startRemedial} onBandReview={startBandReview}/>
       </div>
     )}
   </div>;

@@ -1,6 +1,6 @@
 # Spec: New Lessons & PWA Icon (Issues #34, #35, #36, #37)
 
-> **Status:** Done
+> **Status:** Superseded (pre-rewrite — code removed in `41436ab`)
 > **Branch:** `claude/plan-lesson-suggestions-OHwVa`
 
 ## Goal

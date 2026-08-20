@@ -14,14 +14,14 @@ The current home renders all lessons in a single flat list. With 21 Bath Time le
 ## Requirements
 
 ### Must have
-- [ ] Home screen shows one card per track (8 tracks)
-- [ ] Each track card shows: emoji, title, progress bar (passed / total lessons), and a locked state for tracks with no lesson content
-- [ ] "Recommended Next" section at the top of home — shows the next unpassed lesson in the last-active track, driven by `lastActiveLessonId` from stats
-- [ ] Track Detail screen: reachable by tapping an unlocked track card; shows lessons in that track as a vertical list, grouped by band (A1 / A2 / B1 / B2 / C1)
-- [ ] Track Detail header: back button, track emoji + title, colored accent, overall progress bar
-- [ ] Lesson rows in Track Detail: band badge, lesson title, subtitle, score badge (if attempted), lock icon (if locked)
-- [ ] Tapping an unlocked lesson row in Track Detail navigates to quiz (existing behaviour)
-- [ ] Navigation state: `screen` values become `"home"` | `"track"` | `"quiz"`
+- [x] Home screen shows one card per track (8 tracks)
+- [x] Each track card shows: emoji, title, progress bar (passed / total lessons), and a locked state for tracks with no lesson content
+- [x] "Recommended Next" section at the top of home — shows the next unpassed lesson in the last-active track, driven by `lastActiveLessonId` from stats
+- [x] Track Detail screen: reachable by tapping an unlocked track card; shows lessons in that track as a vertical list, grouped by band (A1 / A2 / B1 / B2 / C1)
+- [x] Track Detail header: back button, track emoji + title, colored accent, overall progress bar
+- [x] Lesson rows in Track Detail: band badge, lesson title, subtitle, score badge (if attempted), lock icon (if locked)
+- [x] Tapping an unlocked lesson row in Track Detail navigates to quiz (existing behaviour)
+- [x] Navigation state: `screen` values become `"home"` | `"track"` | `"quiz"`
 
 ### Nice to have
 - [x] Band section headers in Track Detail — descriptive labels: "A1 — Foundation", "A2 — Developing", "B1 — Building", "B2 — Expanding", "C1 — Mastery"
@@ -140,9 +140,9 @@ _All resolved._
 
 ## Acceptance criteria
 
-- [ ] Home shows 8 track cards; 7 show as locked (no lesson content)
-- [ ] Bath Time card shows correct passed/total count and progress bar
-- [ ] Recommended Next card appears after any quiz is completed; tapping it starts the right lesson
-- [ ] Track Detail lists all 21 Bath Time lessons in band order, each correctly locked/unlocked
-- [ ] Back from Quiz goes to Track Detail; back from Track Detail goes to Home
-- [ ] No regressions in Quiz flow (questions, scoring, stats recording)
+- [x] Home shows 8 track cards; 7 show as locked (no lesson content)
+- [x] Bath Time card shows correct passed/total count and progress bar
+- [x] Recommended Next card appears after any quiz is completed; tapping it starts the right lesson
+- [x] Track Detail lists all 21 Bath Time lessons in band order, each correctly locked/unlocked
+- [x] Back from Quiz goes to Track Detail; back from Track Detail goes to Home
+- [x] No regressions in Quiz flow (questions, scoring, stats recording)

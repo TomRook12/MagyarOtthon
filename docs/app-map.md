@@ -38,8 +38,8 @@ Grep the exact banner text to jump to any region of App.jsx.
 | `// ─── SPEECH UTILITY`                  | `speakHu()`, `SpeakBtn`, `useHuVoiceAvailable()` hook       |
 | `// ─── SMALL COMPONENTS`               | `Header`, `ProgressBar`                                     |
 | `// ─── QUIZ ENGINE`                    | `QuizEngine` component — question display, answer, feedback |
-| `// ─── SCREENS`                        | `GrammarCard`, `HomeScreen`, `TrackDetail` — full-page screen components   |
-| `// ─── APP`                            | `App()` — navigation state (`screen`, `trackId`, `lessonId`), screen routing |
+| `// ─── SCREENS`                        | `GrammarCard`, `BandReview`, `SettingsScreen`, `HomeScreen`, `TrackDetail` |
+| `// ─── APP`                            | `App()` — navigation state (`screen`, `trackId`, `lessonId`, `remedialPhrases`, `reviewBand`, `runId`), screen routing |
 
 ---
 
@@ -112,8 +112,14 @@ Only `"bath-time"` has lesson content in v1. All others appear as locked placeho
     // keyed by phrase.hu
     // SRS: wrong >= 2 → flag; daysSince(lastSeen) >= 7 → queue
   },
+
+  settings: { autoPlayAudio: true },   // see DEFAULT_SETTINGS
 }
 ```
+
+`loadStats()` merges the stored object over `defaultStats()`, and merges `settings` over
+`DEFAULT_SETTINGS` key-by-key. New settings keys therefore need **no `STORAGE_KEY` bump** —
+add the key to `DEFAULT_SETTINGS` and existing users pick up the default on next load.
 
 ---
 
@@ -127,7 +133,9 @@ const {
   recordPhrase,        // (hu: string, correct: boolean) => void
   recordLesson,        // (id: number, score: number, total: number) => void
   markGrammarSeen,     // (id: number) => void
+  markLessonPassed,    // (id: number) => void — Remedial pass; leaves best/attempts alone
   setLastActiveLesson, // (id: number) => void
+  setSetting,          // (key: string, value: any) => void
   getWeakItems,        // (phrases: phrase[]) => phrase[]  — wrong >= right
 } = useStats();
 ```
@@ -176,13 +184,26 @@ All generators also return `phrase` — the source phrase object.
 **Entry point** (the only function components should call):
 
 ```js
-generateQuestions(lesson, weakItems, huVoiceAvail, count = 15)
+generateQuestions(lesson, weakItems, huVoiceAvail, count = 15, distractorPool = null)
 // → question[] — shuffled, length = count
 // weakItems are triple-weighted in the selection pool
 // match is only generated when lesson.phrases.length >= 4; generated at most once per session
 // true_false is removed and phrase_list added if huVoiceAvail === false
 // fill_typed is replaced with fill_pool if lesson.band is A1 or A2
+// distractorPool (>= 4 phrases) supplies wrong-answer options; defaults to lesson.phrases
 ```
+
+**Narrow pools.** Remedial and Band Review pass a small `lesson.phrases` (as few as one
+phrase) with the full lesson as `distractorPool`. Questions come from the narrow pool;
+options come from the wide one. Without this split, `genPhraseList` yields a single option
+and `genFill` has no distractors. Any new generator that builds options from its `all`
+argument must receive `dis`, not `all`.
+
+**Every type may decline.** `genMatch` (< 4 phrases), `genFill` (single-word phrase), and
+`genReconstruct` (outside 3–7 words) return `null`. `generateQuestions` falls back to
+`genPhraseList` / `genTyped` — which never decline — if nothing else produced a question.
+Keep that fallback if you touch the selection loop; without it a narrow pool can yield an
+empty question array and crash `QuizEngine`.
 
 **Never** call `gen*` functions directly from components. All quiz question creation goes
 through `generateQuestions`.
@@ -196,8 +217,18 @@ getPrevLesson(lesson)  // → lesson | null — finds the immediately preceding 
 isUnlocked(lesson, lessonScores)  // → boolean — true if prev is null OR prev.passed
 ```
 
-Band order for crossing band boundaries: `A1 → A2 → B1 → B2 → C1`.
+Band order for crossing band boundaries: `A1 → A2 → B1 → B2 → C1` (the `BANDS` constant).
 The first lesson of A1 in any track is always unlocked.
+
+### Band helpers (`// ─── UTILITIES`)
+
+```js
+getBandLessons(trackId, band)        // → lesson[] sorted by seq
+getBandTypes(trackId, band)          // → string[] — union of the band's question types
+isLastLessonOfBand(lesson)           // → boolean — drives the Band Review offer
+getNextBand(lesson)                  // → band | null — null at the track's final band
+getBandReviewItems(trackId, band, phraseScores, count = 5)  // → phrase[], hardest first
+```
 
 ---
 
@@ -218,9 +249,30 @@ The first lesson of A1 in any track is always unlocked.
 4. Handle the new `type` in the `QuizEngine` component (`// ─── QUIZ ENGINE`)
 5. Update **Section G** of this doc
 
+### QuizEngine modes
+
+`QuizEngine` runs in three modes, set by the `mode` prop:
+
+| mode | count | Pool | On completion |
+|------|-------|------|---------------|
+| `"lesson"` (default) | 15 | `lesson.phrases`, weak items triple-weighted | `recordLesson()` |
+| `"remedial"` | 8 | `pool` — phrases missed in the failed attempt | `markLessonPassed()` at ≥ 80% only |
+| `"review"` | 5 | `pool` — `getBandReviewItems()` | nothing written; advisory |
+
+Remedial and Band Review write `phraseScores` per answer like any other question. Neither
+creates a `lessonScores` entry. Remedial state lives in `App()` React state only — it is
+never persisted, so a reload returns to the parent lesson.
+
 ### Add a stat field
 
 1. Grep `// ─── STATS HOOK`
 2. Add the field to the default object in `loadStats()`
 3. Add or update a method in `useStats()`; expose it in the return object if callers need it
 4. Update **Sections D and E** of this doc
+
+### Add a setting
+
+1. Add the key to `DEFAULT_SETTINGS` (`// ─── STATS HOOK`) — no `STORAGE_KEY` bump needed
+2. Read it as `stats.settings.<key>`; write it with `setSetting(key, value)`
+3. Add a control to `SettingsScreen` (`// ─── SCREENS`)
+4. Update **Section D** of this doc

@@ -1,6 +1,6 @@
 # Spec: Engine Depth — Story Cards, Listening, Shadowing & Quiz Enhancements
 
-> **Status:** Done
+> **Status:** Superseded (pre-rewrite — code removed in `41436ab`)
 > **Branch:** `claude/complete-engine-depth-spec-sKJyg`
 
 ## Goal

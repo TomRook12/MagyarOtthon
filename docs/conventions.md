@@ -15,7 +15,8 @@ Maintain this order: DATA → UTILITIES → ENGINES → HOOKS → QUESTION GENER
 - Lesson `id` values are stable and used as keys in `localStorage`. Never reuse or renumber them.
 - Add new lessons by appending to `LESSONS[]` with the next sequential `id`.
 - Phrase fields: `hu` (Hungarian text), `pr` (pronunciation guide), `en` (English translation). All three are required.
-- `aud` is either `"kids"` or `"wife"`. Omitting it is acceptable only for toolkit/reference lessons.
+- Lessons carry `{id, trackId, band, seq, title, sub?, types, phrases, tip?, grammar?}`. `grammar` is B1+ only.
+- Retired fields — do not reintroduce: `phase`, `aud`, `pat`, `patternId`.
 
 ## Components
 
@@ -41,6 +42,13 @@ Maintain this order: DATA → UTILITIES → ENGINES → HOOKS → QUESTION GENER
 
 - Every question generator (`gen*`) accepts a phrase object and returns a question object with at least `{ type, answer, phrase }`.
 - `generateQuestions` is the only place that calls question generators. Don't call them directly from components.
+- A generator may return `null` to decline a phrase it cannot use. `generateQuestions` keeps a `genPhraseList` / `genTyped` fallback so a narrow pool still yields questions — don't remove it.
+- Generators that build wrong-answer options must take them from the `distractorPool` argument, not from the question pool. The two differ in Remedial and Band Review.
+
+## Settings
+
+- New user settings go in `DEFAULT_SETTINGS` and are read from `stats.settings`. Because `loadStats()` merges over the defaults, adding a key needs no `STORAGE_KEY` bump.
+- Audio that plays without the user asking must respect `settings.autoPlayAudio`. Tap-triggered playback (`SpeakBtn`, feedback after a Check) is always allowed.
 
 ## Accessibility & mobile
 

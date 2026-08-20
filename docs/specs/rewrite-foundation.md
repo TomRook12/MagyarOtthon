@@ -20,46 +20,46 @@ Reference: `C:\Users\tomro\Downloads\hungarian-app-prd.md` (PRD), especially Sec
 ### Must have
 
 **Data constants**
-- [ ] `TRACKS[]` constant defined (8 tracks; see Design section)
-- [ ] All legacy content removed: `PHASES[]`, `LESSONS[]` ids 1–94, `STORIES[]`
-- [ ] All legacy scheduling constants removed: `TIME_TAGS`, `WEEKEND_BOOST`, `WEEKDAY_BOOST`
-- [ ] New `LESSONS[]` using the schema: `{id, trackId, band, seq, title, sub, types, phrases, tip, grammar?}`
-- [ ] Bath Time A1 lessons authored (ids 1–4; see Design section)
+- [x] `TRACKS[]` constant defined (8 tracks; see Design section)
+- [x] All legacy content removed: `PHASES[]`, `LESSONS[]` ids 1–94, `STORIES[]`
+- [x] All legacy scheduling constants removed: `TIME_TAGS`, `WEEKEND_BOOST`, `WEEKDAY_BOOST`
+- [x] New `LESSONS[]` using the schema: `{id, trackId, band, seq, title, sub, types, phrases, tip, grammar?}`
+- [x] Bath Time A1 lessons authored (ids 1–4; see Design section)
 
 **Stats schema**
-- [ ] `STORAGE_KEY` = `"magyar-otthon-stats-v2"`
-- [ ] `loadStats()` default object rewritten (see Design section)
-- [ ] `useStats()` updated: `recordPhrase`, `recordLesson`, `markGrammarSeen`, `setLastActiveLesson`, `getWeakItems`
-- [ ] Retired stat methods removed: `setDailyGoal`, streak tracking, `todayMins`, `totalTime`/`todayTime`
+- [x] `STORAGE_KEY` = `"magyar-otthon-stats-v2"`
+- [x] `loadStats()` default object rewritten (see Design section)
+- [x] `useStats()` updated: `recordPhrase`, `recordLesson`, `markGrammarSeen`, `setLastActiveLesson`, `getWeakItems`
+- [x] Retired stat methods removed: `setDailyGoal`, streak tracking, `todayMins`, `totalTime`/`todayTime`
 
 **Quiz engine**
-- [ ] `genPhraseList(p, all)` — new generator: 4 written options, answer = phrase heard via TTS
-- [ ] `genTyped(p)` — new generator: free-text Hungarian input (B1+)
-- [ ] `generateQuestions(lesson, weakItems)` uses `lesson.types[]` as the allowed-type pool
-- [ ] Band-aware fill routing: `fill_pool` (A1/A2) vs `fill_typed` (B1+) — `generateQuestions` resolves this from `lesson.band`
-- [ ] `normalize(str, accentSensitive)` — second boolean parameter; insensitive at A1/A2, sensitive B1+
-- [ ] True/False → Phrase List fallback: if `!huVoiceAvailable`, exclude `true_false` from pool and add `phrase_list`
-- [ ] `QuizEngine` handles all 6 question types including the two new ones
+- [x] `genPhraseList(p, all)` — new generator: 4 written options, answer = phrase heard via TTS
+- [x] `genTyped(p)` — new generator: free-text Hungarian input (B1+)
+- [x] `generateQuestions(lesson, weakItems)` uses `lesson.types[]` as the allowed-type pool
+- [x] Band-aware fill routing: `fill_pool` (A1/A2) vs `fill_typed` (B1+) — `generateQuestions` resolves this from `lesson.band`
+- [x] `normalize(str, accentSensitive)` — second boolean parameter; insensitive at A1/A2, sensitive B1+
+- [x] True/False → Phrase List fallback: if `!huVoiceAvailable`, exclude `true_false` from pool and add `phrase_list`
+- [x] `QuizEngine` handles all 6 question types including the two new ones
 
 **Retired components removed**
-- [ ] `GoalRing`, `DailyFocusCard`, `getDailyFocus()`
-- [ ] `ReviewDueCard`
-- [ ] `StatsView`
-- [ ] `FeedbackModal`, `FEEDBACK_CATEGORIES`
-- [ ] `StoryView`, `ListenView`
-- [ ] `FlashView`, `PhraseView` (lesson browse tabs)
-- [ ] `SRS_MAX_INTERVAL`, `schedulePhraseReview()`, `getDuePhrases()`
-- [ ] `getWeeklyPattern()`
+- [x] `GoalRing`, `DailyFocusCard`, `getDailyFocus()`
+- [x] `ReviewDueCard`
+- [x] `StatsView`
+- [x] `FeedbackModal`, `FEEDBACK_CATEGORIES`
+- [x] `StoryView`, `ListenView`
+- [x] `FlashView`, `PhraseView` (lesson browse tabs)
+- [x] `SRS_MAX_INTERVAL`, `schedulePhraseReview()`, `getDuePhrases()`
+- [x] `getWeeklyPattern()`
 
 **Minimal working lesson flow (scaffolding)**
-- [ ] `App()` routes: home (flat lesson list) → `QuizEngine` → basic score display
-- [ ] Tapping a lesson starts the quiz directly (no browse/tabs)
-- [ ] On quiz complete: show score %, pass/fail label, and a "Back" button
-- [ ] `recordLesson()` called on completion; `phraseScores` updated per answer
-- [ ] `docs/app-map.md` updated to reflect new schema and section layout
+- [x] `App()` routes: home (flat lesson list) → `QuizEngine` → basic score display
+- [x] Tapping a lesson starts the quiz directly (no browse/tabs)
+- [x] On quiz complete: show score %, pass/fail label, and a "Back" button
+- [x] `recordLesson()` called on completion; `phraseScores` updated per answer
+- [x] `docs/app-map.md` updated to reflect new schema and section layout
 
 ### Nice to have
-- [ ] Lock icon on lessons whose predecessor is not yet passed (visual only — no hard gate in this spec)
+- [x] Lock icon on lessons whose predecessor is not yet passed (visual only — no hard gate in this spec)
 
 ### Out of scope
 - Full home screen (Recommended Next card + Track list with progress bars) — next spec
@@ -274,12 +274,12 @@ A flat scrollable list of all lessons grouped by `trackId`. No lock state, no pr
 
 ## Acceptance criteria
 
-- [ ] `npm run build` passes with no errors or warnings
-- [ ] Bath Time Lesson 1.1 can be opened and completed end-to-end (all questions answered, score shown)
-- [ ] Bath Time Lesson 1.4 uses `sentence_builder` and `fill_pool` — both render correctly
-- [ ] Answering a question correctly increments `phraseScores[hu].right`; incorrectly increments `.wrong`
-- [ ] Completing a lesson at ≥ 80% sets `lessonScores[id].passed = true`
-- [ ] Completing at < 80% leaves `passed: false`
-- [ ] If TTS is unavailable, no `true_false` questions appear in any lesson session
-- [ ] No references to `PHASES`, `TIME_TAGS`, `GoalRing`, `StatsView`, `StoryView`, or `getDailyFocus` remain in `App.jsx`
-- [ ] `docs/app-map.md` reflects the new schema accurately
+- [x] `npm run build` passes with no errors or warnings
+- [x] Bath Time Lesson 1.1 can be opened and completed end-to-end (all questions answered, score shown)
+- [x] Bath Time Lesson 1.4 uses `sentence_builder` and `fill_pool` — both render correctly
+- [x] Answering a question correctly increments `phraseScores[hu].right`; incorrectly increments `.wrong`
+- [x] Completing a lesson at ≥ 80% sets `lessonScores[id].passed = true`
+- [x] Completing at < 80% leaves `passed: false`
+- [x] If TTS is unavailable, no `true_false` questions appear in any lesson session
+- [x] No references to `PHASES`, `TIME_TAGS`, `GoalRing`, `StatsView`, `StoryView`, or `getDailyFocus` remain in `App.jsx`
+- [x] `docs/app-map.md` reflects the new schema accurately
