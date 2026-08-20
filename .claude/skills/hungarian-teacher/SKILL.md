@@ -74,6 +74,14 @@ Hungarian is correct, natural, and worth a child hearing.**
   title and `tip`, and flag any accidental formal (magázás) forms.
 - Imperatives aimed at a child should be warm, not barked.
 
+**Known false positive — read before flagging a missing `-t`.** The accusative `-t` is
+**optional** after the 1st and 2nd person singular possessive suffixes `-m` and `-d`.
+`Mosd meg a kezed!` and `Mosd meg a kezedet!` are both correct; the short form is the one
+a parent actually says, and this track uses it deliberately. Do **not** report the short
+form as a grammatical error. The `-t` *is* obligatory with 3rd person possessives
+(`-a/-e/-ja/-je`): `Megmostad a haját?` may never drop it. If you find a 3rd-person
+possessive object without `-t`, that is a genuine error — report it.
+
 ### 2. English (`en`) translation
 - Faithful to the Hungarian meaning.
 - Natural English, not word-for-word.
@@ -108,7 +116,10 @@ phonetic precision — a guide that contradicts its neighbours is a defect even 
 - Short `e`, `i`, `o`, `u`, `ö`, `ü` stay as themselves.
 
 **Stress and syllables**
-- Hungarian stress is always on the first syllable.
+- Hungarian stress is always on the first syllable of the word.
+- **A preverb takes the stress.** When a preverb (`meg`, `le`, `el`, `fel`, `ki`, `be`) sits
+  directly before its verb they form one stress unit and the preverb is the first syllable:
+  `megmostad` → `MEG-mosh-tod`, not `meg-MOSH-tod`.
 - Multi-syllable words: syllables separated by hyphens, **first syllable in CAPITALS** —
   `TÖ-röld`, `PIS-kosh`, `BU-bo-rék`, `meg-MOSH-tod`.
 - Single-syllable words: lowercase, no hyphen — `kád`, `kéz`, `chop`, `hosh`.
