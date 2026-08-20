@@ -28,12 +28,18 @@ Two nice-to-haves were specced and deliberately not built, both in
 and a decision record for the Band Review trigger point (unnecessary — it was built
 exactly as `CONTEXT.md` describes).
 
+## Approved / in flight
+
+| Spec | Status | Impl tasks | Description | Next action |
+|------|--------|-----------|-------------|-------------|
+| [progression-ladder](progression-ladder.md) | Draft | 0/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | Approve, then execute |
+
 ## Next up
 
-The seven remaining tracks, as content. `CONTEXT.md` § TRACKS Registry lists them:
-Bed Time, Getting Ready, Mealtimes, School Run, Park, Homework, Playing. Each needs a
-spec reserving its lesson id range before authoring — see `bath-time-a2-c1.md` for the
-shape a content spec takes.
+The seven remaining tracks, as content — but **not until `progression-ladder` lands**.
+That spec reshapes what a track *is*; authoring more tracks against the current shape
+would mean redoing them. `CONTEXT.md` § TRACKS Registry lists the remaining seven:
+Bed Time, Getting Ready, Mealtimes, School Run, Park, Homework, Playing.
 
 ## Pre-rewrite (historical record)
 
