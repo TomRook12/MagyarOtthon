@@ -644,7 +644,7 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
   // Safety net: genPhraseList and genTyped never decline, so a lesson can always
   // produce questions even if every one of its declared types refused this pool.
   if(qs.length===0){
-    const fallback=earlyBand?(x)=>genPhraseList(x,dis):genTyped;
+    const fallback=earlyRung?(x)=>genPhraseList(x,dis):genTyped;
     for(const x of pool.slice(0,count))qs.push(fallback(x));
   }
   return shuffle(qs).slice(0,count);
