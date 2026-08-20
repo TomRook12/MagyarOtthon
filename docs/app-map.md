@@ -53,6 +53,7 @@ Fields marked **required** are checked by the `convention-reviewer` agent.
   trackId: string,    // matches a TRACKS[].id  e.g. "bath-time"
   band:    string,    // "A1" | "A2" | "B1" | "B2" | "C1"
   seq:     number,    // 1-based position within the band
+  rung:    number,    // 1–7, the progression-ladder rung (see below); required
   title:   string,    // short display title
   sub:     string,    // subtitle for navigation context (optional)
   types:   string[],  // allowed question type names (see Section G)
@@ -65,6 +66,35 @@ Fields marked **required** are checked by the `convention-reviewer` agent.
   grammar: string,    // optional grammar card text — B1+ only
 }
 ```
+
+### Rung — the progression ladder
+
+Every lesson climbs one of seven rungs, from bare words to extended speech. `rung`
+drives three things: `generateQuestions`' `fill_pool`/`fill_typed` routing (rungs 1–4 get
+`fill_pool`, rungs 5–7 get `fill_typed` — see Section G), the shape rules enforced by
+`npm run validate:curriculum` (`scripts/validate-curriculum.mjs`, config in
+`scripts/curriculum.config.json`), and the human-readable rung name shown in-app.
+
+| Rung | Name | Tokens/phrase | Question types allowed (R9) |
+|------|------|----------------|------------------------------|
+| 1 | Word | 1 | `match`, `phrase_list` |
+| 2 | Marked word | 1–2 | `match`, `phrase_list` |
+| 3 | Two-part phrase | 2–3 | `match`, `phrase_list`, `fill_pool` |
+| 4 | Simple sentence | 3–5 | `match`, `phrase_list`, `fill_pool`, `sentence_builder`, `true_false` |
+| 5 | Full sentence | 4–7 | + `fill_typed` |
+| 6 | Linked sentence | 6–10 | + `fill_typed` |
+| 7 | Extended speech | 8–14 | + `fill_typed` |
+
+The validator also enforces: rung climbs by at most 1 per lesson and never falls back
+(R2); rung sits inside its band's allowed range, e.g. A1 is rungs 1–3 (R8); each lesson's
+carry-over (share of its phrases' lexemes already taught earlier in the same track) meets
+the rung's minimum, and new-lexeme count stays within the rung's budget (R4/R5); and every
+lexeme in a track's lexical spine (`scripts/curriculum.config.json` →
+`tracks.<id>.spine`) appears in at least 3 lessons and reaches a lesson at rung ≥ 4 (R6/R7)
+— a word taught as a bare noun must eventually be used in a sentence. Run
+`npm run validate:curriculum -- --track <id> --verbose` for a per-lesson breakdown of
+carry-over and new-lexeme counts when authoring. Only Bath Time has a spine defined today;
+see `docs/specs/progression-ladder.md` for the full design.
 
 **Append point for new lessons:** Grep for `// ─── UTILITIES` — the `];` immediately
 before that banner closes the `LESSONS` array. Insert the new lesson object before it.
@@ -189,7 +219,7 @@ generateQuestions(lesson, weakItems, huVoiceAvail, count = 15, distractorPool = 
 // weakItems are triple-weighted in the selection pool
 // match is only generated when lesson.phrases.length >= 4; generated at most once per session
 // true_false is removed and phrase_list added if huVoiceAvail === false
-// fill_typed is replaced with fill_pool if lesson.band is A1 or A2
+// fill_typed is replaced with fill_pool if lesson.rung <= 4 (routes by rung, not band)
 // distractorPool (>= 4 phrases) supplies wrong-answer options; defaults to lesson.phrases
 ```
 

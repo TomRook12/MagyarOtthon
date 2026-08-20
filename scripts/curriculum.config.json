@@ -127,7 +127,8 @@
         "kacsa": [
           "kacsa",
           "kacsát",
-          "kacsád"
+          "kacsád",
+          "kacsám"
         ],
         "haj": [
           "haj",
@@ -141,14 +142,16 @@
           "fejed",
           "fejét",
           "fejem",
-          "fejet"
+          "fejet",
+          "fejedet"
         ],
         "fül": [
           "fül",
           "füled",
           "fülét",
           "fülem",
-          "fület"
+          "fület",
+          "füledet"
         ],
         "kéz": [
           "kéz",
@@ -186,14 +189,17 @@
           "ujjad",
           "ujját",
           "ujjaid",
-          "ujjait"
+          "ujjait",
+          "ujjadat"
         ],
         "gyere": [
           "gyere",
           "gyertek",
           "jöjj",
           "gyere ki",
-          "gyere be"
+          "gyere be",
+          "kijött",
+          "bejött"
         ],
         "ülj": [
           "ülj",
@@ -215,20 +221,23 @@
           "megmostad",
           "mosni",
           "mosakodj",
-          "megmosom"
+          "megmosom",
+          "megmostam"
         ],
         "töröl": [
           "töröld",
           "törölj",
           "törölni",
           "megtörlöm",
-          "megtöröllek"
+          "megtöröllek",
+          "megtöröltem"
         ],
         "öblít": [
           "öblítsd",
           "öblítsük",
           "öblíteni",
-          "leöblítem"
+          "leöblítem",
+          "leöblítettem"
         ],
         "meleg": [
           "meleg",

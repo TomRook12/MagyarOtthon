@@ -1,6 +1,6 @@
 # Spec: Progression Ladder — Bath Time
 
-> **Status:** Approved
+> **Status:** Done
 > **Branch:** `claude/project-progress-review-vz07qg`
 > **Approved:** 2026-08-20 — `STORAGE_KEY` v3 bump confirmed; cross-track carry-over deferred per ADR 0005
 > **Intended executor:** Sonnet 5, medium/low effort. Every rule in this spec is
@@ -50,14 +50,14 @@ R7 is the damning one: 25 of 28 spine words are taught but never used in a sente
 ## Requirements
 
 ### Must have
-- [ ] `rung` field (integer 1–7) on every Bath Time lesson
-- [ ] Bath Time rebuilt to 30 lessons following the **Lesson Map** below
-- [ ] `npm run validate:curriculum` exits 0 with zero failures
-- [ ] Every phrase reviewed by the `hungarian-teacher` skill before commit
-- [ ] `STORAGE_KEY` bumped to `magyar-otthon-stats-v3` (see **Decisions**)
-- [ ] `generateQuestions` selects question types by `rung`, not by `band`
-- [ ] `docs/app-map.md` documents the `rung` field and the rung→types table
-- [ ] `CONTEXT.md` gains a **Rung** entry in the domain glossary
+- [x] `rung` field (integer 1–7) on every Bath Time lesson
+- [x] Bath Time rebuilt to 30 lessons following the **Lesson Map** below
+- [x] `npm run validate:curriculum` exits 0 with zero failures
+- [x] Every phrase reviewed by the `hungarian-teacher` skill before commit
+- [x] `STORAGE_KEY` bumped to `magyar-otthon-stats-v3` (see **Decisions**)
+- [x] `generateQuestions` selects question types by `rung`, not by `band`
+- [x] `docs/app-map.md` documents the `rung` field and the rung→types table
+- [x] `CONTEXT.md` gains a **Rung** entry in the domain glossary
 
 ### Nice to have
 - [ ] Track Detail shows a small "builds on: kád · víz · meleg" line under each lesson
@@ -213,22 +213,22 @@ accent sensitivity and TTS rate — do not change those.
 
 Work in this order. Do not start authoring content before task 3 passes.
 
-- [ ] 1. Add `rung: number` to the lesson schema; add it to every existing lesson so the
+- [x] 1. Add `rung: number` to the lesson schema; add it to every existing lesson so the
       validator can run (temporary values are fine — they get replaced in task 4)
-- [ ] 2. Change `generateQuestions` to route `fill_pool` / `fill_typed` by `rung` not `band`
-- [ ] 3. Run `npm run validate:curriculum` and confirm it executes and reports failures
-- [ ] 4. Rewrite `LESSONS[]` for Bath Time as 30 lessons per the Lesson Map, using the
+- [x] 2. Change `generateQuestions` to route `fill_pool` / `fill_typed` by `rung` not `band`
+- [x] 3. Run `npm run validate:curriculum` and confirm it executes and reports failures
+- [x] 4. Rewrite `LESSONS[]` for Bath Time as 30 lessons per the Lesson Map, using the
       worked exemplars verbatim for ids 1–12
-- [ ] 5. Author ids 13–30, running the validator after **every two or three lessons**
-- [ ] 6. Extend `tracks.bath-time.spine` in the config with any new surface forms you use
-- [ ] 7. Set each lesson's `types` to a subset of its rung's allowed types (R9)
-- [ ] 8. Add grammar cards at ids 16, 18, 19, 22, 23 (B1+ only, per `CONTEXT.md`)
-- [ ] 9. Bump `STORAGE_KEY` to `magyar-otthon-stats-v3`
-- [ ] 10. Run the `hungarian-teacher` skill over every new or changed phrase; fix what it flags
-- [ ] 11. `npm run validate:curriculum` → 0 failures; `npm run build` → clean
-- [ ] 12. Update `docs/app-map.md`: `rung` in the lesson schema, the rung→types table, the validator
-- [ ] 13. Add a **Rung** entry to the `CONTEXT.md` domain glossary
-- [ ] 14. Add an ADR for the `STORAGE_KEY` bump as `docs/adr/0006-storage-key-v3.md`
+- [x] 5. Author ids 13–30, running the validator after **every two or three lessons**
+- [x] 6. Extend `tracks.bath-time.spine` in the config with any new surface forms you use
+- [x] 7. Set each lesson's `types` to a subset of its rung's allowed types (R9)
+- [x] 8. Add grammar cards at ids 16, 18, 19, 22, 23 (B1+ only, per `CONTEXT.md`)
+- [x] 9. Bump `STORAGE_KEY` to `magyar-otthon-stats-v3`
+- [x] 10. Run the `hungarian-teacher` skill over every new or changed phrase; fix what it flags
+- [x] 11. `npm run validate:curriculum` → 0 failures; `npm run build` → clean
+- [x] 12. Update `docs/app-map.md`: `rung` in the lesson schema, the rung→types table, the validator
+- [x] 13. Add a **Rung** entry to the `CONTEXT.md` domain glossary
+- [x] 14. Add an ADR for the `STORAGE_KEY` bump as `docs/adr/0006-storage-key-v3.md`
       (follow the format of `docs/adr/0004-v1-scope-cuts.md`)
 
 ### The authoring loop
@@ -263,13 +263,13 @@ are the spec. If one is genuinely unachievable, stop and say so rather than lowe
 
 ## Acceptance criteria
 
-- [ ] `npm run validate:curriculum` exits 0 with zero failures across all nine rules
-- [ ] Bath Time has 30 lessons, ids 1–30, rungs matching the Lesson Map exactly
-- [ ] No lesson's rung is more than 1 above its predecessor
-- [ ] Zero spine lexemes appear in fewer than 3 lessons
-- [ ] Zero spine lexemes fail to reach a rung-4 lesson
-- [ ] Lesson 9's carry-over is 100% — the first sentences use only owned words
-- [ ] `hungarian-teacher` reports no unresolved translation or pronunciation issues
-- [ ] `npm run build` passes with no errors or warnings
-- [ ] A fresh install can walk lessons 1 → 30 in order, each unlocking the next
-- [ ] `docs/app-map.md` and `CONTEXT.md` describe the `rung` field accurately
+- [x] `npm run validate:curriculum` exits 0 with zero failures across all nine rules
+- [x] Bath Time has 30 lessons, ids 1–30, rungs matching the Lesson Map exactly
+- [x] No lesson's rung is more than 1 above its predecessor
+- [x] Zero spine lexemes appear in fewer than 3 lessons
+- [x] Zero spine lexemes fail to reach a rung-4 lesson
+- [x] Lesson 9's carry-over is 100% — the first sentences use only owned words
+- [x] `hungarian-teacher` reports no unresolved translation or pronunciation issues
+- [x] `npm run build` passes with no errors or warnings
+- [x] A fresh install can walk lessons 1 → 30 in order, each unlocking the next
+- [x] `docs/app-map.md` and `CONTEXT.md` describe the `rung` field accurately

@@ -12,34 +12,39 @@ Specs written against the post-rewrite model. These describe the app as it exist
 | [bath-time-a2-c1](bath-time-a2-c1.md) | Done | 9/9 | Author Bath Time A2–C1 lessons (ids 5–21); complete the track end-to-end | — |
 | [grammar-card-results-screen](grammar-card-results-screen.md) | Done | 5/5 | Grammar card before B1+ quizzes; full results screen with missed-phrase review | — |
 | [home-screen-track-detail](home-screen-track-detail.md) | Done | 7/7 | Track-card home screen, Track Detail with band sections, Recommended Next card | — |
+| [progression-ladder](progression-ladder.md) | Done | 14/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | — |
 | [rewrite-foundation](rewrite-foundation.md) | Done | 28/28 | New Track/Band/Lesson data model, simplified stats, updated quiz engine, Bath Time A1 content, legacy code removed | — |
 
 All requirements and acceptance criteria on these specs were verified against
 `src/App.jsx` on 2026-08-20 and ticked. `npm run build` passes clean.
 
-**Bath Time is now a complete vertical slice.** Every behaviour `CONTEXT.md` defines is
-built: the full lesson loop (grammar card → quiz → results → remedial), Band Review,
-Settings, and A1–C1 content. Adding another track is content-only work — no engine
-changes should be needed. If one is, that is a signal the new track has found a genuine
-gap worth a spec of its own.
+**Bath Time is now a complete vertical slice, rebuilt as a 30-lesson, 7-rung ladder.**
+Every behaviour `CONTEXT.md` defines is built: the full lesson loop (grammar card → quiz →
+results → remedial), Band Review, Settings, and A1–C1 content that climbs gradually from
+bare words to extended speech on a lexical spine (`scripts/curriculum.config.json`),
+enforced by `npm run validate:curriculum`. Adding another track is content-only work — no
+engine changes should be needed, though `progression-ladder`'s "Open questions" section
+flags that cross-track lexical carry-over (ADR 0005) is worth revisiting once a second
+track exists. If a new track finds another genuine engine gap, that's worth a spec of its
+own.
 
 Two nice-to-haves were specced and deliberately not built, both in
 `bath-time-loop-completion`: a "now correct" indicator on the Remedial results screen,
 and a decision record for the Band Review trigger point (unnecessary — it was built
-exactly as `CONTEXT.md` describes).
+exactly as `CONTEXT.md` describes). `progression-ladder` also left two nice-to-haves
+unbuilt: a "builds on: …" line in Track Detail, and extra grammar cards at rungs 2–3.
 
 ## Approved / in flight
 
-| Spec | Status | Impl tasks | Description | Next action |
-|------|--------|-----------|-------------|-------------|
-| [progression-ladder](progression-ladder.md) | Approved | 0/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | Handed to Sonnet 5 for execution |
+_None right now._
 
 ## Next up
 
-The seven remaining tracks, as content — but **not until `progression-ladder` lands**.
-That spec reshapes what a track *is*; authoring more tracks against the current shape
-would mean redoing them. `CONTEXT.md` § TRACKS Registry lists the remaining seven:
-Bed Time, Getting Ready, Mealtimes, School Run, Park, Homework, Playing.
+The seven remaining tracks, as content, now that `progression-ladder` has landed and
+proven the rung-ladder shape on Bath Time. `CONTEXT.md` § TRACKS Registry lists the
+remaining seven: Bed Time, Getting Ready, Mealtimes, School Run, Park, Homework, Playing.
+Per ADR 0005, the second track's spec should open by evaluating whether cross-track
+lexical carry-over is worth adopting before authoring begins.
 
 ## Pre-rewrite (historical record)
 
