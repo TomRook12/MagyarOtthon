@@ -17,74 +17,74 @@ const TRACKS = [
 const LESSONS = [
   { id:1, trackId:"bath-time", band:"A1", seq:1, rung:1,
     title:"Bath Time Objects", sub:"kád · víz · szappan · sampon",
-    types:["match","phrase_list"],
+    types:["match","picture_pick"],
     phrases:[
-      {hu:"kád",       pr:"kád",          en:"bath"},
-      {hu:"víz",       pr:"víz",          en:"water"},
-      {hu:"szappan",   pr:"SOP-pon",      en:"soap"},
-      {hu:"sampon",    pr:"SHOM-pon",     en:"shampoo"},
-      {hu:"törölköző", pr:"TÖ-röl-kö-ző", en:"towel"},
-      {hu:"kacsa",     pr:"KO-cho",       en:"duck"},
-      {hu:"csap",      pr:"chop",         en:"tap"},
-      {hu:"buborék",   pr:"BU-bo-rék",    en:"bubble"},
+      {hu:"kád",       pr:"kád",          en:"bath",    icon:"kád"},
+      {hu:"víz",       pr:"víz",          en:"water",   icon:"víz"},
+      {hu:"szappan",   pr:"SOP-pon",      en:"soap",    icon:"szappan"},
+      {hu:"sampon",    pr:"SHOM-pon",     en:"shampoo", icon:"sampon"},
+      {hu:"törölköző", pr:"TÖ-röl-kö-ző", en:"towel",   icon:"törölköző"},
+      {hu:"kacsa",     pr:"KO-cho",       en:"duck",    icon:"kacsa"},
+      {hu:"csap",      pr:"chop",         en:"tap",     icon:"csap"},
+      {hu:"buborék",   pr:"BU-bo-rék",    en:"bubble",  icon:"buborék"},
     ],
     tip:"Repeat the word as you point to each object at bath time." },
 
   { id:2, trackId:"bath-time", band:"A1", seq:2, rung:1,
     title:"Body Parts", sub:"haj · fej · fül · kéz",
-    types:["match","phrase_list"],
+    types:["match","picture_pick"],
     phrases:[
-      {hu:"haj",  pr:"hoy",  en:"hair"},
-      {hu:"fej",  pr:"fey",  en:"head"},
-      {hu:"fül",  pr:"fül",  en:"ear"},
-      {hu:"kéz",  pr:"kéz",  en:"hand"},
-      {hu:"láb",  pr:"láb",  en:"foot"},
-      {hu:"arc",  pr:"orts", en:"face"},
-      {hu:"has",  pr:"hosh", en:"tummy"},
-      {hu:"ujj",  pr:"uy",   en:"finger"},
+      {hu:"haj",  pr:"hoy",  en:"hair",  icon:"haj"},
+      {hu:"fej",  pr:"fey",  en:"head",  icon:"fej"},
+      {hu:"fül",  pr:"fül",  en:"ear",   icon:"fül"},
+      {hu:"kéz",  pr:"kéz",  en:"hand",  icon:"kéz"},
+      {hu:"láb",  pr:"láb",  en:"foot",  icon:"láb"},
+      {hu:"arc",  pr:"orts", en:"face",  icon:"arc"},
+      {hu:"has",  pr:"hosh", en:"tummy", icon:"has"},
+      {hu:"ujj",  pr:"uy",   en:"finger",icon:"ujj"},
     ],
     tip:"Point to each body part as you wash it. 'Hol a füled?' then touch the ear." },
 
   { id:3, trackId:"bath-time", band:"A1", seq:3, rung:1,
     title:"Single-Word Commands", sub:"Gyere! · Ülj! · Állj! · Csitt!",
-    types:["match","phrase_list"],
+    types:["match","picture_pick"],
     phrases:[
-      {hu:"Gyere!", pr:"DYE-re", en:"Come!"},
-      {hu:"Ülj!",   pr:"ewy",    en:"Sit!"},
-      {hu:"Állj!",  pr:"áy",     en:"Stop!"},
-      {hu:"Várj!",  pr:"váry",   en:"Wait!"},
-      {hu:"Nézd!",  pr:"nézd",  en:"Look!"},
-      {hu:"Csitt!", pr:"chitt",  en:"Shh!"},
+      {hu:"Gyere!", pr:"DYE-re", en:"Come!",  icon:"gyere"},
+      {hu:"Ülj!",   pr:"ewy",    en:"Sit!",   icon:"ülj"},
+      {hu:"Állj!",  pr:"áy",     en:"Stop!",  icon:"állj"},
+      {hu:"Várj!",  pr:"váry",   en:"Wait!",  icon:"várj"},
+      {hu:"Nézd!",  pr:"nézd",  en:"Look!",   icon:"nézd"},
+      {hu:"Csitt!", pr:"chitt",  en:"Shh!",   icon:"csitt"},
     ],
     tip:"These are the natural shortened imperative forms parents use with young children. Use one every bath time." },
 
   { id:4, trackId:"bath-time", band:"A1", seq:4, rung:2,
     title:"The Little Word \"a\"", sub:"a kád · a víz · az arc",
-    types:["match","phrase_list"],
+    types:["match","picture_pick"],
     phrases:[
-      {hu:"a kád",         pr:"o kád",              en:"the bath"},
-      {hu:"a víz",         pr:"o víz",              en:"the water"},
-      {hu:"a szappan",     pr:"o SOP-pon",          en:"the soap"},
-      {hu:"a törölköző",   pr:"o TÖ-röl-kö-ző",     en:"the towel"},
-      {hu:"az arc",        pr:"oz orts",            en:"the face"},
-      {hu:"a kéz",         pr:"o kéz",              en:"the hand"},
-      {hu:"a láb",         pr:"o láb",              en:"the foot"},
-      {hu:"a haj",         pr:"o hoy",              en:"the hair"},
+      {hu:"a kád",         pr:"o kád",              en:"the bath",   icon:"kád"},
+      {hu:"a víz",         pr:"o víz",              en:"the water",  icon:"víz"},
+      {hu:"a szappan",     pr:"o SOP-pon",          en:"the soap",   icon:"szappan"},
+      {hu:"a törölköző",   pr:"o TÖ-röl-kö-ző",     en:"the towel",  icon:"törölköző"},
+      {hu:"az arc",        pr:"oz orts",            en:"the face",   icon:"arc"},
+      {hu:"a kéz",         pr:"o kéz",              en:"the hand",   icon:"kéz"},
+      {hu:"a láb",         pr:"o láb",              en:"the foot",   icon:"láb"},
+      {hu:"a haj",         pr:"o hoy",              en:"the hair",   icon:"haj"},
     ],
     tip:"The word 'a' means 'the' — it doesn't change the noun at all, it just sits in front of it. Before a vowel it becomes 'az', as in az arc." },
 
   { id:5, trackId:"bath-time", band:"A1", seq:5, rung:2,
     title:"Your Body", sub:"kezed · lábad · hajad",
-    types:["match","phrase_list"],
+    types:["match","picture_pick"],
     phrases:[
-      {hu:"kezed",  pr:"KE-zed",  en:"your hand"},
-      {hu:"lábad",  pr:"LÁ-bod",  en:"your foot"},
-      {hu:"hajad",  pr:"HO-yod",  en:"your hair"},
-      {hu:"arcod",  pr:"OR-tsod", en:"your face"},
-      {hu:"fejed",  pr:"FE-yed",  en:"your head"},
-      {hu:"füled",  pr:"FÜ-led",  en:"your ear"},
-      {hu:"hasad",  pr:"HO-shod", en:"your tummy"},
-      {hu:"ujjad",  pr:"UY-yod",  en:"your finger"},
+      {hu:"kezed",  pr:"KE-zed",  en:"your hand",  icon:"kéz"},
+      {hu:"lábad",  pr:"LÁ-bod",  en:"your foot",  icon:"láb"},
+      {hu:"hajad",  pr:"HO-yod",  en:"your hair",  icon:"haj"},
+      {hu:"arcod",  pr:"OR-tsod", en:"your face",  icon:"arc"},
+      {hu:"fejed",  pr:"FE-yed",  en:"your head",  icon:"fej"},
+      {hu:"füled",  pr:"FÜ-led",  en:"your ear",   icon:"fül"},
+      {hu:"hasad",  pr:"HO-shod", en:"your tummy", icon:"has"},
+      {hu:"ujjad",  pr:"UY-yod",  en:"your finger",icon:"ujj"},
     ],
     tip:"Notice the -d ending — it means 'your'. kéz becomes kezed the same way haj becomes hajad." },
 
@@ -609,7 +609,10 @@ function genFill(p,all){
 }
 function genMatch(phrases){
   const s=shuffle(phrases).slice(0,4);
-  return{type:"match",pairs:s.map(p=>({hu:p.hu,en:p.en})),phrase:s[0]};
+  // Icons replace English only when the whole lesson is covered — a grid mixing pictures
+  // and English words reads as a bug, not as a design.
+  const useIcons=phrases.every(p=>p.icon);
+  return{type:"match",pairs:s.map(p=>({hu:p.hu,en:p.en,icon:useIcons?p.icon:null})),phrase:s[0]};
 }
 function genReconstruct(p){
   const words=p.hu.split(" ");
@@ -625,6 +628,14 @@ function genPhraseList(p,all){
 }
 function genTyped(p){
   return{type:"fill_typed",prompt:p.en,answer:p.hu,pr:p.pr,phrase:p};
+}
+function genPicturePick(p,all){
+  if(!p.icon)return null;
+  const others=all.filter(x=>x.icon&&x.icon!==p.icon);
+  if(others.length<3)return null;           // fewer than 4 tiles is not a question
+  const distractors=shuffle(others).slice(0,3);
+  const options=shuffle([p,...distractors]).map(x=>({hu:x.hu,icon:x.icon}));
+  return{type:"picture_pick",prompt:p.hu,promptPr:p.pr,answer:p.hu,options,phrase:p};
 }
 
 function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool=null){
@@ -660,6 +671,7 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
     if(type==="fill_typed")return genTyped(p);
     if(type==="sentence_builder")return genReconstruct(p);
     if(type==="true_false")return genTF(p,dis);
+    if(type==="picture_pick")return genPicturePick(p,dis);
     return null;
   };
 
@@ -697,6 +709,104 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
 
 // ─── STYLES ────────────────────────────────────────────────────────────────
 const C={bg:"#0F1117",card:"#161822",border:"#1E2030",text:"#E8E6E1",sub:"#7A7B8A",dim:"#555668",green:"#3A8F6E",red:"#D94A4A",amber:"#E8913A"};
+
+// ─── ICONS ────────────────────────────────────────────────────────────────
+// Inline SVG so the whole set ships in the JS bundle — there is no service worker, and
+// image files would not be available offline. Each icon is a function of the track colour.
+// Keys are concepts, not phrases: "a kád", "kád" and a future "kádban" all point at `kád`.
+//
+// This section must stay below the `// ─── STYLES` banner: `scripts/validate-curriculum.mjs`
+// imports App.jsx by splitting on that exact string and evaluating only what comes before
+// it (JSX-free). These icons are JSX and reference `C`, which is defined above this banner
+// but below the split — an ICONS map placed above `// ─── STYLES` would throw `C is not
+// defined` on import. Question generators may read `phrase.icon` (a plain string, above
+// the split) but must never import or reference `ICONS`, `Icon`, or `C`.
+
+// Body parts share one figure so the learner reads "which part of this person", not
+// "what is this bean shape" — an isolated ear at 48px is unidentifiable.
+const FIG = <g stroke={C.dim} strokeWidth={2.5} fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <circle cx="32" cy="15" r="8.5"/><path d="M32 24v3"/>
+  <path d="M23 30a9 9 0 0 1 18 0v12H23z"/>
+  <path d="M23 32l-8 10 3 4M41 32l8 10-3 4"/>
+  <path d="M27 42v12M37 42v12"/><path d="M23 55h6M35 55h6"/>
+</g>;
+const ring = (x,y,r) => <circle cx={x} cy={y} r={r} stroke={C.amber} strokeWidth="2"
+  strokeDasharray="3 3" fill="none" opacity="0.8"/>;
+
+const ICONS = {
+  // — lesson 1, objects —
+  "kád": c => <><path d="M8 30h48v6a12 12 0 0 1-12 12H20A12 12 0 0 1 8 36z" fill={c} fillOpacity="0.28"/>
+    <path d="M18 30V18a5 5 0 0 1 10 0v2"/><path d="M16 48l-3 7M48 48l3 7"/></>,
+  "víz": c => <><path d="M32 8c9 12 15 19 15 27a15 15 0 0 1-30 0c0-8 6-15 15-27z" fill={c} fillOpacity="0.35"/>
+    <path d="M25 38a7 7 0 0 0 5 6"/></>,
+  "szappan": c => <><rect x="10" y="24" width="44" height="26" rx="9" fill={c} fillOpacity="0.28"/>
+    <path d="M19 24c0-4 4-7 9-7"/><circle cx="44" cy="14" r="4"/><circle cx="34" cy="9" r="2.5"/></>,
+  "sampon": c => <><rect x="18" y="24" width="26" height="32" rx="6" fill={c} fillOpacity="0.28"/>
+    <path d="M27 24v-6h8v6"/><path d="M35 12h9a5 5 0 0 1 5 5v3"/><path d="M22 36h18" strokeOpacity="0.55"/></>,
+  "törölköző": c => <><path d="M8 14h48"/>
+    <path d="M18 14v34a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4V14z" fill={c} fillOpacity="0.28"/>
+    <path d="M27 14v38M37 14v38" strokeOpacity="0.5"/></>,
+  "kacsa": c => <><path d="M14 44c0-9 8-15 17-15h6a9 9 0 0 0 9-9 9 9 0 0 0-18 0c0 2 .6 3.6 1.6 5" fill={C.amber} fillOpacity="0.3"/>
+    <path d="M14 44h30c-2 6-8 9-15 9s-13-3-15-9z" fill={C.amber} fillOpacity="0.3"/>
+    <circle cx="41" cy="17" r="1.6" fill={C.text} stroke="none"/>
+    <path d="M48 20l7 3-7 3z" fill={C.amber} fillOpacity="0.6"/></>,
+  "csap": c => <><path d="M12 20h14v10H12z" fill={c} fillOpacity="0.28"/>
+    <path d="M26 25h14a8 8 0 0 1 8 8v5"/><path d="M42 38h12"/>
+    <path d="M48 44v3M48 52v3" strokeOpacity="0.6"/><path d="M19 20v-6h12"/></>,
+  "buborék": c => <><circle cx="25" cy="36" r="14" fill={c} fillOpacity="0.28"/>
+    <circle cx="45" cy="21" r="8" fill={c} fillOpacity="0.28"/>
+    <circle cx="47" cy="43" r="5" fill={c} fillOpacity="0.28"/>
+    <circle cx="20" cy="30" r="3" fill={C.text} stroke="none" opacity="0.8"/></>,
+
+  // — lesson 2, body parts (drawn on FIG, highlighted in amber) —
+  "haj": () => <>{FIG}<path d="M23.5 13a8.5 8.5 0 0 1 17 0c0-1-2-5-8.5-5S23.5 12 23.5 13z"
+    fill={C.amber} stroke={C.amber} strokeWidth="2.5" strokeLinejoin="round"/>{ring(32,15,12.5)}</>,
+  "fej": () => <>{FIG}<circle cx="32" cy="15" r="8.5" fill={C.amber} fillOpacity="0.45"
+    stroke={C.amber} strokeWidth="2.5"/>{ring(32,15,12.5)}</>,
+  "fül": () => <>{FIG}<path d="M40 12a3.5 4.5 0 0 1 0 7" fill="none" stroke={C.amber}
+    strokeWidth="3" strokeLinecap="round"/>{ring(41,15,7)}</>,
+  "arc": () => <>{FIG}<g stroke={C.amber} strokeWidth="2.2" strokeLinecap="round">
+    <circle cx="29" cy="14" r="1.1" fill={C.amber}/><circle cx="35" cy="14" r="1.1" fill={C.amber}/>
+    <path d="M29 18.5a4 4 0 0 0 6 0" fill="none"/></g>{ring(32,15,12.5)}</>,
+  "has": () => <>{FIG}<circle cx="32" cy="36" r="5.5" fill={C.amber} fillOpacity="0.45"
+    stroke={C.amber} strokeWidth="2.5"/>{ring(32,36,9.5)}</>,
+  "kéz": () => <>{FIG}<path d="M15 42a4 4 0 0 0 8 0" fill={C.amber} fillOpacity="0.45"
+    stroke={C.amber} strokeWidth="2.5" strokeLinecap="round"/>
+    <path d="M15 42v-4M19 42v-5M23 42v-4" stroke={C.amber} strokeWidth="2.5" strokeLinecap="round"/>{ring(19,41,9)}</>,
+  "ujj": () => <>{FIG}<path d="M15 44a4 4 0 0 0 8 0" fill="none" stroke={C.dim} strokeWidth="2.5"/>
+    <path d="M19 40V29" stroke={C.amber} strokeWidth="3.5" strokeLinecap="round"/>{ring(19,35,10)}</>,
+  "láb": () => <>{FIG}<path d="M35 55h6" stroke={C.amber} strokeWidth="3.5" strokeLinecap="round"/>
+    <path d="M37 44v11" stroke={C.amber} strokeWidth="3" strokeLinecap="round"/>{ring(38,52,9)}</>,
+
+  // — lesson 3, commands (pictograms; Állj! and Várj! are deliberately unalike) —
+  "gyere": () => <><circle cx="24" cy="14" r="6"/><path d="M24 20v14M18 40l6-6 6 6M20 52l4-12M28 52l-4-12"/>
+    <path d="M34 26c5-3 9-1 11 2"/><path d="M52 30l-8-4 1 8z" fill={C.amber} stroke="none"/>
+    <path d="M44 34c3 3 7 4 10 3" stroke={C.amber} strokeOpacity="0.7"/></>,
+  "ülj": () => <><circle cx="26" cy="13" r="6"/><path d="M26 19v13h14"/>
+    <path d="M40 32v18M26 32v8h10"/><path d="M40 50h8M18 40h10v10"/><path d="M22 50v-6"/></>,
+  "állj": () => <><path d="M22 34V20a3.5 3.5 0 0 1 7 0v10" fill={C.red} fillOpacity="0.22"/>
+    <path d="M29 30V16a3.5 3.5 0 0 1 7 0v14" fill={C.red} fillOpacity="0.22"/>
+    <path d="M36 30V19a3.5 3.5 0 0 1 7 0v11" fill={C.red} fillOpacity="0.22"/>
+    <path d="M43 30v-8a3.5 3.5 0 0 1 7 0v20a12 12 0 0 1-12 12h-6a10 10 0 0 1-10-10V34" fill={C.red} fillOpacity="0.22"/></>,
+  "várj": c => <><path d="M18 8h28M18 56h28"/>
+    <path d="M22 8v6c0 8 10 12 10 18s-10 10-10 18v6" fill={c} fillOpacity="0.2"/>
+    <path d="M42 8v6c0 8-10 12-10 18s10 10 10 18v6" fill={c} fillOpacity="0.2"/>
+    <path d="M26 48c2-5 10-5 12 0z" fill={c} fillOpacity="0.55" stroke="none"/></>,
+  "nézd": c => <><path d="M6 32s10-14 26-14 26 14 26 14-10 14-26 14S6 32 6 32z" fill={c} fillOpacity="0.18"/>
+    <circle cx="32" cy="32" r="8" fill={c} fillOpacity="0.45"/>
+    <circle cx="32" cy="32" r="3" fill={C.text} stroke="none"/></>,
+  "csitt": c => <><circle cx="32" cy="30" r="20" fill={c} fillOpacity="0.14"/>
+    <circle cx="24" cy="25" r="1.6" fill={C.text} stroke="none"/>
+    <circle cx="40" cy="25" r="1.6" fill={C.text} stroke="none"/>
+    <path d="M26 38h12"/><path d="M32 14v24" stroke={C.amber} strokeWidth="4"/></>,
+};
+
+function Icon({name, color, size = 48}) {
+  const draw = ICONS[name];
+  if (!draw) return null;                       // unknown key renders nothing, never crashes
+  return <svg viewBox="0 0 64 64" width={size} height={size} fill="none" stroke={C.text}
+    strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{draw(color)}</svg>;
+}
 
 // ─── SPEECH UTILITY ──────────────────────────────────────────────────────
 function speakHu(text,band="A1"){
@@ -766,13 +876,13 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",p
 
   useEffect(()=>{if(mode!=="review")statsApi.setLastActiveLesson(lesson.id);},[]);
   useEffect(()=>{
-    if(autoPlay&&(q.type==="true_false"||q.type==="phrase_list"))speakHu(q.prompt,lesson.band);
+    if(autoPlay&&(q.type==="true_false"||q.type==="phrase_list"||q.type==="picture_pick"))speakHu(q.prompt,lesson.band);
   },[qi]);
   useEffect(()=>{if(autoPlay&&ans!==null&&q.type==="fill_typed")speakHu(q.answer,lesson.band);},[ans]);
 
   const matchItems=useMemo(()=>{
     if(q.type!=="match")return[];
-    return[...shuffle(q.pairs.map(p=>({text:p.hu,lang:"hu",key:p.hu}))),...shuffle(q.pairs.map(p=>({text:p.en,lang:"en",key:p.hu})))];
+    return[...shuffle(q.pairs.map(p=>({text:p.hu,lang:"hu",key:p.hu}))),...shuffle(q.pairs.map(p=>({text:p.en,lang:"en",key:p.hu,icon:p.icon})))];
   },[qi]);
 
   const advance=(correct)=>{if(q.phrase)statsApi.recordPhrase(q.phrase.hu,correct);if(correct)setScore(s=>s+1);else if(q.phrase)setMissed(m=>m.some(p=>p.hu===q.phrase.hu)?m:[...m,q.phrase]);};
@@ -844,7 +954,7 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",p
     </div>;
   }
 
-  const label={true_false:"True or false?",phrase_list:"What did you hear?",fill_pool:"Fill the gap",fill_typed:"Type in Hungarian",match:"Match pairs",sentence_builder:"Put in order"}[q.type]||"";
+  const label={true_false:"True or false?",phrase_list:"What did you hear?",fill_pool:"Fill the gap",fill_typed:"Type in Hungarian",match:"Match pairs",sentence_builder:"Put in order",picture_pick:"Pick the picture"}[q.type]||"";
 
   const mcBtn=(opt,i,isAns,isSel)=>{
     let st=null;if(ans!==null){if(isAns)st="correct";else if(isSel)st="wrong";}
@@ -874,8 +984,25 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",p
       {q.options.map((o,i)=>mcBtn(o,i,o===q.answer,o===ans))}
     </div>}
 
+    {q.type==="picture_pick"&&<div>
+      <div style={{fontSize:13,color:C.sub,textAlign:"center",marginBottom:10}}>Which one is it?</div>
+      <div style={{textAlign:"center",marginBottom:16}}>
+        <SpeakBtn text={q.prompt} band={lesson.band} color={color} size={28}/>
+        <div style={{fontSize:11,color:C.dim,marginTop:4,fontStyle:"italic"}}>{q.promptPr}</div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+        {q.options.map((o,i)=>{let st=null;if(ans!==null){if(o.hu===q.answer)st="correct";else if(o.hu===ans)st="wrong";}
+          return <button key={i} disabled={ans!==null} onClick={()=>{setAns(o.hu);advance(o.hu===q.answer);}}
+            style={{padding:"14px 8px",borderRadius:12,border:`2px solid ${st==="correct"?C.green:st==="wrong"?C.red:C.border}`,background:st==="correct"?`${C.green}12`:st==="wrong"?`${C.red}12`:C.card,color:st==="correct"?"#5FD4A0":st==="wrong"?"#FF8888":C.text,cursor:ans?"default":"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:6,minHeight:44}}>
+            <Icon name={o.icon} color={color} size={60}/>
+            <span style={{fontSize:14,fontWeight:700}}>{o.hu}</span>
+          </button>;})}
+      </div>
+    </div>}
+
     {q.type==="true_false"&&<div>
       <div style={{fontSize:13,color:C.sub,textAlign:"center",marginBottom:6}}>Does this Hungarian:</div>
+      {q.phrase.icon&&<div style={{textAlign:"center",marginBottom:4}}><Icon name={q.phrase.icon} color={color} size={40}/></div>}
       <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
         <div style={{fontSize:19,fontWeight:800,color:C.text}}>{q.prompt}</div>
         <SpeakBtn text={q.prompt} band={lesson.band} color={color}/>
@@ -892,6 +1019,7 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",p
 
     {q.type==="fill_pool"&&<div>
       <div style={{fontSize:13,color:C.sub,textAlign:"center"}}>Fill the missing word:</div>
+      {q.phrase.icon&&<div style={{textAlign:"center",marginTop:6}}><Icon name={q.phrase.icon} color={color} size={40}/></div>}
       <div style={{fontSize:12,color:C.dim,textAlign:"center",margin:"6px 0"}}>{q.prompt}</div>
       <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,margin:"10px 0 18px"}}>
         <div style={{fontSize:19,fontWeight:800,color:C.text}}>{q.display}</div>
@@ -928,7 +1056,7 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",p
             if(pair){const nm=[...ms.matched,pair.hu+"hu",pair.hu+"en"];setMs({sel:null,matched:nm,wrong:null});
               if(nm.length===q.pairs.length*2){q.pairs.forEach(p=>statsApi.recordPhrase(p.hu,true));setScore(s=>s+1);setAns("match_done");}}
             else{setMs({...ms,sel:null,wrong:item.text});setTimeout(()=>setMs(m=>({...m,wrong:null})),600);}
-          }} style={{padding:"12px 8px",borderRadius:11,border:`2px solid ${matched?C.green:sel?color:wr?C.red:C.border}`,background:matched?`${C.green}10`:sel?`${color}10`:wr?`${C.red}10`:C.card,color:matched?"#5FD4A0":C.text,fontSize:13,fontWeight:600,cursor:matched?"default":"pointer",opacity:matched?0.4:1,textAlign:"center"}}>{item.text}</button>;
+          }} style={{padding:"12px 8px",borderRadius:11,border:`2px solid ${matched?C.green:sel?color:wr?C.red:C.border}`,background:matched?`${C.green}10`:sel?`${color}10`:wr?`${C.red}10`:C.card,color:matched?"#5FD4A0":C.text,fontSize:13,fontWeight:600,cursor:matched?"default":"pointer",opacity:matched?0.4:1,textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center"}}>{item.icon?<Icon name={item.icon} color={color} size={38}/>:item.text}</button>;
         })}
       </div>
     </div>}
