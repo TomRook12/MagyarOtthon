@@ -272,7 +272,7 @@
     }
   },
   "rungTypes": {
-    "_comment": "Question types each rung may declare. Mirrors what the generators can actually build: genFill needs 2+ words, genReconstruct needs 3-7.",
+    "_comment": "Question types each rung may declare. Mirrors what the generators can actually build: genFill needs 2+ words, genReconstruct needs 3-7 — so sentence_builder is absent at rung 7, whose phrases start at 8 tokens and would make it decline every time.",
     "1": [
       "match",
       "phrase_list"
@@ -314,7 +314,6 @@
       "phrase_list",
       "fill_pool",
       "fill_typed",
-      "sentence_builder",
       "true_false"
     ]
   }

@@ -381,7 +381,7 @@ const LESSONS = [
 
   { id:27, trackId:"bath-time", band:"C1", seq:2, rung:7,
     title:"Idiomatic Bath Time", sub:"Csupa víz vagy! · leszel",
-    types:["fill_typed","sentence_builder"],
+    types:["fill_typed","fill_pool"],
     phrases:[
       {hu:"Csupa víz vagy megint, kacsám, de milyen tiszta leszel!", pr:"CHU-po víz vody ME-gint KO-chám de MI-yen TIS-to LE-sel", en:"You're soaking wet again, my duck, but how clean you'll be!"},
       {hu:"Tudom, hogy nem akarod, de ha megmosod a hajad, kész leszel!", pr:"TU-dom hody nem O-ko-rod de ho MEG-mo-shod o HO-yod kés LE-sel", en:"I know you don't want to, but once you wash your hair, you'll be done!"},
@@ -394,7 +394,7 @@ const LESSONS = [
 
   { id:28, trackId:"bath-time", band:"C1", seq:3, rung:7,
     title:"Telling What Happened", sub:"Megmostam · Kész volt",
-    types:["fill_typed","sentence_builder"],
+    types:["fill_typed","fill_pool"],
     phrases:[
       {hu:"Most megmostam a hajad, megtöröltem a kezed, és leöblítettem a lábad.", pr:"mosht MEG-mosh-tom o HO-yod MEG-tö-röl-tem o KE-zed és LE-öb-lí-tet-tem o LÁ-bod", en:"I just washed your hair, dried your hand, and rinsed your foot."},
       {hu:"Először kész volt a víz, aztán megmostad a kezed.", pr:"E-lő-shör kés volt o víz OZ-tán MEG-mosh-tod o KE-zed", en:"First the water was ready, then you washed your hand."},
@@ -407,18 +407,21 @@ const LESSONS = [
 
   { id:29, trackId:"bath-time", band:"C1", seq:4, rung:7,
     title:"Storytelling", sub:"A kacsa, ami… · Amikor…",
-    types:["fill_typed","sentence_builder"],
+    types:["fill_typed","fill_pool"],
     phrases:[
       {hu:"A kacsa, ami a vízben úszik, a tiéd, kacsám.", pr:"o KO-cho O-mi o VÍZ-ben Ú-sik o TI-éd KO-chám", en:"The duck that's swimming in the water is yours, my duck."},
       {hu:"Amikor kész leszel, elmesélem, hogy milyen ügyes voltál.", pr:"O-mi-kor kés LE-sel EL-me-shé-lem hody MI-yen Ü-dyesh VOL-tál", en:"When you're done, I'll tell you how clever you were."},
       {hu:"Tudom, hogy kész vagy, de ha megmosod a hajad, kész leszel.", pr:"TU-dom hody kés vody de ho MEG-mo-shod o HO-yod kés LE-sel", en:"I know you're ready, but once you wash your hair, you'll really be done."},
       {hu:"A kacsa, ami a vízben úszik, mindig ügyes és tiszta.", pr:"o KO-cho O-mi o VÍZ-ben Ú-sik MIN-dig Ü-dyesh és TIS-to", en:"The duck that swims in the water is always clever and clean."},
+      {hu:"A víz, ami a kádban van, még mindig meleg.", pr:"o víz O-mi o KÁD-bon von még MIN-dig ME-leg", en:"The water that's in the bath is still warm."},
+      {hu:"Amikor megmostad a hajad, nagyon jól csináltad, kis kacsám.", pr:"O-mi-kor MEG-mosh-tod o HO-yod NO-dyon yól CHI-nál-tod kish KO-chám", en:"When you washed your hair, you did it very well, my little duck."},
+      {hu:"Amikor kész leszel, megtörlöm a hajad, aztán a kezed.", pr:"O-mi-kor kés LE-sel MEG-tör-löm o HO-yod OZ-tán o KE-zed", en:"When you're done, I'll dry your hair, then your hand."},
     ],
     tip:"Ami (that/which) introduces a relative clause — it slots right after the noun it describes, set off by commas." },
 
   { id:30, trackId:"bath-time", band:"C1", seq:5, rung:7,
     title:"Capstone: Full Bath Time Scenario", sub:"All bands · All question types",
-    types:["match","phrase_list","fill_typed","sentence_builder","true_false"],
+    types:["match","phrase_list","fill_typed","fill_pool","true_false"],
     phrases:[
       {hu:"Gyere a kádba, mert kész a meleg víz!", pr:"DYE-re o KÁD-bo mert kés o ME-leg víz", en:"Come into the bath, because the warm water's ready!"},
       {hu:"Mosd meg a hajad, majd a kezed, aztán öblítsd le!", pr:"mosd meg o HO-yod moyd o KE-zed OZ-tán ÖB-lítsd le", en:"Wash your hair, then your hand, then rinse it off!"},
