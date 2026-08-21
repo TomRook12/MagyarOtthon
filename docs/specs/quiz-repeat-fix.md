@@ -34,134 +34,163 @@ contains five copies of `gyere` still puts two of them together most of the time
 ## Requirements
 
 ### Must have
-- [x] Phrase selection draws **without replacement**: every phrase in the pool is used once
+- [ ] Phrase selection draws **without replacement**: every phrase in the pool is used once
       before any phrase is used a second time, and so on for each subsequent cycle.
-- [ ] No two adjacent questions in the returned array share a `phrase.hu`. **Not fully met —
-      see "Measured gap" below.** ~10–17% of 100-run samples of lesson 3 still contain one
-      adjacent pair.
-- [x] Weak items keep their extra weight — they should still appear more often across the
+- [ ] A draw that produces no question does **not** consume its phrase's slot in the cycle.
+- [ ] No two adjacent questions in the returned array share a `phrase.hu`, in every run
+      where any arrangement of that run's questions could avoid it.
+- [ ] Weak items keep their extra weight — they should still appear more often across the
       run, they just may not appear twice in a row.
-- [x] `generateQuestions` still returns exactly `count` questions (or all it can build) and
+- [ ] `generateQuestions` still returns exactly `count` questions (or all it can build) and
       never throws on a one-phrase Remedial pool.
-- [x] `npm run validate:curriculum` passes — R10 exercises the real `generateQuestions`.
+- [ ] `npm run validate:curriculum` passes — R10 exercises the real `generateQuestions`.
 
 ### Nice to have
-- [ ] Avoid the identical `phrase` + `type` pair appearing twice in a row even where the
-      phrase differs — measured, not met in every run (see "Measured gap" below).
-
-### Measured gap (found during verification, not fixed — implementation follows the Design
-section verbatim per instructions)
-
-Across four independent 100-run samples of lesson 3, `phrase.hu` adjacency still occurred in
-10–17 runs per sample (14–18 raw adjacent pairs), and 8–17 runs per sample were missing at
-least one of the 6 phrases entirely. Root causes, both inherent to the Design section as
-written rather than to a transcription error:
-
-1. **`separateAdjacent` can only swap forward.** When the colliding pair lands at the last
-   index (very common for a 15-question array, since `qs` is already exactly `count` long
-   before `slice` — there's no surplus to draw a swap candidate from), `findIndex` has
-   nothing at `k > i` to find and the guard `if (j > i)` correctly declines to swap, leaving
-   the tail pair unresolved. The spec's own notes anticipated this only for a one-phrase
-   Remedial pool; it also happens on an ordinary 6-phrase, 15-question lesson run whenever
-   the last draw collides.
-2. **`nextPhrase()` advances the bag even when the draw is discarded.** For lesson 3
-   (`types: ["match","phrase_list"]`), the top-up `while` loop's `type` is 50/50 `match` /
-   `phrase_list`, but `match` always declines after its first use. Each declined `match`
-   attempt still calls `nextPhrase()` and consumes that phrase's bag slot for the cycle, so
-   the phrase does not get another draw until the bag reshuffles. If the run reaches `count`
-   before that phrase's next cycle comes up, it is absent from the output entirely.
-
-Both are consequences of instructions to keep the two loops, the `attempts < 200` guard, and
-`separateAdjacent`'s single forward-only pass exactly as designed. Reported here per the
-task's request to say plainly, not work around silently, when a spec's acceptance criteria
-aren't actually met by its own algorithm.
+- [ ] Some randomness in how equally-sized phrase groups are ordered, so two runs of the
+      same lesson do not produce the same phrase sequence.
 
 ### Out of scope
 - Changing which phrases are chosen for a lesson (weak-item weighting policy stays as is).
 - Any change to the six generators themselves.
 - Guaranteeing a minimum gap larger than one question.
 
+
 ## Design
 
-Three focused changes inside `generateQuestions`, all above the `// ─── STYLES` banner so
-the validator keeps importing them.
+> **Revised 2026-08-21, after the first implementation measured itself and failed.** The
+> original design used a forward-only swap pass and a bag cursor that advanced on every
+> draw. Implemented verbatim, it left an adjacent pair in 10–17 of every 100 lesson-3 runs
+> and dropped a phrase entirely from 8–17 of them. Both causes are recorded in
+> "Why the first design failed" below; keep that section, it is the reason this one looks
+> the way it does.
 
-**1. Cycle the pool instead of sampling it.** Replace the two independent `pool[random]`
-draws with a cursor over a shuffled copy that reshuffles when exhausted:
+Three changes inside `generateQuestions`, all above the `// ─── STYLES` banner so the
+validator keeps importing them.
+
+**1. Cycle the pool instead of sampling it — and only consume a phrase that was used.**
 
 ```js
 // Draw phrases without replacement, reshuffling each time the pool runs dry, so a
 // 6-phrase lesson covers all 6 before repeating any — random sampling was giving one
 // phrase five slots and another none.
 let bag = shuffle(pool), bi = 0;
-const nextPhrase = () => {
-  if (bi >= bag.length) { bag = shuffle(pool); bi = 0; }
-  return bag[bi++];
+const peekPhrase = () => { if (bi >= bag.length) { bag = shuffle(pool); bi = 0; } return bag[bi]; };
+
+// A generator that declines must not burn the phrase's turn. `match` declines every time
+// after its first use, so on a two-type lesson roughly half the draws are discarded — and
+// advancing the cursor on those was silently dropping phrases from the run entirely.
+const build = (type) => {
+  if (type === "match") return gen(type, null);   // genMatch chooses its own four phrases
+  const q = gen(type, peekPhrase());
+  if (q) bi++;                                    // commit only on a produced question
+  return q;
 };
 ```
 
+Both loops call `build(type)` and push whatever it returns if truthy. `match` is handled
+before any draw, because `genMatch` ignores the phrase argument entirely — committing a
+phrase for it would drop that phrase from the cycle for nothing.
+
 `pool` still contains the weak-item duplicates, so a weak phrase legitimately occupies
-three of the bag's slots per cycle and is drawn three times as often. Reshuffling on
-exhaustion means cycle boundaries do not repeat in a fixed order.
+three of the bag's slots per cycle and is drawn three times as often.
 
-**2. Keep the existing structure otherwise.** The two loops (the first pass over `types`,
-then the top-up `while`) both call `nextPhrase()` instead of sampling. The `match` special
-case, the `attempts < 200` guard, and the empty-pool fallback are untouched.
+**2. Keep the rest of the structure.** The two loops (the first pass over `types`, then the
+top-up `while`), the `attempts < 200` guard, and the empty-pool fallback are untouched
+apart from calling `build`.
 
-**3. Separate adjacent duplicates after the shuffle.** Add a small pass applied to the
-shuffled array before `slice`:
+**3. Reorder greedily instead of swapping.** Replace the shuffled array's order entirely:
 
 ```js
-// A phrase may repeat inside a run — it may not repeat back to back.
-function separateAdjacent(qs) {
-  const key = q => q.type === "match" ? null : q.phrase?.hu ?? null;
-  for (let i = 1; i < qs.length; i++) {
-    if (key(qs[i]) === null || key(qs[i]) !== key(qs[i-1])) continue;
-    // find the nearest later question that differs from both neighbours and swap it in
-    let j = qs.findIndex((q, k) => k > i &&
-      key(q) !== key(qs[i-1]) &&
-      (k + 1 >= qs.length || key(q) !== key(qs[k+1])));
-    if (j > i) [qs[i], qs[j]] = [qs[j], qs[i]];
+// Reorder so no two adjacent questions drill the same phrase. Greedy: repeatedly take the
+// phrase with the most questions left, unless that is the phrase just placed, in which case
+// take the runner-up. This succeeds whenever any arrangement can — i.e. unless one phrase
+// holds more than half the slots, which is exactly the single-phrase Remedial case.
+function separateAdjacent(qs){
+  const key=q=>q.type==="match"?null:(q.phrase?.hu??null);
+  const groups=new Map();
+  for(const q of qs){const k=key(q);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(q);}
+  // `match` covers four phrases and reports only s[0], so it belongs to no phrase — hold
+  // those aside as filler that can separate any pair.
+  const free=groups.get(null)||[]; groups.delete(null);
+  const out=[]; let prev=null;
+  while(groups.size||free.length){
+    let best=null;
+    for(const [k,arr] of groups)
+      if(k!==prev&&(best===null||arr.length>groups.get(best).length))best=k;
+    if(best===null){
+      if(free.length){out.push(free.pop());prev=null;continue;}
+      best=groups.keys().next().value;   // only `prev` is left — unavoidable, and correct
+    }                                    // for a Remedial pool of one phrase
+    const arr=groups.get(best);
+    out.push(arr.pop());
+    if(!arr.length)groups.delete(best);
+    prev=best;
   }
-  return qs;
+  return out;
 }
 ```
 
+Why greedy rather than swapping: a swap pass can only fix a collision by finding somewhere
+else to put one of the two questions, and at the **last index there is nowhere later to
+look** — `qs` is already exactly `count` long, so there is no surplus. That single blind
+spot accounted for most of the measured failures. Rebuilding the order from scratch has no
+blind spot: taking the largest remaining group each step is the standard optimal strategy
+for this rearrangement, and it fails only when one phrase genuinely holds more than half
+the slots.
+
 Notes the implementer must respect:
 
-- `match` covers four phrases at once and its `phrase` field is only `s[0]`; treat it as
-  having no key so it never blocks or is blocked.
-- Swapping can only fail when the pool genuinely cannot avoid it (a one-phrase Remedial
-  pool). In that case leave the order alone rather than looping — the guard is `if (j > i)`,
-  and a Remedial on a single missed phrase is *meant* to hammer that phrase.
-- Do the pass on the shuffled array, then `slice(0, count)`. Slicing first would let the
-  cut reintroduce an adjacent pair at the boundary — it cannot here, but keep the order.
+- `separateAdjacent` now **returns a new array** rather than mutating in place. Call it as
+  `separateAdjacent(shuffle(qs)).slice(0, count)`.
+- The `prev = null` after placing a `match` is deliberate: a match question separates two
+  instances of the same phrase perfectly well, so the phrase before it is not a constraint
+  on the phrase after it.
+- The final fallback (`groups.keys().next().value`) is what makes a one-phrase Remedial
+  pool work. It is meant to hammer that phrase; do not "fix" it.
+
+### Why the first design failed
+
+Keep this section. It is the evidence for the two rules above, measured on the real code.
+
+1. **Forward-only swap.** `qs.findIndex((q,k) => k > i && …)` has nothing to find when the
+   collision is at the last index, and the `if (j > i)` guard then correctly declines to
+   swap — leaving the pair in place. Common on an ordinary 15-question run, not just on the
+   Remedial pool the original notes anticipated.
+2. **Bag cursor advanced on declined draws.** On lesson 3 the top-up loop picks `match` or
+   `phrase_list` 50/50, and `match` declines after its first use. Every declined attempt
+   still consumed a phrase's slot, so that phrase got no further draw until the bag
+   reshuffled — and the run often hit `count` first, leaving the phrase absent.
+
+Measured before the fix, across four independent 100-run samples of lesson 3: 10–17 runs
+per sample contained an adjacent pair, 8–17 runs were missing at least one of the 6
+phrases.
 
 ### Effect on lesson 3
 
-| | Today | After |
+| | Before any fix | After |
 |---|---|---|
-| Distinct phrases seen | typically 4 of 6 | all 6, twice each, plus 2 |
+| Distinct phrases seen | typically 4 of 6 | all 6, every run |
 | Adjacent duplicates | ~4 per run | 0 |
 | `gyere` appearances | 0–5, unpredictable | 2 (3 if flagged weak) |
 
 ## Implementation tasks
 
-- [x] Add the `nextPhrase()` bag cursor in `generateQuestions`; replace both `pool[random]`
-      draws with it.
-- [x] Add `separateAdjacent()` next to `shuffle()` in `// ─── UTILITIES` and call it on the
-      shuffled result before `slice`.
-- [x] Run `npm run validate:curriculum` — all rules pass, R10 in particular.
-- [x] Run `npm run build` — clean.
+- [ ] Replace `nextPhrase()` with `peekPhrase()` + the `build(type)` helper that commits the
+      cursor only on a produced question and handles `match` without a draw.
+- [ ] Point both selection loops at `build(type)`.
+- [ ] Replace `separateAdjacent()` in `// ─── UTILITIES` with the greedy rebuild; call it as
+      `separateAdjacent(shuffle(qs)).slice(0, count)`.
+- [ ] Run `npm run validate:curriculum` — all rules pass, R10 in particular.
+- [ ] Run `npm run build` — clean.
+- [ ] Re-run the verification script from the first attempt and record the new numbers in
+      this spec. The adjacency and coverage counts must both be zero across 4 × 100 runs.
 - [ ] Manual check: open lesson 3, play through all 15 questions, confirm no phrase appears
-      twice in a row and all 6 phrases appear. **Not done as an interactive browser check —
-      no browser available in this environment.** Verified instead with a scripted equivalent
-      (100+ generated runs); see "Measured gap" above and the Acceptance criteria below —
-      this does not hold on every run.
-- [x] Manual check: fail a lesson, start the Remedial with exactly one missed phrase, and
+      twice in a row and all 6 phrases appear.
+- [ ] Manual check: fail a lesson, start the Remedial with exactly one missed phrase, and
       confirm the 8-question run still works (repeats expected and correct here).
-- [x] Update `docs/app-map.md` Section G — the `generateQuestions` entry should state that
-      phrases are drawn without replacement and no phrase repeats back to back.
+- [ ] Update `docs/app-map.md` Section G — the `generateQuestions` entry should state that
+      phrases are drawn without replacement, that a declined draw does not consume its
+      phrase, and that no phrase repeats back to back.
 
 ## Open questions
 
@@ -169,14 +198,10 @@ None.
 
 ## Acceptance criteria
 
-- [ ] Across 100 generated runs of lesson 3 (6 phrases), zero runs contain two consecutive
-      questions with the same `phrase.hu`. **Measured: 10–17 of 100 runs still had one
-      adjacent pair, across four separate 100-run samples. See "Measured gap" above.**
-- [ ] In the same 100 runs, every one of the 6 phrases appears at least once in every run.
-      **Measured: 8–17 of 100 runs were missing at least one phrase, across four separate
-      100-run samples. See "Measured gap" above.**
-- [x] A Remedial pool of one phrase still returns 8 questions and does not hang. Measured:
-      8 questions returned in ~0–1ms.
-- [x] A weak phrase (`wrong >= right`) still appears roughly three times as often as a
-      non-weak one across many runs. Measured: ratio ≈ 3.0–3.1 across four 200-run samples.
-- [x] `npm run validate:curriculum` and `npm run build` both pass.
+- [ ] Across 4 × 100 generated runs of lesson 3 (6 phrases), **zero** runs contain two
+      consecutive questions with the same `phrase.hu`.
+- [ ] In the same runs, **zero** runs are missing any of the 6 phrases.
+- [ ] A Remedial pool of one phrase still returns 8 questions and does not hang.
+- [ ] A weak phrase (`wrong >= right`) still appears roughly three times as often as a
+      non-weak one across many runs.
+- [ ] `npm run validate:curriculum` and `npm run build` both pass.
