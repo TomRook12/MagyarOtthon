@@ -34,18 +34,47 @@ contains five copies of `gyere` still puts two of them together most of the time
 ## Requirements
 
 ### Must have
-- [ ] Phrase selection draws **without replacement**: every phrase in the pool is used once
+- [x] Phrase selection draws **without replacement**: every phrase in the pool is used once
       before any phrase is used a second time, and so on for each subsequent cycle.
-- [ ] No two adjacent questions in the returned array share a `phrase.hu`.
-- [ ] Weak items keep their extra weight — they should still appear more often across the
+- [ ] No two adjacent questions in the returned array share a `phrase.hu`. **Not fully met —
+      see "Measured gap" below.** ~10–17% of 100-run samples of lesson 3 still contain one
+      adjacent pair.
+- [x] Weak items keep their extra weight — they should still appear more often across the
       run, they just may not appear twice in a row.
-- [ ] `generateQuestions` still returns exactly `count` questions (or all it can build) and
+- [x] `generateQuestions` still returns exactly `count` questions (or all it can build) and
       never throws on a one-phrase Remedial pool.
-- [ ] `npm run validate:curriculum` passes — R10 exercises the real `generateQuestions`.
+- [x] `npm run validate:curriculum` passes — R10 exercises the real `generateQuestions`.
 
 ### Nice to have
 - [ ] Avoid the identical `phrase` + `type` pair appearing twice in a row even where the
-      phrase differs — already implied, but assert it in the manual check.
+      phrase differs — measured, not met in every run (see "Measured gap" below).
+
+### Measured gap (found during verification, not fixed — implementation follows the Design
+section verbatim per instructions)
+
+Across four independent 100-run samples of lesson 3, `phrase.hu` adjacency still occurred in
+10–17 runs per sample (14–18 raw adjacent pairs), and 8–17 runs per sample were missing at
+least one of the 6 phrases entirely. Root causes, both inherent to the Design section as
+written rather than to a transcription error:
+
+1. **`separateAdjacent` can only swap forward.** When the colliding pair lands at the last
+   index (very common for a 15-question array, since `qs` is already exactly `count` long
+   before `slice` — there's no surplus to draw a swap candidate from), `findIndex` has
+   nothing at `k > i` to find and the guard `if (j > i)` correctly declines to swap, leaving
+   the tail pair unresolved. The spec's own notes anticipated this only for a one-phrase
+   Remedial pool; it also happens on an ordinary 6-phrase, 15-question lesson run whenever
+   the last draw collides.
+2. **`nextPhrase()` advances the bag even when the draw is discarded.** For lesson 3
+   (`types: ["match","phrase_list"]`), the top-up `while` loop's `type` is 50/50 `match` /
+   `phrase_list`, but `match` always declines after its first use. Each declined `match`
+   attempt still calls `nextPhrase()` and consumes that phrase's bag slot for the cycle, so
+   the phrase does not get another draw until the bag reshuffles. If the run reaches `count`
+   before that phrase's next cycle comes up, it is absent from the output entirely.
+
+Both are consequences of instructions to keep the two loops, the `attempts < 200` guard, and
+`separateAdjacent`'s single forward-only pass exactly as designed. Reported here per the
+task's request to say plainly, not work around silently, when a spec's acceptance criteria
+aren't actually met by its own algorithm.
 
 ### Out of scope
 - Changing which phrases are chosen for a lesson (weak-item weighting policy stays as is).
@@ -118,17 +147,20 @@ Notes the implementer must respect:
 
 ## Implementation tasks
 
-- [ ] Add the `nextPhrase()` bag cursor in `generateQuestions`; replace both `pool[random]`
+- [x] Add the `nextPhrase()` bag cursor in `generateQuestions`; replace both `pool[random]`
       draws with it.
-- [ ] Add `separateAdjacent()` next to `shuffle()` in `// ─── UTILITIES` and call it on the
+- [x] Add `separateAdjacent()` next to `shuffle()` in `// ─── UTILITIES` and call it on the
       shuffled result before `slice`.
-- [ ] Run `npm run validate:curriculum` — all rules pass, R10 in particular.
-- [ ] Run `npm run build` — clean.
+- [x] Run `npm run validate:curriculum` — all rules pass, R10 in particular.
+- [x] Run `npm run build` — clean.
 - [ ] Manual check: open lesson 3, play through all 15 questions, confirm no phrase appears
-      twice in a row and all 6 phrases appear.
-- [ ] Manual check: fail a lesson, start the Remedial with exactly one missed phrase, and
+      twice in a row and all 6 phrases appear. **Not done as an interactive browser check —
+      no browser available in this environment.** Verified instead with a scripted equivalent
+      (100+ generated runs); see "Measured gap" above and the Acceptance criteria below —
+      this does not hold on every run.
+- [x] Manual check: fail a lesson, start the Remedial with exactly one missed phrase, and
       confirm the 8-question run still works (repeats expected and correct here).
-- [ ] Update `docs/app-map.md` Section G — the `generateQuestions` entry should state that
+- [x] Update `docs/app-map.md` Section G — the `generateQuestions` entry should state that
       phrases are drawn without replacement and no phrase repeats back to back.
 
 ## Open questions
@@ -138,9 +170,13 @@ None.
 ## Acceptance criteria
 
 - [ ] Across 100 generated runs of lesson 3 (6 phrases), zero runs contain two consecutive
-      questions with the same `phrase.hu`.
+      questions with the same `phrase.hu`. **Measured: 10–17 of 100 runs still had one
+      adjacent pair, across four separate 100-run samples. See "Measured gap" above.**
 - [ ] In the same 100 runs, every one of the 6 phrases appears at least once in every run.
-- [ ] A Remedial pool of one phrase still returns 8 questions and does not hang.
-- [ ] A weak phrase (`wrong >= right`) still appears roughly three times as often as a
-      non-weak one across many runs.
-- [ ] `npm run validate:curriculum` and `npm run build` both pass.
+      **Measured: 8–17 of 100 runs were missing at least one phrase, across four separate
+      100-run samples. See "Measured gap" above.**
+- [x] A Remedial pool of one phrase still returns 8 questions and does not hang. Measured:
+      8 questions returned in ~0–1ms.
+- [x] A weak phrase (`wrong >= right`) still appears roughly three times as often as a
+      non-weak one across many runs. Measured: ratio ≈ 3.0–3.1 across four 200-run samples.
+- [x] `npm run validate:curriculum` and `npm run build` both pass.

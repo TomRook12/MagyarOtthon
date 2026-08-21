@@ -443,6 +443,19 @@ function getRecommendedNext(stats){
   return trackLessons.find(l=>!lessonScores[String(l.id)]?.passed&&isUnlocked(l,lessonScores))||null;
 }
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+// A phrase may repeat inside a run — it may not repeat back to back.
+function separateAdjacent(qs){
+  const key=q=>q.type==="match"?null:(q.phrase?.hu??null);
+  for(let i=1;i<qs.length;i++){
+    if(key(qs[i])===null||key(qs[i])!==key(qs[i-1]))continue;
+    // find the nearest later question that differs from both neighbours and swap it in
+    let j=qs.findIndex((q,k)=>k>i&&
+      key(q)!==key(qs[i-1])&&
+      (k+1>=qs.length||key(q)!==key(qs[k+1])));
+    if(j>i)[qs[i],qs[j]]=[qs[j],qs[i]];
+  }
+  return qs;
+}
 function normalize(s,accentSensitive=false){
   const clean=s.replace(/[!?.,:;'"¡¿…]/g,"").toLowerCase().trim();
   if(accentSensitive)return clean;
@@ -609,6 +622,15 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
   let pool=[...all];
   if(weakItems.length>0)pool=[...pool,...weakItems,...weakItems];
 
+  // Draw phrases without replacement, reshuffling each time the pool runs dry, so a
+  // 6-phrase lesson covers all 6 before repeating any — random sampling was giving one
+  // phrase five slots and another none.
+  let bag=shuffle(pool),bi=0;
+  const nextPhrase=()=>{
+    if(bi>=bag.length){bag=shuffle(pool);bi=0;}
+    return bag[bi++];
+  };
+
   let matchUsed=false;
   const gen=(type,p)=>{
     if(type==="match"){if(matchUsed||all.length<4)return null;matchUsed=true;return genMatch(all);}
@@ -623,7 +645,7 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
   const qs=[];
   for(const type of types){
     if(qs.length>=count)break;
-    const p=pool[Math.floor(Math.random()*pool.length)];
+    const p=nextPhrase();
     const q=gen(type,p);
     if(q)qs.push(q);
   }
@@ -631,7 +653,7 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
   while(qs.length<count&&attempts<200){
     attempts++;
     const type=types[Math.floor(Math.random()*types.length)];
-    const p=pool[Math.floor(Math.random()*pool.length)];
+    const p=nextPhrase();
     const q=gen(type,p);
     if(q)qs.push(q);
   }
@@ -641,7 +663,7 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
     const fallback=earlyRung?(x)=>genPhraseList(x,dis):genTyped;
     for(const x of pool.slice(0,count))qs.push(fallback(x));
   }
-  return shuffle(qs).slice(0,count);
+  return separateAdjacent(shuffle(qs)).slice(0,count);
 }
 
 // ─── STYLES ────────────────────────────────────────────────────────────────
