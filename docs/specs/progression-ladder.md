@@ -112,7 +112,7 @@ lexeme budget, they just are not required to recur.
 **When you inflect a spine word into a form not yet listed, add the form to the config.**
 That is expected and normal. Do not work around a missing form by avoiding the word.
 
-### The nine rules
+### The ten rules
 
 All enforced by `npm run validate:curriculum`:
 
@@ -127,10 +127,19 @@ All enforced by `npm run validate:curriculum`:
 | R7 | every spine lexeme reaches a lesson at rung ≥ 4 |
 | R8 | rung sits inside its band's allowed range |
 | R9 | declared `types` are buildable at that rung |
+| R10 | every declared type survives **real** question generation |
 
 R9 matters more than it looks: `genReconstruct` needs 3–7 words and `genFill` needs 2+, so
 declaring `sentence_builder` on a single-word lesson produces a generator that silently
 declines. Matching types to rungs means fewer declined generations and better quizzes.
+
+**R10 is the backstop for the whole class of bug R9 can only approximate.** R9 checks a
+declaration against a table; R10 runs the real `generateQuestions` 120 times per lesson
+under a seeded PRNG and fails any declared type that never appears. It was written after
+all four rung-7 lessons were found declaring `sentence_builder` that could never fire —
+R9's table said it was allowed, and the lessons silently ran on one question type. Prefer
+adding to R10's reach over widening R9's table: R9 encodes what we believe, R10 observes
+what happens.
 
 ### Lesson Map — 30 lessons
 

@@ -238,6 +238,12 @@ empty question array and crash `QuizEngine`.
 **Never** call `gen*` functions directly from components. All quiz question creation goes
 through `generateQuestions`.
 
+**Generators decline silently, so declaring a type does not mean it will appear.** If you
+add a generator or change a length constraint, `npm run validate:curriculum` rule R10 will
+catch lessons whose declared types can no longer be built — it runs the real
+`generateQuestions` per lesson and fails any type that never surfaces. Run it after any
+change to this section.
+
 ---
 
 ## H. Unlock Logic

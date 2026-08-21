@@ -18,15 +18,39 @@ const args = process.argv.slice(2);
 const only = args.includes("--track") ? args[args.indexOf("--track") + 1] : null;
 const verbose = args.includes("--verbose");
 
-// LESSONS lives in App.jsx above the STYLES banner, which is JSX-free.
-async function loadLessons() {
+// LESSONS and the question engine both live in App.jsx above the STYLES banner,
+// which is JSX-free. We import the real generateQuestions rather than modelling what
+// it does — R10 below depends on exercising the actual code path.
+async function loadApp() {
   const src = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
   const logic = src.split("// ─── STYLES")[0].replace(/^import .*$/m, "");
   const stub = "const useState=()=>[],useEffect=()=>{},useCallback=f=>f,useMemo=f=>f,useRef=()=>({});" +
                "const localStorage={getItem:()=>null,setItem:()=>{}};";
-  const mod = await import("data:text/javascript;base64," +
-    Buffer.from(stub + logic + "\nexport {LESSONS};").toString("base64"));
-  return mod.LESSONS;
+  return import("data:text/javascript;base64," +
+    Buffer.from(stub + logic + "\nexport {LESSONS, generateQuestions};").toString("base64"));
+}
+
+// Deterministic PRNG so R10 gives the same answer on every run and in CI.
+function withSeededRandom(seed, fn) {
+  const real = Math.random;
+  let s = seed >>> 0;
+  Math.random = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+  try { return fn(); } finally { Math.random = real; }
+}
+
+// R10 — actually generate quizzes for this lesson and see which types come out.
+// A declared type that never appears is dead weight: the generator declines it every
+// time (genReconstruct needs 3-7 words, genFill needs 2+, genMatch needs 4 phrases),
+// and the lesson silently runs on fewer types than it claims.
+const GENERATION_RUNS = 120;
+function observedTypes(generateQuestions, lesson) {
+  const seen = new Map();
+  withSeededRandom(20260821, () => {
+    for (let i = 0; i < GENERATION_RUNS; i++)
+      for (const q of generateQuestions(lesson, [], true, 15, lesson.phrases))
+        seen.set(q.type, (seen.get(q.type) || 0) + 1);
+  });
+  return seen;
 }
 
 const norm = s => s.toLowerCase().replace(/[!?.,:;"'…—–]/g, " ").replace(/\s+/g, " ").trim();
@@ -82,6 +106,21 @@ function validateTrack(trackId, lessons, spine) {
         note(l.id, "R3", `"${p.hu}" is ${n} token(s); rung ${rung} (${R.name}) allows ${R.minTokens}–${R.maxTokens}`);
     }
 
+    // R10 — every declared type must actually survive generation
+    let producedTypes = "—";
+    if ((l.types || []).length) {
+      const seen = observedTypes(generateQuestions, l);
+      const subs = cfg.typeSubstitutions || {};
+      for (const t of l.types) {
+        const accepted = subs[t] || [t];
+        if (!accepted.some(a => seen.has(a))) {
+          const got = [...seen.entries()].map(([k, v]) => `${k}×${v}`).join(", ") || "nothing";
+          note(l.id, "R10", `type "${t}" never generated in ${GENERATION_RUNS} quizzes — the generator declines every phrase. Produced: ${got}`);
+        }
+      }
+      producedTypes = [...seen.keys()].sort().join(",");
+    }
+
     // R9 — declared question types must be buildable at this rung
     const allowed = cfg.rungTypes[String(rung)] || [];
     if (rungOK) for (const t of (l.types || []))
@@ -102,7 +141,7 @@ function validateTrack(trackId, lessons, spine) {
 
     if (verbose)
       console.log(`  ${String(l.id).padStart(2)} r${rung ?? "?"} ${String(Math.round(carry * 100) + "%").padStart(4)} carry` +
-        `  +${String(fresh.length).padStart(2)} new   ${l.title}`);
+        `  +${String(fresh.length).padStart(2)} new  ${producedTypes.padEnd(46)} ${l.title}`);
 
     for (const x of lexemes) {
       if (!(x in spine)) continue;
@@ -126,7 +165,7 @@ function validateTrack(trackId, lessons, spine) {
   }
 }
 
-const LESSONS = await loadLessons();
+const { LESSONS, generateQuestions } = await loadApp();
 const tracks = Object.keys(cfg.tracks).filter(t => !only || t === only);
 if (only && !tracks.length) { console.error(`No spine defined for track "${only}"`); process.exit(2); }
 
@@ -147,6 +186,7 @@ const RULES = {
   R7: "every spine lexeme reaches a sentence",
   R8: "rung sits inside its band's range",
   R9: "question types are buildable at the rung",
+  R10: "every declared type survives real question generation",
 };
 
 console.log("\n" + "─".repeat(60));

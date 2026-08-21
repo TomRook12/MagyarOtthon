@@ -316,5 +316,12 @@
       "fill_typed",
       "true_false"
     ]
+  },
+  "typeSubstitutions": {
+    "_comment": "R10 only. Declaring the key is satisfied by observing any listed type, covering routing generateQuestions performs on purpose.",
+    "fill_typed": [
+      "fill_typed",
+      "fill_pool"
+    ]
   }
 }
