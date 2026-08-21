@@ -171,7 +171,6 @@ const LESSONS = [
       {hu:"Hol a szappan?",                    pr:"hol o SOP-pon",              en:"Where's the soap?"},
       {hu:"Add a szappant!",                   pr:"odd o SOP-pont",             en:"Give me the soap!"},
       {hu:"Mosd meg a hajad samponnal!",       pr:"mosd meg o HO-yod SHOM-pon-nol", en:"Wash your hair with shampoo!"},
-      {hu:"A szappan a kádban.",               pr:"o SOP-pon o KÁD-bon",        en:"The soap is in the bath."},
       {hu:"Nézd a buborékot!",                 pr:"nézd o BU-bo-ré-kot",       en:"Look at the bubble!"},
     ],
     tip:"Add means 'give' — a new little verb, still built from words you already know." },
@@ -275,7 +274,7 @@ const LESSONS = [
       {hu:"Kész vagy, megmostad a füled?", pr:"kés vody MEG-mosh-tod o FÜ-led", en:"Are you ready, did you wash your ear?"},
       {hu:"Hol volt a kacsa?",         pr:"hol volt o KO-cho",         en:"Where was the duck?"},
     ],
-    grammar:"Hungarian past tense adds -t or -tt to the verb stem, plus an ending that encodes who did it: mos → megmostad (you washed it), megmostam (I washed it). Töröl and öblít follow the same pattern: megtöröltem, leöblítettem. The igekötő prefixes (meg, le) you already know attach to the front of the whole past form.",
+    grammar:"Hungarian past tense adds -t or -tt to the verb stem, plus an ending that encodes who did it: mos → megmostad (you washed it), megmostam (I washed it). Töröl and öblít follow the same pattern: megtöröltem, leöblítettem. The igekötő prefixes (meg, le) you already know attach to the front of the whole past form. Van is irregular: its past is volt (was), as in Hol volt a kacsa?",
     tip:"Listen for -am/-tam (I) versus -ad/-tad (you) on the end of the verb." },
 
   { id:20, trackId:"bath-time", band:"B1", seq:6, rung:5,
@@ -298,7 +297,7 @@ const LESSONS = [
     phrases:[
       {hu:"Megmostad már a haját?",       pr:"MEG-mosh-tod már o HO-yát", en:"Have you washed her/his hair yet?"},
       {hu:"Még nem, mindjárt kész.",      pr:"még nem MIND-yárt kés",     en:"Not yet, almost done."},
-      {hu:"A kádból már kijött, kint van.", pr:"o KÁD-ból már KI-yött kint von", en:"She/he's already out of the bath."},
+      {hu:"A kádból már kijött, kint van.", pr:"o KÁD-ból már KI-yött kint von", en:"She/he's already out of the bath, she/he's outside."},
       {hu:"Még benn van a vízben.",       pr:"még ben von o VÍZ-ben",     en:"She/he's still in the water."},
       {hu:"Nem hideg a víz, jó meleg.",   pr:"nem HI-deg o víz yó ME-leg", en:"The water's not cold, it's nice and warm."},
       {hu:"Megmostad a haját, ügyes vagy!", pr:"MEG-mosh-tod o HO-yát Ü-dyesh vody", en:"You washed her/his hair, well done!"},
@@ -339,7 +338,7 @@ const LESSONS = [
     phrases:[
       {hu:"Először mosd meg, aztán öblítsd le!",     pr:"E-lő-shör mosd meg OZ-tán ÖB-lítsd le", en:"First wash it, then rinse it off!"},
       {hu:"Ülj le, majd töröld meg magad!",          pr:"ewy le moyd TÖ-röld meg MO-god",       en:"Sit down, then dry yourself!"},
-      {hu:"Gyere ki a kádból, majd öltözz fel!",     pr:"DYE-re ki o KÁD-ból moyd ÖL-töz fel",   en:"Get out of the bath, then get dressed!"},
+      {hu:"Gyere ki a kádból, majd öltözz fel!",     pr:"DYE-re ki o KÁD-ból moyd ÖL-tözz fel",   en:"Get out of the bath, then get dressed!"},
       {hu:"Állj fel, majd töröld meg a hajad!",      pr:"áy fel moyd TÖ-röld meg o HO-yod",      en:"Stand up, then dry your hair!"},
       {hu:"Mosd meg a hajad, utoljára öblítsd le!",  pr:"mosd meg o HO-yod U-tol-yá-ro ÖB-lítsd le", en:"Wash your hair, then finally rinse it off!"},
       {hu:"Ülj a kádba, aztán mosd meg a lábad!",    pr:"ewy o KÁD-bo OZ-tán mosd meg o LÁ-bod",  en:"Sit in the bath, then wash your foot!"},
@@ -358,9 +357,7 @@ const LESSONS = [
       {hu:"Nem akarod, de kész vagy már.",              pr:"nem O-ko-rod de kés vody már",          en:"You don't want to, but you're ready now."},
       {hu:"Tudom, hogy nem tiszta, de mindjárt kész.",  pr:"TU-dom hody nem TIS-to de MIND-yárt kés", en:"I know it's not clean, but it'll be done soon."},
       {hu:"Tudom, hogy nem akarod a szappant, de kell!", pr:"TU-dom hody nem O-ko-rod o SOP-pont de kel", en:"I know you don't want the soap, but you need it!"},
-      {hu:"De kell, mert piszkos a hajad.",             pr:"de kel mert PIS-kosh o HO-yod",          en:"But it has to be done, because your hair is dirty."},
       {hu:"Tudom, hogy nem akarod, de gyere ide!",      pr:"TU-dom hody nem O-ko-rod de DYE-re I-de", en:"I know you don't want to, but come here!"},
-      {hu:"Tudom, hogy hideg a lábad, de várj még!",    pr:"TU-dom hody HI-deg o LÁ-bod de váry még", en:"I know your foot is cold, but wait a bit!"},
     ],
     tip:"Tudom, hogy… (I know that…) softens a correction. De (but) holds the boundary firm right after it." },
 
@@ -386,7 +383,7 @@ const LESSONS = [
     title:"Idiomatic Bath Time", sub:"Csupa víz vagy! · leszel",
     types:["fill_typed","sentence_builder"],
     phrases:[
-      {hu:"Csupa víz vagy megint, kacsám, de milyen tiszta leszel!", pr:"CHU-po víz vody ME-gint KO-chám de MI-yen TIS-to LE-sel", en:"You're soaking wet again, duck, but how clean you'll be!"},
+      {hu:"Csupa víz vagy megint, kacsám, de milyen tiszta leszel!", pr:"CHU-po víz vody ME-gint KO-chám de MI-yen TIS-to LE-sel", en:"You're soaking wet again, my duck, but how clean you'll be!"},
       {hu:"Tudom, hogy nem akarod, de ha megmosod a hajad, kész leszel!", pr:"TU-dom hody nem O-ko-rod de ho MEG-mo-shod o HO-yod kés LE-sel", en:"I know you don't want to, but once you wash your hair, you'll be done!"},
       {hu:"Amikor kész leszel, nagyon tiszta lesz a kezed!", pr:"O-mi-kor kés LE-sel NO-dyon TIS-to les o KE-zed", en:"When you're done, your hand will be very clean!"},
       {hu:"Ha jól megmosod magad, nagyon ügyes kacsa leszel!", pr:"ho yól MEG-mo-shod MO-god NO-dyon Ü-dyesh KO-cho LE-sel", en:"If you wash yourself well, you'll be a very clever duck!"},
@@ -415,8 +412,6 @@ const LESSONS = [
       {hu:"A kacsa, ami a vízben úszik, a tiéd, kacsám.", pr:"o KO-cho O-mi o VÍZ-ben Ú-sik o TI-éd KO-chám", en:"The duck that's swimming in the water is yours, my duck."},
       {hu:"Amikor kész leszel, elmesélem, hogy milyen ügyes voltál.", pr:"O-mi-kor kés LE-sel EL-me-shé-lem hody MI-yen Ü-dyesh VOL-tál", en:"When you're done, I'll tell you how clever you were."},
       {hu:"Tudom, hogy kész vagy, de ha megmosod a hajad, kész leszel.", pr:"TU-dom hody kés vody de ho MEG-mo-shod o HO-yod kés LE-sel", en:"I know you're ready, but once you wash your hair, you'll really be done."},
-      {hu:"Amikor a kacsa úszik a vízben, nagyon ügyes vagy!", pr:"O-mi-kor o KO-cho Ú-sik o VÍZ-ben NO-dyon Ü-dyesh vody", en:"When the duck swims in the water, you're very clever!"},
-      {hu:"Ha megmosod magad, kész leszel, mindig ügyes leszel.", pr:"ho MEG-mo-shod MO-god kés LE-sel MIN-dig Ü-dyesh LE-sel", en:"If you wash yourself, you'll be done, you'll always be clever."},
       {hu:"A kacsa, ami a vízben úszik, mindig ügyes és tiszta.", pr:"o KO-cho O-mi o VÍZ-ben Ú-sik MIN-dig Ü-dyesh és TIS-to", en:"The duck that swims in the water is always clever and clean."},
     ],
     tip:"Ami (that/which) introduces a relative clause — it slots right after the noun it describes, set off by commas." },
