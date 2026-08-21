@@ -1,0 +1,327 @@
+{
+  "_comment": "Curriculum shape rules + per-track lexical spine. Read by scripts/validate-curriculum.mjs.",
+  "rungs": {
+    "1": {
+      "name": "Word",
+      "minTokens": 1,
+      "maxTokens": 1,
+      "minCarryOver": 0,
+      "newLexemeBudget": 8
+    },
+    "2": {
+      "name": "Marked word",
+      "minTokens": 1,
+      "maxTokens": 2,
+      "minCarryOver": 0.5,
+      "newLexemeBudget": 4
+    },
+    "3": {
+      "name": "Two-part phrase",
+      "minTokens": 2,
+      "maxTokens": 3,
+      "minCarryOver": 0.55,
+      "newLexemeBudget": 4
+    },
+    "4": {
+      "name": "Simple sentence",
+      "minTokens": 3,
+      "maxTokens": 5,
+      "minCarryOver": 0.55,
+      "newLexemeBudget": 4
+    },
+    "5": {
+      "name": "Full sentence",
+      "minTokens": 4,
+      "maxTokens": 7,
+      "minCarryOver": 0.55,
+      "newLexemeBudget": 5
+    },
+    "6": {
+      "name": "Linked sentence",
+      "minTokens": 6,
+      "maxTokens": 10,
+      "minCarryOver": 0.6,
+      "newLexemeBudget": 5
+    },
+    "7": {
+      "name": "Extended speech",
+      "minTokens": 8,
+      "maxTokens": 14,
+      "minCarryOver": 0.6,
+      "newLexemeBudget": 5
+    },
+    "_comment": "minCarryOver is a FLOOR, not a target. It exists only to catch a lesson that is almost entirely new vocabulary. The real foundation guarantee is newLexemeBudget, which can only be met by having taught the words in an earlier lesson. Never add filler phrases to raise carry-over — if a lesson cannot be built from the foundation, plant the missing words in an earlier lesson instead."
+  },
+  "bandRungs": {
+    "A1": [
+      1,
+      3
+    ],
+    "A2": [
+      3,
+      4
+    ],
+    "B1": [
+      4,
+      5
+    ],
+    "B2": [
+      5,
+      6
+    ],
+    "C1": [
+      6,
+      7
+    ]
+  },
+  "spineRules": {
+    "minLessonsPerLexeme": 3,
+    "minRungForMaturity": 4,
+    "comment": "Every spine lexeme must appear in at least minLessonsPerLexeme lessons, and reach a lesson at rung >= minRungForMaturity. A word taught as a bare noun must eventually be used in a sentence."
+  },
+  "tracks": {
+    "bath-time": {
+      "spine": {
+        "kád": [
+          "kád",
+          "kádba",
+          "kádban",
+          "kádból",
+          "kádat",
+          "kádhoz"
+        ],
+        "víz": [
+          "víz",
+          "vizet",
+          "vízbe",
+          "vízben",
+          "vize",
+          "vízzel"
+        ],
+        "szappan": [
+          "szappan",
+          "szappant",
+          "szappannal",
+          "szappanos"
+        ],
+        "sampon": [
+          "sampon",
+          "sampont",
+          "samponnal"
+        ],
+        "törölköző": [
+          "törölköző",
+          "törölközőt",
+          "törölközővel",
+          "törölköződ"
+        ],
+        "csap": [
+          "csap",
+          "csapot",
+          "csapból"
+        ],
+        "buborék": [
+          "buborék",
+          "buborékot",
+          "buborékok"
+        ],
+        "kacsa": [
+          "kacsa",
+          "kacsát",
+          "kacsád",
+          "kacsám"
+        ],
+        "haj": [
+          "haj",
+          "hajad",
+          "hajat",
+          "haját",
+          "hajam"
+        ],
+        "fej": [
+          "fej",
+          "fejed",
+          "fejét",
+          "fejem",
+          "fejet",
+          "fejedet"
+        ],
+        "fül": [
+          "fül",
+          "füled",
+          "fülét",
+          "fülem",
+          "fület",
+          "füledet"
+        ],
+        "kéz": [
+          "kéz",
+          "kezed",
+          "kezét",
+          "kezem",
+          "kezet",
+          "kezeket",
+          "kezeid"
+        ],
+        "láb": [
+          "láb",
+          "lábad",
+          "lábát",
+          "lábam",
+          "lábat",
+          "lábakat"
+        ],
+        "arc": [
+          "arc",
+          "arcod",
+          "arcát",
+          "arcom",
+          "arcot"
+        ],
+        "has": [
+          "has",
+          "hasad",
+          "hasát",
+          "hasam",
+          "hasat"
+        ],
+        "ujj": [
+          "ujj",
+          "ujjad",
+          "ujját",
+          "ujjaid",
+          "ujjait",
+          "ujjadat"
+        ],
+        "gyere": [
+          "gyere",
+          "gyertek",
+          "jöjj",
+          "gyere ki",
+          "gyere be",
+          "kijött",
+          "bejött"
+        ],
+        "ülj": [
+          "ülj",
+          "ülök",
+          "ülsz",
+          "leülni",
+          "ülve"
+        ],
+        "állj": [
+          "állj",
+          "állsz",
+          "állni",
+          "felállni"
+        ],
+        "mos": [
+          "mosd",
+          "mosom",
+          "mossuk",
+          "megmostad",
+          "mosni",
+          "mosakodj",
+          "megmosom",
+          "megmostam"
+        ],
+        "töröl": [
+          "töröld",
+          "törölj",
+          "törölni",
+          "megtörlöm",
+          "megtöröllek",
+          "megtöröltem"
+        ],
+        "öblít": [
+          "öblítsd",
+          "öblítsük",
+          "öblíteni",
+          "leöblítem",
+          "leöblítettem"
+        ],
+        "meleg": [
+          "meleg",
+          "melegebb",
+          "melegen"
+        ],
+        "hideg": [
+          "hideg",
+          "hidegebb",
+          "hidegen"
+        ],
+        "forró": [
+          "forró",
+          "forróbb"
+        ],
+        "tiszta": [
+          "tiszta",
+          "tisztább",
+          "tisztán"
+        ],
+        "piszkos": [
+          "piszkos",
+          "piszkosabb"
+        ],
+        "kész": [
+          "kész",
+          "készen",
+          "elkészültünk"
+        ]
+      }
+    }
+  },
+  "rungTypes": {
+    "_comment": "Question types each rung may declare. Mirrors what the generators can actually build: genFill needs 2+ words, genReconstruct needs 3-7 — so sentence_builder is absent at rung 7, whose phrases start at 8 tokens and would make it decline every time.",
+    "1": [
+      "match",
+      "phrase_list"
+    ],
+    "2": [
+      "match",
+      "phrase_list"
+    ],
+    "3": [
+      "match",
+      "phrase_list",
+      "fill_pool"
+    ],
+    "4": [
+      "match",
+      "phrase_list",
+      "fill_pool",
+      "sentence_builder",
+      "true_false"
+    ],
+    "5": [
+      "match",
+      "phrase_list",
+      "fill_pool",
+      "fill_typed",
+      "sentence_builder",
+      "true_false"
+    ],
+    "6": [
+      "match",
+      "phrase_list",
+      "fill_pool",
+      "fill_typed",
+      "sentence_builder",
+      "true_false"
+    ],
+    "7": [
+      "match",
+      "phrase_list",
+      "fill_pool",
+      "fill_typed",
+      "true_false"
+    ]
+  },
+  "typeSubstitutions": {
+    "_comment": "R10 only. Declaring the key is satisfied by observing any listed type, covering routing generateQuestions performs on purpose.",
+    "fill_typed": [
+      "fill_typed",
+      "fill_pool"
+    ]
+  }
+}

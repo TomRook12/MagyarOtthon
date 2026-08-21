@@ -26,6 +26,9 @@ A shortened follow-up Lesson of 8 Questions, generated automatically from the It
 ## Grammar Card
 A dismissible explanation screen shown at the start of a Lesson where a new grammatical concept is first introduced. Grammar Cards appear at B1 and above only. They explain the *why* behind a structure; A1–A2 Lessons present grammar implicitly through repeated exposure.
 
+## Rung
+A Lesson's position (1–7) on the progression ladder within its Track, from bare words up to extended speech: 1 Word, 2 Marked word, 3 Two-part phrase, 4 Simple sentence, 5 Full sentence, 6 Linked sentence, 7 Extended speech. Rung climbs by at most one per Lesson and never falls back, and must sit inside its Band's allowed rung range (A1: 1–3, A2: 3–4, B1: 4–5, B2: 5–6, C1: 6–7). Rung — not Band — decides whether a Lesson's `fill_typed` questions downgrade to `fill_pool` (rungs 1–4 downgrade; rungs 5–7 keep `fill_typed`). Each Track that defines a lexical spine (`scripts/curriculum.config.json`) is checked by `npm run validate:curriculum`: every spine word must recur across several Lessons and reach a Lesson at rung ≥ 4, so a word taught as a bare noun is guaranteed to eventually appear in a sentence. See `docs/specs/progression-ladder.md` for the full design; only Bath Time has a spine as of this writing.
+
 ## Pass
 A Lesson outcome achieved by scoring ≥ 80%. Unlocks the next Lesson in sequence.
 
@@ -42,6 +45,7 @@ The persistent home-screen card pointing to the user's most recent in-progress o
 | `trackId` | string | e.g. `"bath-time"`. Replaces `phase`. |
 | `band` | string | `"A1"` \| `"A2"` \| `"B1"` \| `"B2"` \| `"C1"` |
 | `seq` | integer | 1-based position within the Band. |
+| `rung` | integer | 1–7, the progression-ladder rung. See **Rung** above. |
 | `title` | string | Display title. |
 | `sub` | string? | Optional subtitle for navigation context. |
 | `types` | string[] | Allowed question type names for this Lesson. |
@@ -119,10 +123,17 @@ Only `"bath-time"` has lesson content in v1. All other tracks appear on the home
 
 ## Typed Answer Rules
 
-| Band | Accent sensitivity | Input type |
-|---|---|---|
-| A1, A2 | Insensitive (accents optional) | Word pool only (`fill_pool`) |
-| B1, B2, C1 | Sensitive (accents required) | Free text (`fill_typed`) |
+Input type is decided by **Rung**, not Band: rungs 1–4 get a word pool (`fill_pool`);
+rungs 5–7 get free text (`fill_typed`). Accent sensitivity is still decided by Band:
+
+| Band | Accent sensitivity |
+|---|---|
+| A1, A2 | Insensitive (accents optional) |
+| B1, B2, C1 | Sensitive (accents required) |
+
+Band and Rung usually move together (A1/A2 lessons are rung ≤ 4, B1+ lessons are rung ≥
+4), but a rung-4 Lesson in a B1+ Band still gets `fill_pool` — the word pool is a shape
+property of the sentence, not a property of the Band.
 
 ## True/False Audio Fallback
 
@@ -139,7 +150,7 @@ Speech rate: 0.85 at A1/A2, 1.0 at B1+.
 
 ## Storage Key
 
-`"magyar-otthon-stats-v2"` — bumped from v1 due to SM-2 removal and schema changes. Existing v1 data is abandoned (no migration).
+`"magyar-otthon-stats-v3"` — bumped from v2 because the Bath Time progression-ladder rebuild (`docs/specs/progression-ladder.md`) makes Lesson ids 4–21 denote materially different content; see `docs/adr/0006-storage-key-v3.md`. Existing v2 data is abandoned (no migration).
 
 ## Valid Question Type Names
 
