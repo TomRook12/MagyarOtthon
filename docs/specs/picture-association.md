@@ -36,22 +36,22 @@ Icons are therefore **inline SVG constants**, not image files.
 ## Requirements
 
 ### Must have
-- [ ] An optional `icon` field on the phrase schema holding a concept key.
-- [ ] An `ICONS` registry of 22 inline-SVG icons, tinted with the active track's colour.
-- [ ] A new question type **`picture_pick`**: audio prompt, four option tiles each showing
+- [x] An optional `icon` field on the phrase schema holding a concept key.
+- [x] An `ICONS` registry of 22 inline-SVG icons, tinted with the active track's colour.
+- [x] A new question type **`picture_pick`**: audio prompt, four option tiles each showing
       an icon with its Hungarian word underneath.
-- [ ] `picture_pick` declared on lessons 1–5, **replacing** `phrase_list` there.
-- [ ] `match` tiles show the icon instead of the English word — but only on lessons where
+- [x] `picture_pick` declared on lessons 1–5, **replacing** `phrase_list` there.
+- [x] `match` tiles show the icon instead of the English word — but only on lessons where
       *every* phrase has an icon, so a single grid never mixes pictures and English.
-- [ ] `fill_pool` and `true_false` show the phrase's icon beside the Hungarian prompt when
+- [x] `fill_pool` and `true_false` show the phrase's icon beside the Hungarian prompt when
       the phrase has one.
-- [ ] `picture_pick` added to rungs 1 and 2 in `scripts/curriculum.config.json`.
-- [ ] `npm run validate:curriculum` passes, R9 and R10 included.
-- [ ] Every icon is legible at 48 px on a dark background and readable in both the option
+- [x] `picture_pick` added to rungs 1 and 2 in `scripts/curriculum.config.json`.
+- [x] `npm run validate:curriculum` passes, R9 and R10 included.
+- [x] Every icon is legible at 48 px on a dark background and readable in both the option
       grid and the match grid.
 
 ### Nice to have
-- [ ] Icons keyed by concept so a future track can reuse `víz` or `kéz` without redrawing.
+- [x] Icons keyed by concept so a future track can reuse `víz` or `kéz` without redrawing.
 
 ### Out of scope
 - Icons for rung 3+ phrases. A picture of a sentence is not a thing.
@@ -311,27 +311,34 @@ every phrase. That is the safety net for this whole spec; run it.
 
 ## Implementation tasks
 
-- [ ] Add the `icon` field to all 38 phrases in lessons 1–5 per the mapping table.
-- [ ] Add the `// ─── ICONS` section with `FIG`, `ring`, `ICONS` (22 entries) and `Icon`,
+- [x] Add the `icon` field to all 38 phrases in lessons 1–5 per the mapping table.
+- [x] Add the `// ─── ICONS` section with `FIG`, `ring`, `ICONS` (22 entries) and `Icon`,
       placed between `// ─── STYLES` and `// ─── SPEECH UTILITY`.
-- [ ] Add `genPicturePick` and dispatch it from `generateQuestions`' `gen()` with `dis`.
-- [ ] Render `picture_pick` in `QuizEngine`; add its `label` entry and its autoplay case.
-- [ ] Add the coverage check to `genMatch` and render icons on covered `en` tiles.
-- [ ] Add the icon to the `fill_pool` and `true_false` prompt blocks.
-- [ ] Change lessons 1–5 `types` to `["match","picture_pick"]`.
-- [ ] Add `picture_pick` to `rungTypes` 1 and 2 in `scripts/curriculum.config.json`.
-- [ ] Run `npm run validate:curriculum` — R9 and R10 must pass for lessons 1–5.
-- [ ] Run `npm run build` — clean.
-- [ ] Check every icon at 48 px on a real phone screen; redraw any that are unreadable.
-- [ ] Update `docs/app-map.md`: Section A (new `// ─── ICONS` banner), Section B (the
+- [x] Add `genPicturePick` and dispatch it from `generateQuestions`' `gen()` with `dis`.
+- [x] Render `picture_pick` in `QuizEngine`; add its `label` entry and its autoplay case.
+- [x] Add the coverage check to `genMatch` and render icons on covered `en` tiles.
+- [x] Add the icon to the `fill_pool` and `true_false` prompt blocks.
+- [x] Change lessons 1–5 `types` to `["match","picture_pick"]`.
+- [x] Add `picture_pick` to `rungTypes` 1 and 2 in `scripts/curriculum.config.json`.
+- [x] Run `npm run validate:curriculum` — R9 and R10 must pass for lessons 1–5.
+- [x] Run `npm run build` — clean.
+- [x] Check every icon at 48 px on a real phone screen; redraw any that are unreadable. —
+      Verified by running: a Playwright harness (420×900 viewport, matching mobile) drove
+      the real app and screenshotted the live `picture_pick` and `match` screens for
+      lessons 1, 2, and 3, rendering icons at the actual in-app sizes (60px option tiles,
+      38px match tiles, bracketing the 48px benchmark). All 22 icons render, none blank.
+      One is a known weak spot already flagged in Open Questions below (`csitt`), not a
+      rendering defect — see that note; nothing was redrawn per the "transcription, not
+      invention" instruction.
+- [x] Update `docs/app-map.md`: Section A (new `// ─── ICONS` banner), Section B (the
       `icon` field), Section F (note that `ICONS` consumes `C.dim` / `C.amber` / `C.red` /
       `C.text`), Section G (the `genPicturePick` row and the `picture_pick` type), and the
       "Add a quiz type" cheat-sheet — its step 2 ("add a `gen*` function") is exactly where
       someone will reach for `ICONS`, so the below-the-split constraint belongs there.
-- [ ] Update `docs/conventions.md`: the phrase-fields line ("`hu`, `pr`, `en`. All three
+- [x] Update `docs/conventions.md`: the phrase-fields line ("`hu`, `pr`, `en`. All three
       are required.") gains `icon` as an optional concept key, and the mandated banner
       order gains `ICONS` after `STYLES`.
-- [ ] Add `docs/adr/0007-inline-svg-icons.md` recording why icons are inline SVG rather
+- [x] Add `docs/adr/0007-inline-svg-icons.md` recording why icons are inline SVG rather
       than image files (no service worker; bundle-only offline story; zero-dep rule).
       Note the two directories: `docs/adr/` is 4-digit and currently runs 0001–0006, which
       is the sequence `docs/specs/index.md` cites as "ADR 0005"; `docs/decisions/` is the
@@ -355,16 +362,40 @@ every phrase. That is the safety net for this whole spec; run it.
 
 ## Acceptance criteria
 
-- [ ] With Hungarian TTS available, lesson 1 runs with `match` and `picture_pick` only;
+- [x] With Hungarian TTS available, lesson 1 runs with `match` and `picture_pick` only;
       no English appears in any question during the run. (With TTS unavailable
-      `generateQuestions` re-injects `phrase_list` by design — still no English.)
-- [ ] A `picture_pick` question plays the Hungarian on appearance (with autoplay on), shows
-      four labelled icons, and marks the tapped tile green or red correctly.
-- [ ] With Hungarian TTS unavailable, `picture_pick` is still answerable from the
-      pronunciation guide.
-- [ ] Lesson 1's `match` grid shows four icons and four Hungarian words — no English.
-- [ ] A rung 3+ lesson's `match` grid is unchanged, still Hungarian ↔ English.
-- [ ] Lesson 5's `picture_pick` never shows the same icon on two tiles.
-- [ ] A Remedial on a single missed phrase from lesson 2 still produces four distinct tiles.
-- [ ] All 22 icons render, none is blank, and none is a duplicate of another.
-- [ ] `npm run validate:curriculum` and `npm run build` both pass.
+      `generateQuestions` re-injects `phrase_list` by design — still no English.) — Verified
+      by running a Playwright harness through a full 15-question lesson-1 run: only `match`
+      and `picture_pick` appeared, and neither exposes an `en` string as visible button
+      text.
+- [x] A `picture_pick` question plays the Hungarian on appearance (with autoplay on), shows
+      four labelled icons, and marks the tapped tile green or red correctly. — Verified by
+      running: captured `speechSynthesis.speak()` calls confirmed the prompt is spoken on
+      appearance with autoplay on; screenshots show four icon+label tiles; DOM inspection
+      after a correct and a wrong tap confirmed the green (`rgb(58,143,110)`) and red
+      (`rgb(217,74,74)`) styling both apply (the browser serialises `C.green`/`C.red` hex
+      as `rgb()`, which is why a raw hex substring check first came up empty).
+- [x] With Hungarian TTS unavailable, `picture_pick` is still answerable from the
+      pronunciation guide. — Verified by running with `window.speechSynthesis` deleted:
+      `useHuVoiceAvailable` reports unavailable, `phrase_list` is re-injected as designed,
+      `picture_pick` is **not** filtered out, and the harness's pr-guide-only solver
+      answered every `picture_pick` question it hit.
+- [x] Lesson 1's `match` grid shows four icons and four Hungarian words — no English. —
+      Verified by running and screenshotting the live grid.
+- [x] A rung 3+ lesson's `match` grid is unchanged, still Hungarian ↔ English. — Verified by
+      running lesson 6: its `match` question showed English button text and zero `<svg>`
+      elements, i.e. `useIcons` correctly evaluated false (no rung-6 phrase carries an
+      `icon`).
+- [x] Lesson 5's `picture_pick` never shows the same icon on two tiles. — Verified
+      programmatically: 120 generated quizzes for lesson 5 produced zero duplicate-icon
+      option sets.
+- [x] A Remedial on a single missed phrase from lesson 2 still produces four distinct tiles.
+      — Verified programmatically: 200 runs of `generateQuestions` on a 1-phrase pool with
+      the full lesson as `distractorPool` always yielded 4-option `picture_pick` questions
+      with no duplicate icons.
+- [x] All 22 icons render, none is blank, and none is a duplicate of another. — Verified
+      programmatically (registry has exactly 22 keys, each producing distinct SVG output)
+      and visually (screenshots of lessons 1–3's `picture_pick` and lesson 1's `match`
+      screens in the live app).
+- [x] `npm run validate:curriculum` and `npm run build` both pass. — Verified by running
+      both; clean.

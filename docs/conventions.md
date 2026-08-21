@@ -8,13 +8,13 @@ The app is intentionally a single file (`src/App.jsx`). Sections are separated w
 // ─── SECTION NAME ──────────────────────────────────────────────────────────
 ```
 
-Maintain this order: DATA → UTILITIES → ENGINES → HOOKS → QUESTION GENERATORS → STYLES → COMPONENTS → APP.
+Maintain this order: DATA → UTILITIES → ENGINES → HOOKS → QUESTION GENERATORS → STYLES → ICONS → COMPONENTS → APP.
 
 ## Data
 
 - Lesson `id` values are stable and used as keys in `localStorage`. Never reuse or renumber them.
 - Add new lessons by appending to `LESSONS[]` with the next sequential `id`.
-- Phrase fields: `hu` (Hungarian text), `pr` (pronunciation guide), `en` (English translation). All three are required.
+- Phrase fields: `hu` (Hungarian text), `pr` (pronunciation guide), `en` (English translation). All three are required. `icon` (concept key into the `ICONS` registry) is optional — currently used only by rung 1–2 phrases.
 - Lessons carry `{id, trackId, band, seq, title, sub?, types, phrases, tip?, grammar?}`. `grammar` is B1+ only.
 - Retired fields — do not reintroduce: `phase`, `aud`, `pat`, `patternId`.
 

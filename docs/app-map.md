@@ -35,6 +35,7 @@ Grep the exact banner text to jump to any region of App.jsx.
 | `// ─── STATS HOOK`                      | `STORAGE_KEY`, `loadStats()`, `saveStats()`, `useStats()`   |
 | `// ─── QUESTION GENERATORS`             | All `gen*` functions, `generateQuestions()`                 |
 | `// ─── STYLES`                          | `C` colour constants object                                 |
+| `// ─── ICONS`                           | `FIG`, `ring`, `ICONS` (22-entry registry), `Icon` component |
 | `// ─── SPEECH UTILITY`                  | `speakHu()`, `SpeakBtn`, `useHuVoiceAvailable()` hook       |
 | `// ─── SMALL COMPONENTS`               | `Header`, `ProgressBar`                                     |
 | `// ─── QUIZ ENGINE`                    | `QuizEngine` component — question display, answer, feedback |
@@ -58,9 +59,13 @@ Fields marked **required** are checked by the `convention-reviewer` agent.
   sub:     string,    // subtitle for navigation context (optional)
   types:   string[],  // allowed question type names (see Section G)
   phrases: [
-    { hu: "kád", pr: "kád", en: "bath" },
+    { hu: "kád", pr: "kád", en: "bath", icon: "kád" },
     // hu = Hungarian text   pr = pronunciation guide   en = English
     // All three fields required on every phrase object.
+    // icon = optional concept key into the ICONS registry (see Section F). Explicit on
+    // the phrase, never derived by stripping articles or endings — "a kád" and "kezed"
+    // both point at concept "kád"/"kéz". Currently only rungs 1-2 (lessons 1-5, Bath
+    // Time) carry it; a phrase without it behaves exactly as before.
   ],
   tip:     string,    // optional teaching note for the parent
   grammar: string,    // optional grammar card text — B1+ only
@@ -194,6 +199,24 @@ const C = {
 
 Always reference as `C.key` in style props. Raw hex anywhere else is a convention violation.
 
+### Icon registry — `ICONS` (`// ─── ICONS` section)
+
+22 inline-SVG concept icons for rungs 1–2 vocabulary (lessons 1–5, Bath Time — objects,
+body parts, single-word commands). Each entry is a function `color => <>...</>` so it picks
+up the active track's colour; body-part icons are drawn on a shared figure (`FIG`) with the
+target part highlighted in `C.amber`. Icons also draw on `C.dim`, `C.red`, and `C.text` for
+outlines, the "stop" pictogram, and small accent dots respectively — never a raw hex.
+Look up an icon with the `Icon({name, color, size})` component; an unknown `name` renders
+nothing rather than crashing, so a typo'd `icon` key degrades silently to today's behaviour.
+
+**This section must stay below `// ─── STYLES`.** `scripts/validate-curriculum.mjs` imports
+App.jsx by splitting the file on the exact string `"// ─── STYLES"` and evaluating only what
+precedes it (JSX-free). `ICONS` is JSX and reads `C`, which is defined above the ICONS
+banner but still below the split — placing it above `// ─── STYLES` throws `C is not
+defined` on import. **Never import `ICONS` or `Icon` into a question generator** (anything
+in `// ─── QUESTION GENERATORS`, which lives above the split) — generators may only read
+`phrase.icon`, a plain string in the lesson data.
+
 ---
 
 ## G. Question Generator Interface
@@ -208,6 +231,7 @@ All generators live in the `// ─── QUESTION GENERATORS` section.
 | `genReconstruct` | `(p)` | `"sentence_builder"` | `en` (English prompt), `tiles[]` (shuffled), `correctTiles[]` |
 | `genPhraseList` | `(p, all)` | `"phrase_list"` | `prompt` (hu, played as audio), `promptPr`, `answer` (hu), `options[]` (4 hu strings) |
 | `genTyped` | `(p)` | `"fill_typed"` | `prompt` (en), `answer` (hu), `pr` |
+| `genPicturePick` | `(p, all)` | `"picture_pick"` | `prompt` (hu, played as audio), `promptPr`, `answer` (hu), `options[]` (4 `{hu, icon}`) |
 
 All generators also return `phrase` — the source phrase object.
 
@@ -253,11 +277,16 @@ options come from the wide one. Without this split, `genPhraseList` yields a sin
 and `genFill` has no distractors. Any new generator that builds options from its `all`
 argument must receive `dis`, not `all`.
 
-**Every type may decline.** `genMatch` (< 4 phrases), `genFill` (single-word phrase), and
-`genReconstruct` (outside 3–7 words) return `null`. `generateQuestions` falls back to
-`genPhraseList` / `genTyped` — which never decline — if nothing else produced a question.
-Keep that fallback if you touch the selection loop; without it a narrow pool can yield an
-empty question array and crash `QuizEngine`.
+**Every type may decline.** `genMatch` (< 4 phrases), `genFill` (single-word phrase),
+`genReconstruct` (outside 3–7 words), and `genPicturePick` (phrase has no `icon`, or fewer
+than 3 *other* phrases in the distractor pool carry one) return `null`. `generateQuestions`
+falls back to `genPhraseList` / `genTyped` — which never decline — if nothing else produced
+a question. Keep that fallback if you touch the selection loop; without it a narrow pool can
+yield an empty question array and crash `QuizEngine`.
+
+`genPicturePick` dedupes its distractors on `icon`, not `hu` — lesson 5's phrases (`kezed`,
+`lábad`, ...) resolve several different `hu` strings to the same `icon` (`kéz`, `láb`, ...),
+and deduping on `hu` would let two tiles show the same picture.
 
 **Never** call `gen*` functions directly from components. All quiz question creation goes
 through `generateQuestions`.
@@ -309,7 +338,11 @@ getBandReviewItems(trackId, band, phraseScores, count = 5)  // → phrase[], har
 ### Add a quiz type
 
 1. Grep `// ─── QUESTION GENERATORS`
-2. Add a new `gen*` function (must return `{type, phrase, ...}`)
+2. Add a new `gen*` function (must return `{type, phrase, ...}`). If it needs a drawing —
+   not just data — reach for `Icon`/`ICONS` (`// ─── ICONS`): remember that section sits
+   *below* the `// ─── STYLES` split `scripts/validate-curriculum.mjs` evaluates on import,
+   so a generator (which lives *above* that split) may only read a plain data field like
+   `phrase.icon`, never import `ICONS`, `Icon`, or `C` directly.
 3. Add the new type to the `gen()` dispatch inside `generateQuestions`
 4. Handle the new `type` in the `QuizEngine` component (`// ─── QUIZ ENGINE`)
 5. Update **Section G** of this doc
