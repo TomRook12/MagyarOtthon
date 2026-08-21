@@ -216,12 +216,24 @@ All generators also return `phrase` — the source phrase object.
 ```js
 generateQuestions(lesson, weakItems, huVoiceAvail, count = 15, distractorPool = null)
 // → question[] — shuffled, length = count
-// weakItems are triple-weighted in the selection pool
+// phrases are drawn without replacement (a shuffled bag, reshuffled on exhaustion), and no
+// two adjacent questions share a phrase.hu — see nextPhrase()/separateAdjacent() below
+// weakItems are triple-weighted in the selection pool, so they cycle through the bag more often
 // match is only generated when lesson.phrases.length >= 4; generated at most once per session
 // true_false is removed and phrase_list added if huVoiceAvail === false
 // fill_typed is replaced with fill_pool if lesson.rung <= 4 (routes by rung, not band)
 // distractorPool (>= 4 phrases) supplies wrong-answer options; defaults to lesson.phrases
 ```
+
+**No back-to-back repeats.** `generateQuestions` draws phrases from a shuffled "bag"
+(`nextPhrase()`, cursor `bi` over `shuffle(pool)`, reshuffled when the cursor runs past the
+end) instead of sampling `pool[random]` with replacement — every phrase in the pool is used
+once before any repeats. After building and shuffling the question array, `separateAdjacent()`
+(next to `shuffle()` in `// ─── UTILITIES`) swaps any adjacent pair sharing `phrase.hu` with a
+later non-conflicting question before the final `slice(0, count)`. `match` has no adjacency
+key (its `phrase` field is only the first of its four pairs) so it never blocks or is blocked.
+A one-phrase pool (e.g. Remedial on a single missed phrase) cannot avoid adjacency — the swap
+is skipped (`if (j > i)`) rather than looping, and the repeat is intentional there.
 
 **Narrow pools.** Remedial and Band Review pass a small `lesson.phrases` (as few as one
 phrase) with the full lesson as `distractorPool`. Questions come from the narrow pool;
