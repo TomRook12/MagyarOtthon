@@ -15,7 +15,7 @@ Specs written against the post-rewrite model. These describe the app as it exist
 | [progression-ladder](progression-ladder.md) | Done | 14/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | — |
 | [rewrite-foundation](rewrite-foundation.md) | Done | 28/28 | New Track/Band/Lesson data model, simplified stats, updated quiz engine, Bath Time A1 content, legacy code removed | — |
 | [lesson-progression](lesson-progression.md) | Approved | 0/7 | "Next lesson →" button on the results screen after a pass | Add `getNextLesson()` to `// ─── UTILITIES` |
-| [picture-association](picture-association.md) | Approved | 0/13 | Inline-SVG icons and a `picture_pick` question type for rung 1–2 vocabulary | Add the `icon` field to all 38 phrases in lessons 1–5 |
+| [picture-association](picture-association.md) | Approved | 0/14 | Inline-SVG icons and a `picture_pick` question type for rung 1–2 vocabulary | Add the `icon` field to all 38 phrases in lessons 1–5 |
 | [quiz-repeat-fix](quiz-repeat-fix.md) | Approved | 0/7 | Draw phrases without replacement; never repeat a phrase back to back | Add the `nextPhrase()` bag cursor in `generateQuestions` |
 
 All requirements and acceptance criteria on the six Done specs were verified against
