@@ -1,6 +1,6 @@
 # Spec: Progress Straight to the Next Lesson
 
-> **Status:** Approved
+> **Status:** Done
 > **Branch:** `claude/test-feedback-feature-spec-s9pjqd`
 
 ## Goal

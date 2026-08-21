@@ -14,11 +14,11 @@ Specs written against the post-rewrite model. These describe the app as it exist
 | [home-screen-track-detail](home-screen-track-detail.md) | Done | 7/7 | Track-card home screen, Track Detail with band sections, Recommended Next card | — |
 | [progression-ladder](progression-ladder.md) | Done | 14/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | — |
 | [rewrite-foundation](rewrite-foundation.md) | Done | 28/28 | New Track/Band/Lesson data model, simplified stats, updated quiz engine, Bath Time A1 content, legacy code removed | — |
-| [lesson-progression](lesson-progression.md) | Approved | 0/7 | "Next lesson →" button on the results screen after a pass | Add `getNextLesson()` to `// ─── UTILITIES` |
-| [picture-association](picture-association.md) | Approved | 0/14 | Inline-SVG icons and a `picture_pick` question type for rung 1–2 vocabulary | Add the `icon` field to all 38 phrases in lessons 1–5 |
-| [quiz-repeat-fix](quiz-repeat-fix.md) | Approved | 0/7 | Draw phrases without replacement; never repeat a phrase back to back | Add the `nextPhrase()` bag cursor in `generateQuestions` |
+| [lesson-progression](lesson-progression.md) | Done | 7/7 | "Next lesson →" button on the results screen after a pass | — |
+| [picture-association](picture-association.md) | Done | 14/14 | Inline-SVG icons and a `picture_pick` question type for rung 1–2 vocabulary | — |
+| [quiz-repeat-fix](quiz-repeat-fix.md) | Done | 9/9 | Draw phrases without replacement; never repeat a phrase back to back | — |
 
-All requirements and acceptance criteria on the six Done specs were verified against
+All requirements and acceptance criteria on the first six specs above were verified against
 `src/App.jsx` on 2026-08-20 and ticked. `npm run build` passes clean.
 
 **Bath Time is a complete vertical slice, rebuilt as a 30-lesson, 7-rung ladder.**
@@ -33,24 +33,37 @@ and a decision record for the Band Review trigger point (unnecessary — it was 
 exactly as `CONTEXT.md` describes). `progression-ladder` also left two nice-to-haves
 unbuilt: a "builds on: …" line in Track Detail, and extra grammar cards at rungs 2–3.
 
-## Approved / in flight
+## Test-feedback round 1 (2026-08-21) — all three shipped
 
-Three specs from the first round of real family testing (2026-08-21). All are approved and
-unstarted; none depends on the others, so they can be implemented in any order, though the
-suggested sequence is easiest-first.
+Three specs from the first round of real family testing, all implemented, verified and
+pushed on `claude/test-feedback-feature-spec-s9pjqd`.
 
-1. **[quiz-repeat-fix](quiz-repeat-fix.md)** — `generateQuestions` samples phrases *with
-   replacement*, so lesson 3's six phrases fill fifteen slots unevenly and `gyere` follows
-   `gyere`. Smallest diff of the three; contained entirely in `generateQuestions` plus one
-   new utility.
-2. **[lesson-progression](lesson-progression.md)** — the results screen says "next lesson
-   unlocked!" and then offers no way through. Adds `getNextLesson()` and a primary button,
-   respecting the existing Band Review offer and the end of a track.
-3. **[picture-association](picture-association.md)** — the big one. 22 inline-SVG icons, a
-   new `picture_pick` question type, icons replacing English in `match` on fully covered
-   lessons. Carries the full icon source in the spec, so implementation is transcription
-   rather than invention. Two open questions are deliberately left for after a week of
-   real use.
+| Spec | Commit | What it changed |
+|------|--------|-----------------|
+| quiz-repeat-fix | `fa655ac` | `generateQuestions` draws phrases without replacement and never repeats one back to back |
+| lesson-progression | `eddbb2d` | `getNextLesson()` and a **Next lesson →** button on the results screen |
+| picture-association | `12a88ff` | 22 inline-SVG icons, the `picture_pick` question type, icons replacing English in `match` |
+
+**`quiz-repeat-fix` needed two design passes.** The first implementation followed the spec
+verbatim, measured itself, and failed its own acceptance criteria: a forward-only swap pass
+could not fix a collision at the last index, and the bag cursor advanced on declined draws,
+silently dropping phrases. Both are recorded in that spec's "Why the first design failed"
+section — keep it, it is the reason the algorithm looks the way it does. The corrected
+design measures 0 adjacent pairs and 0 missing phrases across 400 runs of lesson 3, and 0
+adjacency across all 30 lessons.
+
+**Verification went beyond the build.** `lesson-progression` and `picture-association` were
+driven in headless Chromium against the real dev server — 17 and 8 assertions respectively,
+covering the pass / fail / remedial-pass / band-boundary / track-end / grammar-card paths and
+the icon rendering. The browser tooling lives outside the repo, so `package.json` still has
+zero production dependencies beyond React.
+
+Two open questions were deliberately left for after a week of real use, both in
+`picture-association`: the always-visible Hungarian labels make the picture *available* but
+not *required* to answer (a one-condition change flips it to reveal-only), and the command
+pictograms for lesson 3 are the weak link — `csitt` in particular reads more like a clock
+face than a "shh" gesture. If lesson 3 starts scoring worse than lessons 1–2, the fix is
+dropping icons from it rather than redrawing them a third time.
 
 ## Next up
 
