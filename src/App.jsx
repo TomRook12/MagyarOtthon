@@ -443,18 +443,32 @@ function getRecommendedNext(stats){
   return trackLessons.find(l=>!lessonScores[String(l.id)]?.passed&&isUnlocked(l,lessonScores))||null;
 }
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-// A phrase may repeat inside a run — it may not repeat back to back.
+// Reorder so no two adjacent questions drill the same phrase. Greedy: repeatedly take the
+// phrase with the most questions left, unless that is the phrase just placed, in which case
+// take the runner-up. This succeeds whenever any arrangement can — i.e. unless one phrase
+// holds more than half the slots, which is exactly the single-phrase Remedial case.
 function separateAdjacent(qs){
   const key=q=>q.type==="match"?null:(q.phrase?.hu??null);
-  for(let i=1;i<qs.length;i++){
-    if(key(qs[i])===null||key(qs[i])!==key(qs[i-1]))continue;
-    // find the nearest later question that differs from both neighbours and swap it in
-    let j=qs.findIndex((q,k)=>k>i&&
-      key(q)!==key(qs[i-1])&&
-      (k+1>=qs.length||key(q)!==key(qs[k+1])));
-    if(j>i)[qs[i],qs[j]]=[qs[j],qs[i]];
+  const groups=new Map();
+  for(const q of qs){const k=key(q);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(q);}
+  // `match` covers four phrases and reports only s[0], so it belongs to no phrase — hold
+  // those aside as filler that can separate any pair.
+  const free=groups.get(null)||[]; groups.delete(null);
+  const out=[]; let prev=null;
+  while(groups.size||free.length){
+    let best=null;
+    for(const [k,arr] of groups)
+      if(k!==prev&&(best===null||arr.length>groups.get(best).length))best=k;
+    if(best===null){
+      if(free.length){out.push(free.pop());prev=null;continue;}
+      best=groups.keys().next().value;   // only `prev` is left — unavoidable, and correct
+    }                                    // for a Remedial pool of one phrase
+    const arr=groups.get(best);
+    out.push(arr.pop());
+    if(!arr.length)groups.delete(best);
+    prev=best;
   }
-  return qs;
+  return out;
 }
 function normalize(s,accentSensitive=false){
   const clean=s.replace(/[!?.,:;'"¡¿…]/g,"").toLowerCase().trim();
@@ -626,10 +640,7 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
   // 6-phrase lesson covers all 6 before repeating any — random sampling was giving one
   // phrase five slots and another none.
   let bag=shuffle(pool),bi=0;
-  const nextPhrase=()=>{
-    if(bi>=bag.length){bag=shuffle(pool);bi=0;}
-    return bag[bi++];
-  };
+  const peekPhrase=()=>{if(bi>=bag.length){bag=shuffle(pool);bi=0;}return bag[bi];};
 
   let matchUsed=false;
   const gen=(type,p)=>{
@@ -642,19 +653,27 @@ function generateQuestions(lesson,weakItems,huVoiceAvail,count=15,distractorPool
     return null;
   };
 
+  // A generator that declines must not burn the phrase's turn. `match` declines every time
+  // after its first use, so on a two-type lesson roughly half the draws are discarded — and
+  // advancing the cursor on those was silently dropping phrases from the run entirely.
+  const build=(type)=>{
+    if(type==="match")return gen(type,null);   // genMatch chooses its own four phrases
+    const q=gen(type,peekPhrase());
+    if(q)bi++;                                 // commit only on a produced question
+    return q;
+  };
+
   const qs=[];
   for(const type of types){
     if(qs.length>=count)break;
-    const p=nextPhrase();
-    const q=gen(type,p);
+    const q=build(type);
     if(q)qs.push(q);
   }
   let attempts=0;
   while(qs.length<count&&attempts<200){
     attempts++;
     const type=types[Math.floor(Math.random()*types.length)];
-    const p=nextPhrase();
-    const q=gen(type,p);
+    const q=build(type);
     if(q)qs.push(q);
   }
   // Safety net: genPhraseList and genTyped never decline, so a lesson can always
