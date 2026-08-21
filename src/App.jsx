@@ -234,7 +234,7 @@ const LESSONS = [
       {hu:"Töröld meg a füledet!", pr:"TÖ-röld meg o FÜ-le-det", en:"Dry your ear!"},
       {hu:"Fogd meg a kezét!",    pr:"fogd meg o KE-zét",     en:"Hold his/her hand!"},
     ],
-    grammar:"Hungarian marks a direct object with the accusative suffix -t (with a linking vowel — -at/-et/-ot/-öt — chosen by vowel harmony). When the noun already carries a possessive suffix (-d = your), the two stack: fej → fejed (your head) → fejedet (your head, as the object). Füled → füledet works the same way. Words without a possessive, like csapot and sampont, take the accusative directly.",
+    grammar:"Hungarian marks a direct object with the accusative suffix -t (with a linking vowel — -at/-et/-ot/-öt — chosen by vowel harmony). Words without a possessive, like csapot and sampont, take it directly. When the noun already carries a possessive suffix, the two can stack: fej → fejed (your head) → fejedet (your head, as the object).\n\nWith -m (my) and -d (your), that -t is optional. Mosd meg a kezed! and Mosd meg a kezedet! are both correct — the short form is what you will usually hear at home, which is why most lessons here use it. The longer form is a little more careful or emphatic.\n\nWith his/her (-a/-e/-ja/-je) it is not optional: the -t is required. That is why this lesson says Fogd meg a kezét! and never Fogd meg a keze!",
     tip:"Listen for the extra -et/-at at the end — that's the accusative doing its job." },
 
   { id:17, trackId:"bath-time", band:"B1", seq:3, rung:5,
@@ -413,7 +413,7 @@ const LESSONS = [
     types:["fill_typed","sentence_builder"],
     phrases:[
       {hu:"A kacsa, ami a vízben úszik, a tiéd, kacsám.", pr:"o KO-cho O-mi o VÍZ-ben Ú-sik o TI-éd KO-chám", en:"The duck that's swimming in the water is yours, my duck."},
-      {hu:"Amikor kész leszel, elmesélem, hogy milyen ügyes voltál.", pr:"O-mi-kor kés LE-sel el-me-SHÉ-lem hody MI-yen Ü-dyesh VOL-tál", en:"When you're done, I'll tell you how clever you were."},
+      {hu:"Amikor kész leszel, elmesélem, hogy milyen ügyes voltál.", pr:"O-mi-kor kés LE-sel EL-me-shé-lem hody MI-yen Ü-dyesh VOL-tál", en:"When you're done, I'll tell you how clever you were."},
       {hu:"Tudom, hogy kész vagy, de ha megmosod a hajad, kész leszel.", pr:"TU-dom hody kés vody de ho MEG-mo-shod o HO-yod kés LE-sel", en:"I know you're ready, but once you wash your hair, you'll really be done."},
       {hu:"Amikor a kacsa úszik a vízben, nagyon ügyes vagy!", pr:"O-mi-kor o KO-cho Ú-sik o VÍZ-ben NO-dyon Ü-dyesh vody", en:"When the duck swims in the water, you're very clever!"},
       {hu:"Ha megmosod magad, kész leszel, mindig ügyes leszel.", pr:"ho MEG-mo-shod MO-god kés LE-sel MIN-dig Ü-dyesh LE-sel", en:"If you wash yourself, you'll be done, you'll always be clever."},
