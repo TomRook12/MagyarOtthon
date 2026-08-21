@@ -1,6 +1,6 @@
 # Spec Index
 
-_Updated: 2026-08-20_
+_Updated: 2026-08-21_
 
 ## Current architecture (Track → Band → Lesson)
 
@@ -14,19 +14,18 @@ Specs written against the post-rewrite model. These describe the app as it exist
 | [home-screen-track-detail](home-screen-track-detail.md) | Done | 7/7 | Track-card home screen, Track Detail with band sections, Recommended Next card | — |
 | [progression-ladder](progression-ladder.md) | Done | 14/14 | Rebuild Bath Time as a 7-rung ladder with a lexical spine that threads through the whole track | — |
 | [rewrite-foundation](rewrite-foundation.md) | Done | 28/28 | New Track/Band/Lesson data model, simplified stats, updated quiz engine, Bath Time A1 content, legacy code removed | — |
+| [lesson-progression](lesson-progression.md) | Approved | 0/7 | "Next lesson →" button on the results screen after a pass | Add `getNextLesson()` to `// ─── UTILITIES` |
+| [picture-association](picture-association.md) | Approved | 0/13 | Inline-SVG icons and a `picture_pick` question type for rung 1–2 vocabulary | Add the `icon` field to all 38 phrases in lessons 1–5 |
+| [quiz-repeat-fix](quiz-repeat-fix.md) | Approved | 0/7 | Draw phrases without replacement; never repeat a phrase back to back | Add the `nextPhrase()` bag cursor in `generateQuestions` |
 
-All requirements and acceptance criteria on these specs were verified against
+All requirements and acceptance criteria on the six Done specs were verified against
 `src/App.jsx` on 2026-08-20 and ticked. `npm run build` passes clean.
 
-**Bath Time is now a complete vertical slice, rebuilt as a 30-lesson, 7-rung ladder.**
+**Bath Time is a complete vertical slice, rebuilt as a 30-lesson, 7-rung ladder.**
 Every behaviour `CONTEXT.md` defines is built: the full lesson loop (grammar card → quiz →
 results → remedial), Band Review, Settings, and A1–C1 content that climbs gradually from
 bare words to extended speech on a lexical spine (`scripts/curriculum.config.json`),
-enforced by `npm run validate:curriculum`. Adding another track is content-only work — no
-engine changes should be needed, though `progression-ladder`'s "Open questions" section
-flags that cross-track lexical carry-over (ADR 0005) is worth revisiting once a second
-track exists. If a new track finds another genuine engine gap, that's worth a spec of its
-own.
+enforced by `npm run validate:curriculum`.
 
 Two nice-to-haves were specced and deliberately not built, both in
 `bath-time-loop-completion`: a "now correct" indicator on the Remedial results screen,
@@ -36,7 +35,22 @@ unbuilt: a "builds on: …" line in Track Detail, and extra grammar cards at run
 
 ## Approved / in flight
 
-_None right now._
+Three specs from the first round of real family testing (2026-08-21). All are approved and
+unstarted; none depends on the others, so they can be implemented in any order, though the
+suggested sequence is easiest-first.
+
+1. **[quiz-repeat-fix](quiz-repeat-fix.md)** — `generateQuestions` samples phrases *with
+   replacement*, so lesson 3's six phrases fill fifteen slots unevenly and `gyere` follows
+   `gyere`. Smallest diff of the three; contained entirely in `generateQuestions` plus one
+   new utility.
+2. **[lesson-progression](lesson-progression.md)** — the results screen says "next lesson
+   unlocked!" and then offers no way through. Adds `getNextLesson()` and a primary button,
+   respecting the existing Band Review offer and the end of a track.
+3. **[picture-association](picture-association.md)** — the big one. 22 inline-SVG icons, a
+   new `picture_pick` question type, icons replacing English in `match` on fully covered
+   lessons. Carries the full icon source in the spec, so implementation is transcription
+   rather than invention. Two open questions are deliberately left for after a week of
+   real use.
 
 ## Next up
 
@@ -45,6 +59,9 @@ proven the rung-ladder shape on Bath Time. `CONTEXT.md` § TRACKS Registry lists
 remaining seven: Bed Time, Getting Ready, Mealtimes, School Run, Park, Homework, Playing.
 Per ADR 0005, the second track's spec should open by evaluating whether cross-track
 lexical carry-over is worth adopting before authoring begins.
+
+Note that `picture-association` keys icons by concept rather than by phrase precisely so a
+second track can reuse `víz`, `kéz` and friends without redrawing them.
 
 ## Pre-rewrite (historical record)
 
