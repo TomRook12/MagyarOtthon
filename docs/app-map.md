@@ -216,8 +216,9 @@ All generators also return `phrase` — the source phrase object.
 ```js
 generateQuestions(lesson, weakItems, huVoiceAvail, count = 15, distractorPool = null)
 // → question[] — shuffled, length = count
-// phrases are drawn without replacement (a shuffled bag, reshuffled on exhaustion), and no
-// two adjacent questions share a phrase.hu — see nextPhrase()/separateAdjacent() below
+// phrases are drawn without replacement (a shuffled bag, reshuffled on exhaustion), a
+// declined draw does not consume its phrase's turn, and no two adjacent questions share a
+// phrase.hu — see peekPhrase()/build()/separateAdjacent() below
 // weakItems are triple-weighted in the selection pool, so they cycle through the bag more often
 // match is only generated when lesson.phrases.length >= 4; generated at most once per session
 // true_false is removed and phrase_list added if huVoiceAvail === false
@@ -226,14 +227,25 @@ generateQuestions(lesson, weakItems, huVoiceAvail, count = 15, distractorPool = 
 ```
 
 **No back-to-back repeats.** `generateQuestions` draws phrases from a shuffled "bag"
-(`nextPhrase()`, cursor `bi` over `shuffle(pool)`, reshuffled when the cursor runs past the
+(`peekPhrase()`, cursor `bi` over `shuffle(pool)`, reshuffled when the cursor runs past the
 end) instead of sampling `pool[random]` with replacement — every phrase in the pool is used
-once before any repeats. After building and shuffling the question array, `separateAdjacent()`
-(next to `shuffle()` in `// ─── UTILITIES`) swaps any adjacent pair sharing `phrase.hu` with a
-later non-conflicting question before the final `slice(0, count)`. `match` has no adjacency
-key (its `phrase` field is only the first of its four pairs) so it never blocks or is blocked.
-A one-phrase pool (e.g. Remedial on a single missed phrase) cannot avoid adjacency — the swap
-is skipped (`if (j > i)`) rather than looping, and the repeat is intentional there.
+once before any repeats. The `build(type)` helper wraps the draw: it only advances `bi`
+(commits the phrase) when the generator actually produces a question, so a declined draw
+(most commonly `match` after its first use) does not burn that phrase's turn — an earlier
+version advanced the cursor unconditionally and could drop a phrase from the run entirely.
+`match` is generated without a draw at all, since `genMatch` ignores the phrase argument and
+picks its own four phrases.
+
+After building and shuffling the question array, `separateAdjacent()` (next to `shuffle()`
+in `// ─── UTILITIES`) rebuilds the order from scratch — greedily placing, at each step, the
+phrase with the most questions left that isn't the phrase just placed — rather than trying
+to swap individual collisions. `match` questions have no adjacency key (their `phrase` field
+is only the first of their four pairs) and are held aside as filler that resets the
+"just placed" phrase, so a match can separate two instances of the same phrase. This has no
+last-index blind spot (an earlier swap-based version did, since a collision at the final
+index has nothing later to swap with) — it fails to fully separate only when one phrase
+holds more than half the run's slots, which is exactly the intended one-phrase Remedial
+case: it hammers that phrase by design rather than looping forever.
 
 **Narrow pools.** Remedial and Band Review pass a small `lesson.phrases` (as few as one
 phrase) with the full lesson as `distractorPool`. Questions come from the narrow pool;
