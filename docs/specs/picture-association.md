@@ -89,9 +89,12 @@ Lessons 1–5 phrase → icon key mapping:
 A new banner section **`// ─── ICONS`**, placed *between* `// ─── STYLES` and
 `// ─── SPEECH UTILITY`.
 
-This position matters. `scripts/validate-curriculum.mjs` imports App.jsx by splitting on
-`"// ─── STYLES"` and evaluating only what comes before it, because that part is JSX-free.
-The icons are JSX and must stay below the split. The generator therefore may only read
+This position matters, and for two reasons rather than one. `scripts/validate-curriculum.mjs`
+imports App.jsx by splitting on `"// ─── STYLES"` and evaluating only what comes before it,
+because that part is JSX-free. The icons are JSX, so they must stay below the split — and
+`C` itself is defined *below* that banner, so an `ICONS` map placed above it would throw
+`C is not defined` on import even if every icon were rewritten JSX-free. Below the split is
+mandatory, not merely tidy. The generator therefore may only read
 `phrase.icon` (a plain string in the data, above the split); resolving that key to a drawing
 is the renderer's job. **Do not import `ICONS` into `generateQuestions`** — it will break
 the validator.
@@ -243,8 +246,12 @@ generator already follows, so a Remedial on one phrase still gets four tiles.
         └───────────┴─────────────┘
 ```
 
-- Label row: `"Which one is it?"` in the same style as `phrase_list`'s `"What did you
-  hear?"` line. Add `picture_pick: "Pick the picture"` to the `label` map.
+- Two different strings, deliberately: the top-right type chip reads **"Pick the
+  picture"** (add `picture_pick: "Pick the picture"` to the `label` map, where every entry
+  names its type), and the on-screen header above the speak button reads **"Which one is
+  it?"**, styled exactly like `phrase_list`'s `"What did you hear?"` line. `phrase_list`
+  happens to use the same string in both places; `picture_pick` does not, and that is not
+  a transcription slip.
 - Autoplay: extend the existing effect — `if(autoPlay && (q.type==="true_false" ||
   q.type==="phrase_list" || q.type==="picture_pick")) speakHu(q.prompt, lesson.band)`.
 - Tiles are buttons in a `1fr 1fr` grid, minimum 44 px touch target, correct/wrong styling
@@ -317,10 +324,18 @@ every phrase. That is the safety net for this whole spec; run it.
 - [ ] Run `npm run build` — clean.
 - [ ] Check every icon at 48 px on a real phone screen; redraw any that are unreadable.
 - [ ] Update `docs/app-map.md`: Section A (new `// ─── ICONS` banner), Section B (the
-      `icon` field), Section G (the `genPicturePick` row and the `picture_pick` type), and
-      the note that `ICONS` lives below the validator's `// ─── STYLES` split.
-- [ ] Add `docs/decisions/0007-inline-svg-icons.md` recording why icons are inline SVG
-      rather than image files (no service worker; bundle-only offline story; zero-dep rule).
+      `icon` field), Section F (note that `ICONS` consumes `C.dim` / `C.amber` / `C.red` /
+      `C.text`), Section G (the `genPicturePick` row and the `picture_pick` type), and the
+      "Add a quiz type" cheat-sheet — its step 2 ("add a `gen*` function") is exactly where
+      someone will reach for `ICONS`, so the below-the-split constraint belongs there.
+- [ ] Update `docs/conventions.md`: the phrase-fields line ("`hu`, `pr`, `en`. All three
+      are required.") gains `icon` as an optional concept key, and the mandated banner
+      order gains `ICONS` after `STYLES`.
+- [ ] Add `docs/adr/0007-inline-svg-icons.md` recording why icons are inline SVG rather
+      than image files (no service worker; bundle-only offline story; zero-dep rule).
+      Note the two directories: `docs/adr/` is 4-digit and currently runs 0001–0006, which
+      is the sequence `docs/specs/index.md` cites as "ADR 0005"; `docs/decisions/` is the
+      older 3-digit set. This record belongs in `docs/adr/`.
 
 ## Open questions
 
@@ -329,7 +344,8 @@ every phrase. That is the safety net for this whole spec; run it.
   drawing — the association is available but not required. The alternative is labels on
   the reveal only: tiles are pictures while you choose, and every tile gains its word the
   moment you tap. That is a one-condition change in the render block
-  (`{ans !== null && <div className=…>{o.hu}</div>}`). Use the app for a week and decide;
+  (`{ans !== null && <div style={{fontSize:13,fontWeight:800,color:C.text,marginTop:6}}>{o.hu}</div>}`).
+  Use the app for a week and decide;
   it is cheap to flip either way. — *Tom*
 - **Command pictograms are the weak link.** `gyere` / `ülj` / `nézd` / `csitt` are
   reasonable, but a pictogram for "Come!" is a convention that has to be learned once
@@ -339,8 +355,9 @@ every phrase. That is the safety net for this whole spec; run it.
 
 ## Acceptance criteria
 
-- [ ] Lesson 1 runs with `match` and `picture_pick` only; no English appears in any
-      question during the run.
+- [ ] With Hungarian TTS available, lesson 1 runs with `match` and `picture_pick` only;
+      no English appears in any question during the run. (With TTS unavailable
+      `generateQuestions` re-injects `phrase_list` by design — still no English.)
 - [ ] A `picture_pick` question plays the Hungarian on appearance (with autoplay on), shows
       four labelled icons, and marks the tapped tile green or red correctly.
 - [ ] With Hungarian TTS unavailable, `picture_pick` is still answerable from the
