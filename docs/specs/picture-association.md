@@ -1,6 +1,6 @@
 # Spec: Picture Association for Rung 1–2 Vocabulary
 
-> **Status:** Approved
+> **Status:** Done
 > **Branch:** `claude/test-feedback-feature-spec-s9pjqd`
 
 ## Goal

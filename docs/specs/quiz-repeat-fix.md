@@ -1,6 +1,6 @@
 # Spec: No Back-to-Back Repeats in a Quiz Run
 
-> **Status:** Approved
+> **Status:** Done
 > **Branch:** `claude/test-feedback-feature-spec-s9pjqd`
 
 ## Goal
