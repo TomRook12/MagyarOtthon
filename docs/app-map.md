@@ -274,8 +274,13 @@ change to this section.
 
 ```js
 getPrevLesson(lesson)  // → lesson | null — finds the immediately preceding lesson in track
+getNextLesson(lesson)  // → lesson | null — exact inverse; null at the track's last lesson
 isUnlocked(lesson, lessonScores)  // → boolean — true if prev is null OR prev.passed
 ```
+
+`getNextLesson` crosses band boundaries via `getNextBand`, so an empty band cannot strand
+the learner. It drives the results screen's **Next lesson →** button; `getRecommendedNext`
+is a different thing and belongs to the Home screen.
 
 Band order for crossing band boundaries: `A1 → A2 → B1 → B2 → C1` (the `BANDS` constant).
 The first lesson of A1 in any track is always unlocked.
@@ -318,6 +323,14 @@ getBandReviewItems(trackId, band, phraseScores, count = 5)  // → phrase[], har
 | `"lesson"` (default) | 15 | `lesson.phrases`, weak items triple-weighted | `recordLesson()` |
 | `"remedial"` | 8 | `pool` — phrases missed in the failed attempt | `markLessonPassed()` at ≥ 80% only |
 | `"review"` | 5 | `pool` — `getBandReviewItems()` | nothing written; advisory |
+
+**Results-screen callbacks.** `onFinish` (back to the track), `onRemedial(missed)`,
+`onBandReview(lesson)` and `onNextLesson(lesson)`. `onNextLesson` is wired straight to
+`App()`'s `openLesson`, which resets Remedial state, bumps `runId` so questions regenerate,
+and routes through the grammar card when the next lesson has one — do not add a second
+navigation path. The button renders only when the run was passed in `"lesson"` or
+`"remedial"` mode and `getNextLesson` returns an unlocked lesson; at a band's last lesson
+the Band Review offer stays primary and it drops to the secondary style beneath.
 
 Remedial and Band Review write `phraseScores` per answer like any other question. Neither
 creates a `lessonScores` entry. Remedial state lives in `App()` React state only — it is

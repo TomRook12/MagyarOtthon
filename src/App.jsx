@@ -483,6 +483,16 @@ function getPrevLesson(lesson){
   const prevBandLessons=LESSONS.filter(l=>l.trackId===lesson.trackId&&l.band===BANDS[bi-1]);
   return prevBandLessons.sort((a,b)=>b.seq-a.seq)[0]||null;
 }
+// Inverse of getPrevLesson — the next lesson in the same track, crossing into the next
+// band that actually has content when the current band runs out.
+function getNextLesson(lesson){
+  const sameBand=LESSONS.filter(l=>l.trackId===lesson.trackId&&l.band===lesson.band);
+  const next=sameBand.find(l=>l.seq===lesson.seq+1);
+  if(next)return next;
+  const nb=getNextBand(lesson);                       // already skips empty bands
+  if(!nb)return null;
+  return getBandLessons(lesson.trackId,nb)[0]||null;   // getBandLessons sorts by seq
+}
 function isUnlocked(lesson,lessonScores){
   const prev=getPrevLesson(lesson);
   return prev===null||!!lessonScores[String(prev.id)]?.passed;
@@ -733,7 +743,7 @@ function ProgressBar({pct,color}){
 
 // ─── QUIZ ENGINE ──────────────────────────────────────────────────────────
 // mode: "lesson" (15q, scored) | "remedial" (8q, pass flips parent lesson) | "review" (5q, advisory)
-function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",pool=null,onRemedial,onBandReview}){
+function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",pool=null,onRemedial,onBandReview,onNextLesson}){
   const count=mode==="remedial"?8:mode==="review"?5:15;
   const srcLesson=pool?{...lesson,phrases:pool}:lesson;
   // Remedial and Review pools are already weak by construction — no extra boosting.
@@ -781,6 +791,10 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",p
     const review=mode==="review";
     const offerBandReview=mode==="lesson"&&passed&&isLastLessonOfBand(lesson)&&getNextBand(lesson);
     const offerRemedial=(mode==="lesson"||mode==="remedial")&&!passed&&missed.length>0;
+    const justPassed=passed&&(mode==="lesson"||mode==="remedial");
+    const nextLesson=justPassed?getNextLesson(lesson):null;
+    const canGoNext=!!(nextLesson&&isUnlocked(nextLesson,statsApi.stats.lessonScores));
+    const trackDone=justPassed&&!nextLesson;
     const headline=review
       ?"Review complete"
       :passed?(mode==="remedial"?"Remedial passed — lesson unlocked!":"Passed — next lesson unlocked!")
@@ -810,7 +824,19 @@ function QuizEngine({lesson,track,onFinish,statsApi,huVoiceAvail,mode="lesson",p
         style={{width:"100%",padding:"14px",borderRadius:14,background:color,border:"none",color:C.text,fontSize:15,fontWeight:800,cursor:"pointer",marginTop:24}}>
         Review {lesson.band} before moving on →
       </button>}
-      <div style={{display:"flex",gap:10,marginTop:offerRemedial||offerBandReview?10:24}}>
+      {/* Primary once passed — unless a Band Review is being offered, which stays primary
+          and pushes this into the secondary style beneath it. */}
+      {canGoNext&&<button onClick={()=>onNextLesson&&onNextLesson(nextLesson)}
+        style={offerBandReview
+          ?{width:"100%",padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer",marginTop:10}
+          :{width:"100%",padding:"14px",borderRadius:14,background:color,border:"none",color:C.text,fontSize:15,fontWeight:800,cursor:"pointer",marginTop:24}}>
+        Next lesson → {nextLesson.title}
+        <span style={{display:"block",fontSize:11,fontWeight:600,opacity:0.75,marginTop:2}}>{BAND_LABELS[nextLesson.band]}</span>
+      </button>}
+      {trackDone&&<div style={{textAlign:"center",fontSize:14,fontWeight:700,color:C.sub,marginTop:24}}>
+        🏆 {track.title} complete — every lesson passed.
+      </div>}
+      <div style={{display:"flex",gap:10,marginTop:offerRemedial||offerBandReview||canGoNext||trackDone?10:24}}>
         <button onClick={onFinish} style={{flex:1,padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Back to lessons</button>
         {mode==="lesson"&&<button onClick={()=>{setQi(0);setScore(0);setAns(null);setTyped("");setPlaced([]);setMs({sel:null,matched:[],wrong:null});setMissed([]);}}
           style={{flex:1,padding:"13px",borderRadius:12,background:`${color}18`,border:`1px solid ${color}35`,color,fontSize:14,fontWeight:700,cursor:"pointer"}}>Retry</button>}
@@ -1174,7 +1200,7 @@ export default function App(){
         <QuizEngine key={runId} lesson={lesson} track={quizTrack} onFinish={backToTrack}
           statsApi={statsApi} huVoiceAvail={huVoiceAvail}
           mode={remedialPhrases?"remedial":"lesson"} pool={remedialPhrases}
-          onRemedial={startRemedial} onBandReview={startBandReview}/>
+          onRemedial={startRemedial} onBandReview={startBandReview} onNextLesson={openLesson}/>
       </div>
     )}
   </div>;
