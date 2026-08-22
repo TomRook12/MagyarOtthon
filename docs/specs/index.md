@@ -17,6 +17,7 @@ Specs written against the post-rewrite model. These describe the app as it exist
 | [lesson-progression](lesson-progression.md) | Done | 7/7 | "Next lesson →" button on the results screen after a pass | — |
 | [picture-association](picture-association.md) | Done | 14/14 | Inline-SVG icons and a `picture_pick` question type for rung 1–2 vocabulary | — |
 | [quiz-repeat-fix](quiz-repeat-fix.md) | Done | 9/9 | Draw phrases without replacement; never repeat a phrase back to back | — |
+| [build-stamp](build-stamp.md) | Done | 5/5 | Commit SHA and build date in Settings, so a stale client is diagnosable | — |
 
 All requirements and acceptance criteria on the first six specs above were verified against
 `src/App.jsx` on 2026-08-20 and ticked. `npm run build` passes clean.
