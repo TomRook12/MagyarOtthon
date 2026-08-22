@@ -1154,6 +1154,13 @@ function SettingsScreen({statsApi,huVoiceAvail,onBack}){
           {huVoiceAvail===null?"Checking…":huVoiceAvail?"Available on this device.":"Not available on this device — listening questions are replaced with written ones."}
         </div>
       </div>
+      {/* Build stamp. There is no service worker, so a cached index.html keeps serving an
+          old hashed bundle indefinitely — this is how you tell a missing feature from a
+          stale client. Compare it against the latest commit on main. */}
+      <div style={{textAlign:"center",fontSize:11,color:C.dim,marginTop:20,lineHeight:1.5}}>
+        Build {__BUILD_SHA__} · {__BUILD_DATE__}
+        <div style={{marginTop:2}}>If a new feature is missing, clear the site data and reopen.</div>
+      </div>
     </div>
   </div>;
 }
