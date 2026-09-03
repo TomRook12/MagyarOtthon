@@ -7,7 +7,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
-    "validate:curriculum": "node scripts/validate-curriculum.mjs"
+    "validate:curriculum": "node scripts/validate-curriculum.mjs",
+    "export:podcast": "node scripts/export-podcast-source.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",
