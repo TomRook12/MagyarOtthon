@@ -66,7 +66,11 @@ companion to the app, not a replacement for it.
 2. Create a NotebookLM notebook and upload that file. Add `CONTEXT.md` too if you want the
    hosts to understand the app's structure; leave it out if you want them to stay purely on
    the language.
-3. Generate an Audio Overview, choose the **Deep Dive** format, and paste one of the prompts
+3. Add any extra sources that episode's grammar point needs —
+   `docs/notebooklm/sources.md` lists verified links mapped to the episodes below. Keep the
+   notebook small: every extra reference is more Hungarian the hosts can reach for, and the
+   prompt's central constraint is that they stay inside the curriculum.
+4. Generate an Audio Overview, choose the **Deep Dive** format, and paste one of the prompts
    below into the customise box.
 
 One warning worth taking seriously: **NotebookLM's hosts are English-speaking voices and
